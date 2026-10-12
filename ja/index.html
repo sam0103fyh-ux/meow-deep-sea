@@ -217,7 +217,7 @@ function saveProg(){if(TRYC)return;try{localStorage.setItem('mmsea_prog',JSON.st
 function lvLabel(L){return (((L-1)/10|0)+1)+'-'+(((L-1)%10)+1);}
 const GOALS=['pearls','depth','fish','survive','sfish','pearls','nodmg','survive','depth','boss'];
 function getLevel(L){const w=(L-1)/10|0,sI=(L-1)%10,k=GOALS[sI];
-const pool=w===12?['jelly','door','strap','eel','strap']:w===13?['jelly','rusticle','swing','shark','rusticle']:w===11?['jelly','eel','debris','wall','debris']:w===10?['jelly','blow','urchin','blow']:EN_ORDER.slice(0,Math.min(w,7)+1);const nw=WORLD_NEW[w]||EN_ORDER[(L*3)%8];
+const pool=w===12?['jelly','eel','door','jelly','strap','eel','jelly']:w===13?['jelly','rusticle','swing','shark','rusticle']:w===11?['jelly','eel','debris','wall','debris']:w===10?['jelly','blow','urchin','blow']:EN_ORDER.slice(0,Math.min(w,7)+1);const nw=WORLD_NEW[w]||EN_ORDER[(L*3)%8];
 let n;switch(k){case'pearls':n=(sI<5?3:6)+w;break;case'depth':n=(sI<5?20:30)+w*4;break;case'fish':n=4+w;break;case'survive':n=(sI<5?20:28)+w*3;break;case'sfish':n=1+(w>=5?1:0);break;case'nodmg':n=15+w*3;break;case'boss':n=25+w*2;break;}
 return{L,w,s:sI,k,n:k==='boss'?1:n,pool,nw,boss:k==='boss'?(WORLD_NEW[w]||EN_ORDER[7-(w%3)]):null,base:w===12?.22+sI*.03:w===13?.25+sI*.03:w===11?.2+sI*.03:w===10?.15+sI*.03:Math.min(.9,(L-1)/110),theme:THEMES[w],sf:SFISH[w%5]};}
 function goalText(l){const n=l.n;switch(l.k){case'pearls':return`真珠を ${n} 個あつめる`;case'depth':return`${n}m まで潜る`;case'fish':return`魚を ${n} 匹たべる`;case'survive':return`${n} 秒たえる`;case'sfish':return`${l.sf.n}を ${n} 匹つかまえる`;case'nodmg':return`ノーダメで ${n}m まで`;case'boss':return`ボス：${BOSSDEF[BOSS_ORDER[l.w%3]].n}をたおせ`;}}
@@ -505,7 +505,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('タップでスタート 🔊',0,-7,12,P.y);ctx.restore();
 txt('（音楽が流れます）',80,190,8,P.k);drawMute();}
-const GAME_VER='v2026.10.13-2145';
+const GAME_VER='v2026.10.13-2220';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -1162,11 +1162,18 @@ if(R()<.5){const y2=y+hh-4,sx2=left?sx+w-2:sx-12;const sg2=citySign(14,9,cols[(R
 const drips=[];for(let i=0;i<8;i++)drips.push({x:8+((R()*(W-16))|0),y:((R()*h)|0),p:(R()*120)|0});
 return{c:bake(c,.7),h,signs,drips};}
 let CITY=null;
+function mkKwcSign(){const en=LANG==='en',sw=36,sh=en?118:124,[fc,f]=cvs(sw,sh);
+f.fillStyle='#1a0c14';f.fillRect(2,2,sw-4,sh-4);f.strokeStyle='#1a1c2c';f.lineWidth=3;f.strokeRect(1.5,1.5,sw-3,sh-3);f.shadowColor='#ff3b6e';f.shadowBlur=4;f.strokeStyle='#ff5a8a';f.lineWidth=1.5;f.strokeRect(4.5,4.5,sw-9,sh-9);f.shadowBlur=0;f.fillStyle='#566c86';f.fillRect(8,0,1,2);f.fillRect(sw-9,0,1,2);
+const parts=[],mk=(dim,draw,w,h)=>{const[c,x]=cvs(w,h);if(!dim){x.shadowColor='#ff2050';x.shadowBlur=5;}x.fillStyle=dim?'#5a2034':'#ffd0e0';draw(x);if(!dim){x.shadowBlur=0;x.fillStyle='#fff0f4';draw(x);}return c;};
+if(!en){const ch=['\u4e5d','\u9f8d','\u57ce','\u5be8'];ch.forEach((g,i)=>{const d=x=>{x.font='bold 24px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(g,15,14);};parts.push({x:3,y:6+i*28,l:mk(0,d,30,28),k:mk(1,d,30,28)});});}
+else{['KOWLOON','WALLED','CITY'].forEach((g,i)=>{const d=x=>{x.save();x.translate(5,108);x.rotate(-Math.PI/2);x.font='bold 10px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(g,52,0);x.restore();};parts.push({x:4+i*9,y:3,l:mk(0,d,10,112),k:mk(1,d,10,112)});});}
+return{c:fc,parts,w:sw,h:sh};}
 function drawCity(d){if(!CITY)CITY={far:cityFar(),mid:cityMid(),near:cityNear(),t0:(Math.random()*1200)|0};const C=CITY;
 const tile=(ly,sp)=>{const off=-Math.round((d*sp)%ly.h);for(let y=off;y<H;y+=ly.h)ctx.drawImage(ly.c,0,y);return off;};
 // far + Kai Tak airliner
 tile(C.far,.8);const pt=(tick+C.t0)%1500;if(pt<320){const px=W+30-pt*.6,py=34;ctx.fillStyle='rgba(30,30,38,0.55)';ctx.fillRect(px,py,22,3);ctx.fillRect(px+8,py-4,6,11);ctx.fillRect(px+18,py-3,3,4);ctx.fillRect(px-2,py+1,3,1);if(tick%40<20){ctx.fillStyle='rgba(255,59,92,0.7)';ctx.fillRect(px+10,py+6,1,1);}}
 const om=tile(C.mid,1.8);
+if(!C.sign)C.sign=mkKwcSign();{const S=C.sign,sx=W-S.w-6;for(let y=om;y<H;y+=C.mid.h){const sy=y+40;if(sy<-S.h||sy>H)continue;ctx.drawImage(S.c,sx,sy);const ph=(tick+C.t0)%420,dimI=ph<26&&(ph>>2)%2===0?((tick+C.t0)/420|0)%S.parts.length:-1;S.parts.forEach((p,i)=>ctx.drawImage(i===dimI?p.k:p.l,sx+p.x,sy+p.y));}}
 // fish through the alley / windows
 for(let i=0;i<C.mid.fishRows.length;i++){for(let y=om;y<H;y+=C.mid.h){const fy=y+C.mid.fishRows[i];if(fy<0||fy>H)continue;const dir=i%2?1:-1,fx=((tick*.3*dir+i*53)%(W+20)+W+20)%(W+20)-10;ctx.fillStyle=i%3?'#ef7d57':'#ffcd75';ctx.fillRect(Math.round(fx),fy,4,2);ctx.fillRect(Math.round(fx)+(dir>0?-2:4),fy-1,2,4);}}
 // near: dim pipes/cables + flickering signs + drips
@@ -1218,7 +1225,7 @@ x.fillStyle='#b8606a';for(let sx=cx+2;sx<cx+len-4;sx+=4){x.fillRect(sx,top+5,1,1
 const nd=cab?3:4,dw=6;for(let d=0;d<nd;d++){const dx=cx+5+d*((len-(cab?18:10))/nd)|0;x.fillStyle='#2a2e30';x.fillRect(dx-1,top+7,dw+2,32);x.fillStyle='#0c1014';x.fillRect(dx,top+8,dw,31);x.fillStyle='#1a2026';x.fillRect(dx+1,top+11,dw-2,7);
 const wx=dx+dw+3;if(wx+7<cx+len-(cab?10:2)){x.fillStyle='#c8c0b0';x.fillRect(wx-1,top+9,9,10);x.fillStyle='#1a2026';x.fillRect(wx,top+10,7,8);x.fillStyle='rgba(115,239,247,0.22)';x.fillRect(wx,top+10,7,2);
 if(R()<.35){x.fillStyle='#0a0c10';x.fillRect(wx+2,top+12,4,5);x.fillStyle='#c8e8f0';x.fillRect(wx+1,top+11,1,2);x.fillRect(wx+5,top+16,1,1);}
-x.strokeStyle='#94b0c2';x.beginPath();x.moveTo(wx+3.5,top+10);x.lineTo(wx+5.5,top+14);x.stroke();x.strokeRect(wx+5,top+14,1.5,1.5);}}// framed windows, some broken, straps frozen mid-swing
+if(R()<.25){x.strokeStyle='#94b0c2';x.beginPath();x.moveTo(wx+3.5,top+10);x.lineTo(wx+5.5,top+14);x.stroke();x.strokeRect(wx+5,top+14,1.5,1.5);}}}// framed windows, some broken, straps frozen mid-swing
 x.fillStyle='#e8e0d0';x.font='5px sans-serif';x.textBaseline='top';x.textAlign='left';x.fillText(num,cx+len-(cab?24:16),top+32);
 x.fillStyle='#3a4246';x.fillRect(cx+10,top-4,14,4);x.fillRect(cx+len-30,top-4,14,4);x.fillStyle='#566c86';x.fillRect(cx+11,top-3,12,1);x.fillRect(cx+len-29,top-3,12,1);// AC units
 x.fillStyle='#2a2e30';x.fillRect(cx+6,top+40,16,6);x.fillRect(cx+len-24,top+40,16,6);x.fillStyle='#1a1c2c';for(const bx of[cx+8,cx+18,cx+len-22,cx+len-12]){x.beginPath();x.arc(bx,top+46,3,0,6.283);x.fill();}// bogies
@@ -1279,23 +1286,54 @@ function shipNear(){const h=320,[c,x]=cvs(W,h),R=cityRng(829);
 for(const px of[0,W-6]){x.fillStyle='#3a2a24';x.fillRect(px,0,6,h);for(let y=0;y<h;y+=8){x.fillStyle='#5a3a2a';x.fillRect(px+1,y,4,1);}}
 for(let y=30;y<h;y+=90){x.strokeStyle='rgba(30,20,18,0.9)';x.beginPath();x.moveTo(0,y);x.quadraticCurveTo(80,y+14,W,y+2);x.stroke();for(let k=0;k<8;k++){x.fillStyle='#9a5a32';const rx=10+((R()*140)|0);x.fillRect(rx,y+8+((R()*4)|0),1,3+((R()*6)|0));}}
 return{c:bake(c,.7),h};}
+function shipVert(){const SW=84,SH=1000,[c,x]=cvs(SW,SH),R=cityRng(777);
+// rudder + propellers (stern up)
+x.fillStyle='#1a1c2c';x.fillRect(10,2,9,26);x.fillStyle='#2a2422';x.fillRect(11,3,7,24);x.fillStyle='#7a4a32';x.fillRect(12,6,1,14);
+for(const[px,py]of[[5,34],[22,30],[36,34]]){x.fillStyle='#8a6a3a';x.fillRect(px-1,py-1,3,3);x.fillStyle='#b8904a';x.fillRect(px-6,py-4,5,2);x.fillRect(px+2,py+2,5,2);x.fillRect(px-1,py-8,2,6);x.fillStyle='#5a4a3a';x.fillRect(px,py+2,1,10);}
+// hull silhouette: keel on the left, deck on the right, stern rounded top, bow pointed bottom
+x.fillStyle='#1a1c2c';x.beginPath();x.moveTo(2,60);x.quadraticCurveTo(4,40,22,40);x.quadraticCurveTo(34,42,36,58);x.lineTo(36,890);x.lineTo(14,972);x.lineTo(2,900);x.closePath();x.fill();x.strokeStyle='#6a7a86';x.stroke();
+x.save();x.clip();x.fillStyle='#9a2a22';x.fillRect(0,0,7,SH);x.fillStyle='#d8d4c8';x.fillRect(34,0,2,SH);
+for(let y=70;y<900;y+=6){for(const px of[13,21,28]){x.fillStyle=R()<.15?'#c8a050':'#5a6a70';x.fillRect(px,y,2,2);}}
+for(let i=0;i<140;i++){const rx=7+((R()*28)|0),ry=50+((R()*880)|0),L=4+((R()*20)|0);x.fillStyle='#8a4a2a';x.fillRect(rx,ry,1,L);x.fillStyle='#b8703a';x.fillRect(rx,ry,1,L>>2);}x.restore();// rust bleeding down
+// white superstructure
+x.fillStyle='#1a1c2c';x.fillRect(36,150,13,640);x.fillStyle='#e8e4d8';x.fillRect(37,151,11,638);x.fillStyle='#1a2026';for(let y=154;y<786;y+=5)x.fillRect(40,y,3,2);x.fillStyle='#b8b0a0';x.fillRect(47,151,1,638);
+// four buff funnels sticking out sideways, leaning back (toward stern = up)
+for(const fy of[620,480,340,200]){x.save();x.translate(49,fy);x.transform(1,-.2,0,1,0,0);x.fillStyle='#1a1c2c';x.fillRect(0,-1,31,16);x.fillStyle='#d8a848';x.fillRect(0,0,30,14);x.fillStyle='#1a1c2c';x.fillRect(23,0,7,14);x.fillStyle='#8a4a2a';x.fillRect(6,3,10,1);x.fillRect(9,9,7,1);x.restore();}
+// two masts + sagging rigging
+for(const my of[110,840]){x.fillStyle='#4a3a2e';x.fillRect(36,my,46,2);x.strokeStyle='#94b0c2';x.beginPath();x.moveTo(80,my+1);x.quadraticCurveTo(62,my+(my<500?30:-30),48,my+(my<500?60:-60));x.moveTo(80,my+1);x.quadraticCurveTo(60,my+(my<500?-8:8),36,my+(my<500?-30:30));x.stroke();}
+// bow railing + anchor
+x.fillStyle='#d8d4c8';for(let y=880;y<950;y+=4){const rx=36-(y-890)*.27;x.fillRect(Math.max(16,rx),y,4,1);}x.fillRect(36,790,1,100);
+x.strokeStyle='#5a4a3a';x.lineWidth=2;x.beginPath();x.moveTo(8,905);x.lineTo(8,925);x.moveTo(3,921);x.quadraticCurveTo(8,929,13,921);x.stroke();x.lineWidth=1;
+// rusticles hanging from every edge
+for(let y=60;y<960;y+=3+((R()*5)|0)){const L=2+((R()*6)|0);x.fillStyle='#9a5a32';x.fillRect(36+((R()*12)|0),y,1,L);}
+// seabed burying the bow + debris field + chandelier
+x.fillStyle='#8a7a5a';x.beginPath();x.moveTo(0,948);for(let xx=0;xx<=SW;xx+=6)x.lineTo(xx,946+Math.sin(xx*.2)*3);x.lineTo(SW,SH);x.lineTo(0,SH);x.fill();x.fillStyle='#a8966a';for(let i=0;i<60;i++)x.fillRect((R()*SW)|0,952+((R()*46)|0),1,1);
+for(let i=0;i<10;i++){x.fillStyle=R()<.5?'#4a3a2e':'#3a2a24';x.fillRect(30+((R()*52)|0),950+((R()*40)|0),3+((R()*8)|0),2);}
+x.fillStyle='#c8a050';x.fillRect(52,968,19,2);x.fillRect(55,970,13,2);x.fillRect(60,972,3,3);x.fillStyle='#ffe8b0';for(let i=0;i<5;i++)x.fillRect(53+i*4,967,1,1);x.fillStyle='#5a4a3a';x.fillRect(61,958,1,10);
+return{c:bake(c,.92,'rgba(10,40,48,0.22)'),w:SW,h:SH,chand:[61,968]};}
 let SHIP=null;
-function drawShip(d){if(!SHIP)SHIP={far:shipFar(),mid:shipMid(),near:shipNear()};const S2=SHIP;
+function shipProg(){if(!G)return 0;let t=0;if(lvl&&mode==='level'){t=lvl.k==='boss'?(G.bossWon?1:Math.min(.9,G.t/5400)):Math.min(1,goalVal()/Math.max(1,lvl.n));}else t=Math.min(1,G.depth/2000);G.shipP=Math.max(G.shipP||0,Math.min(t,(G.shipP||0)+.004));return G.shipP;}
+function drawShip(d){if(!SHIP)SHIP={far:shipFar(),v:shipVert(),near:shipNear()};const S2=SHIP;
 const tile=(ly,sp)=>{const off=-Math.round((d*sp)%ly.h);for(let y=off;y<H;y+=ly.h)ctx.drawImage(ly.c,0,y);return off;};
-tile(S2.far,.8);const om=tile(S2.mid,1.8);
-for(let y=om;y<H;y+=S2.mid.h){const cy=y+S2.mid.chand;if(cy<-30||cy>H+10)continue;const sw=Math.sin(tick*.02)*2;ctx.fillStyle='#5a4a3a';ctx.fillRect(80,cy-40,1,40);ctx.globalAlpha=.35+.1*Math.sin(tick*.05);ctx.drawImage(GLOW,80+sw-14,cy-8,28,22);ctx.globalAlpha=1;ctx.fillStyle='#c8a050';ctx.fillRect(72+sw,cy,17,2);ctx.fillRect(75+sw,cy+2,11,2);ctx.fillRect(79+sw,cy+4,3,3);ctx.fillStyle='#ffe8b0';for(let i=0;i<5;i++)ctx.fillRect(73+sw+i*4,cy-1,1,1);}
+tile(S2.far,.8);const V=S2.v,p=shipProg(),vy=-Math.round(p*(V.h-H));ctx.drawImage(V.c,0,vy);if(vy+950<H){ctx.fillStyle='#71664c';ctx.fillRect(V.w,vy+948,W-V.w,60);ctx.fillStyle='#3a2a24';ctx.fillRect(V.w+18,vy+962,7,2);ctx.fillRect(V.w+46,vy+975,5,2);}
+{const[cx,cy]=V.chand,yy=vy+cy;if(yy>-20&&yy<H+10){ctx.globalAlpha=.3+.1*Math.sin(tick*.05);ctx.drawImage(GLOW,cx-14,yy-10,28,22);ctx.globalAlpha=1;}}
+for(let i=0;i<6;i++){const sy=((i*47+tick*.25)%(H+20))-10,sx=40+((i*13)%14)+Math.sin(tick*.03+i)*2;ctx.fillStyle='rgba(184,112,58,0.75)';ctx.fillRect(Math.round(sx),Math.round(sy),1,3);}// drifting rusticle flakes
 for(let i=0;i<3;i++){const fy=((i*83-d*1.8)%H+H)%H,dir=i%2?1:-1,fx=((tick*.3*dir+i*57)%(W+20)+W+20)%(W+20)-10;ctx.fillStyle='#ef7d57';ctx.fillRect(Math.round(fx),Math.round(fy),4,2);ctx.fillRect(Math.round(fx)+(dir>0?-2:4),Math.round(fy)-1,2,4);}
 tile(S2.near,3.2);}
 // obstacles: closing train-door gap, swinging straps / chains, rusticles (debris variant)
 const RUSTIC=mkSpr(6,12,(x,y)=>{const w=3-y*.25;if(Math.abs(x-2.5)>w)return'';return y<4?'o':(x+y)%3===0?'m':'S';});
 const STRAPI=mkSpr(8,12,(x,y)=>{if(y<6)return x===3||x===4?'s':'';const d=Math.hypot(x-3.5,y-8.5);return d<=3.3&&d>=1.8?'w':'';});
-function mkDoor(){if(G.t-(G.lastWall||-999)<220)return mkEnemy('jelly',curDiff());G.lastWall=G.t;{const gc=Math.round(rnd(40,W-40));return{t:'door',x:0,y:H+8,vx:0,gc,gx:gc-28,gw:56,k:0};}}
-function mkStrap(chain){return{t:'strap',x:rnd(30,130),y:H+8,vx:0,k:(Math.random()*300)|0,L:chain?26:18,chain};}
+function mkDoor(){if(G.t-(G.lastWall||-999)<300||G.lastObs==='strap')return mkEnemy('jelly',curDiff());G.lastWall=G.t;G.lastObs='door';{const gc=Math.round(rnd(40,W-40));return{t:'door',x:0,y:H+8,vx:0,gc,gx:gc-28,gw:56,k:0};}}
+function mkStrap(chain){if(!chain){if(G.lastObs==='door')return mkEnemy('eel',curDiff());G.lastObs='strap';}return{t:'strap',x:rnd(30,130),y:H+8,vx:0,k:(Math.random()*300)|0,L:chain?26:18,chain};}
 function strapEnd(e){const a=Math.sin(e.k*.045)*.9;return[e.x+Math.sin(a)*e.L,e.y+Math.cos(a)*e.L];}
 const SAY_TRAIN=['ドアが開いたり閉まったり、タイミングを見て通るにゃ！','つり革で遊んじゃダメにゃ！'],SAY_SHIP=['この船、大きすぎて全部見えないにゃ！','上のサビのつららがいつ落ちてもおかしくないにゃ！'];
 const SAY_CH={11:SAY_CITY,12:SAY_TRAIN,13:SAY_SHIP};
-function drawDoor(e,ey){const close=Math.cos(e.k*6.283/200)<-.2;for(const[a,bb] of[[0,e.gx],[e.gx+e.gw,W]]){ctx.fillStyle='#1a1c2c';ctx.fillRect(a,ey-1,bb-a,13);ctx.fillStyle='#7a1e2a';ctx.fillRect(a,ey,bb-a,11);ctx.fillStyle='#c8c8c0';ctx.fillRect(a===0?bb-2:a,ey,2,11);ctx.fillStyle='#1a2026';ctx.fillRect(a===0?bb-12:a+4,ey+2,8,5);}
-if(close&&tick%10<5){ctx.fillStyle=P.m;ctx.fillRect(e.gx-3,ey-4,3,3);ctx.fillRect(e.gx+e.gw,ey-4,3,3);}}
+function drawDoor(e,ey){const ph=((e.k%200)+200)%200,closing=ph<100,warn=ph<40&&ey>-12&&ey<H;
+if(ph===2&&ey>0&&ey<H){beep(988,.09,'sine');setTimeout(()=>beep(784,.12,'sine'),110);}
+const fl=e.gc-30,fr=e.gc+30;ctx.fillStyle='#3a1418';ctx.fillRect(0,ey-2,fl,15);ctx.fillRect(fr,ey-2,W-fr,15);ctx.fillStyle='#7a1e2a';ctx.fillRect(0,ey-1,fl-1,13);ctx.fillRect(fr+1,ey-1,W-fr-1,13);ctx.fillStyle='#e8e0d0';ctx.fillRect(0,ey+8,fl-1,2);ctx.fillRect(fr+1,ey+8,W-fr-1,2);// car body
+ctx.fillStyle='#c8c8c0';ctx.fillRect(fl-1,ey-3,2,17);ctx.fillRect(fr-1,ey-3,2,17);// door frame
+for(const L of[1,0]){const a=L?Math.max(fl,0):e.gx+e.gw,b=L?e.gx:Math.min(fr,W),w=b-a;if(w<=0)continue;ctx.fillStyle='#1a1c2c';ctx.fillRect(a,ey-1,w,13);ctx.fillStyle='#a8a8a0';ctx.fillRect(a+(L?0:1),ey,w-1,11);ctx.fillStyle='#1a2026';const wx=L?b-10:a+3;if(w>12){ctx.fillRect(wx,ey+1,7,5);ctx.fillStyle='rgba(115,239,247,0.35)';ctx.fillRect(wx,ey+1,7,1);}ctx.fillStyle='#2a2e30';ctx.fillRect(L?b-1:a,ey-1,1,13);}// sliding panels with windows + rubber edge
+if(warn&&tick%12<6){ctx.fillStyle='#ffcd75';ctx.fillRect(fl-4,ey-6,3,3);ctx.fillRect(fr+1,ey-6,3,3);ctx.fillStyle='rgba(255,205,117,0.25)';ctx.fillRect(fl-6,ey-8,7,7);ctx.fillRect(fr-1,ey-8,7,7);}}
 function drawStrap(e){const[sx,sy]=strapEnd(e);ctx.strokeStyle=e.chain?'#7a4a32':'#94b0c2';ctx.lineWidth=e.chain?2:1;ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(sx,sy);ctx.stroke();ctx.lineWidth=1;ctx.fillStyle='#566c86';ctx.fillRect(e.x-3,e.y-2,7,2);
 if(e.chain){ctx.fillStyle='#1a1c2c';ctx.fillRect(sx-5,sy-4,10,8);ctx.fillStyle='#7a4a32';ctx.fillRect(sx-4,sy-3,8,6);ctx.fillStyle='#b8703a';ctx.fillRect(sx-3,sy-3,3,2);}else{ctx.strokeStyle='#f4f4f4';ctx.beginPath();ctx.arc(sx,sy+2,3,0,6.283);ctx.stroke();}}
 THEMES[11].bg=drawCity;THEMES[12].bg=drawTrain;THEMES[13].bg=drawShip;
