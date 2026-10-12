@@ -124,7 +124,7 @@ function saveDaily(){try{localStorage.setItem('mmsea_daily',JSON.stringify(daily
 let toast=null,shareBlob=null,pendShare=false;
 const SBTN={x:40,y:106,w:80,h:16};
 function inShare(q){return state==='over'&&tick>20&&q.x>=SBTN.x&&q.x<=SBTN.x+SBTN.w&&q.y>=SBTN.y&&q.y<=SBTN.y+SBTN.h;}
-function shareText(){const U=location.href.split('?')[0];if(mode==='deep')return `🐱🌊 喵喵深海尋珠記・潛得最深\n我（${meName()}・${distName(meDist())}）潛到 ${Math.floor(G.depth/10)}m！\n嚟挑戰我啦：${U}`;if(mode==='vs'&&vs.opp)return `🐱⚔ 喵喵深海尋珠記・商人比賽\n${meName()}（${distName(meDist())}）${vs.res==='win'?'贏咗':vs.res==='lose'?'輸咗俾':'打和'} ${vs.opp.n}（${distName(vs.opp.d)}）\n潛到 ${Math.floor(G.depth/10)}m\n${U}`;if(mode==='level')return `🐱🌊 喵喵深海尋珠記\n第 ${lvLabel(LV)} 關「${THEME.n}」${G.won?'過關！':'挑戰中'}\n分數：${G.score}\n${location.href.split('?')[0]}`;return `🐱🌊 喵喵深海尋珠記 ${TODAY}\n今日挑戰：${THEME.n}\n分數：${G.score}　${SF.n} x${G.sf}\n${location.href.split('?')[0]}`;}
+function shareText(){const U=location.href.split('?')[0];if(mode==='deep')return `🐱🌊 喵喵深海尋珠記・潛得最深\n我（${meName()}・${distName(meDist())}）潛到 ${Math.floor(G.depth/10)}m！\n嚟挑戰我啦：${U}`;if(mode==='vs'&&vs.opp)return `🐱⚔ 喵喵深海尋珠記・雙人比賽\n${meName()}（${distName(meDist())}）${vs.res==='win'?'贏咗':vs.res==='lose'?'輸咗俾':'打和'} ${vs.opp.n}（${distName(vs.opp.d)}）\n潛到 ${Math.floor(G.depth/10)}m\n${U}`;if(mode==='level')return `🐱🌊 喵喵深海尋珠記\n第 ${lvLabel(LV)} 關「${THEME.n}」${G.won?'過關！':'挑戰中'}\n分數：${G.score}\n${location.href.split('?')[0]}`;return `🐱🌊 喵喵深海尋珠記 ${TODAY}\n今日挑戰：${THEME.n}\n分數：${G.score}　${SF.n} x${G.sf}\n${location.href.split('?')[0]}`;}
 function showToast(t){toast={t,l:120};}
 function downloadPng(){if(!shareBlob)return;try{const a=document.createElement('a');a.href=URL.createObjectURL(shareBlob);a.download='meow-deep-sea-'+TODAY+'.png';document.body.appendChild(a);a.click();a.remove();}catch(e){}}
 function fallbackShare(text){const done=()=>{showToast('已複製');downloadPng();};
@@ -443,7 +443,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('㩒一下開始 🔊',0,-7,12,P.y);ctx.restore();
 txt('（會有音樂播放）',80,190,8,P.k);drawMute();}
-const GAME_VER='v2026.10.12-2040';
+const GAME_VER='v2026.10.12-2100';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -616,7 +616,7 @@ ctx.fillStyle='rgba(26,28,44,0.75)';ctx.fillRect(0,0,W,13);
 for(let i=0;i<G.maxhp;i++)if(i<G.hp)ctx.drawImage(HEART,2+i*7,4);
 ctx.fillStyle=P.k;ctx.fillRect(31,4,38,6);ctx.fillStyle=G.o2<25&&tick%20<10?P.m:P.c;ctx.fillRect(32,5,Math.max(0,G.o2*.36),4);
 num(Math.floor(G.depth/10)+'m',73,4,P.g);drawScore();if(state==='play')drawCombo();
-if(state==='play'){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(0,13,W,11);if(mode==='level')txt(lvLabel(LV)+'　'+goalText(lvl).replace(/頭目關：喺大(.+)面前/,'頭目$1：')+'　'+Math.min(goalVal(),lvl.n)+'/'+lvl.n,80,14,8,lvl.boss?P.p:P.y);else txt(mode==='deep'?'⬇ 潛得最深　'+meName()+'・'+distName(meDist()):mode==='vs'?'⚔ 商人比賽：撐到最後就贏':'每日挑戰：'+THEME.n,80,14,8,P.y);
+if(state==='play'){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(0,13,W,11);if(mode==='level')txt(lvLabel(LV)+'　'+goalText(lvl).replace(/頭目關：喺大(.+)面前/,'頭目$1：')+'　'+Math.min(goalVal(),lvl.n)+'/'+lvl.n,80,14,8,lvl.boss?P.p:P.y);else txt(mode==='deep'?'⬇ 潛得最深　'+meName()+'・'+distName(meDist()):mode==='vs'?'⚔ 雙人比賽：撐到最後就贏':'每日挑戰：'+THEME.n,80,14,8,P.y);
 const sk=SKILLS[cfg.skill];if(sk.id!=='none'&&skillOpen(cfg.skill)){const on=G.skillUses>0;ctx.globalAlpha=on?.85:.35;ctx.fillStyle=P.k;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,0,7);ctx.fill();ctx.fillStyle=on?P.v:P.S;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,12,0,7);ctx.fill();ctx.globalAlpha=1;if(G.magT>0){ctx.strokeStyle=P.y;ctx.lineWidth=2;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,-Math.PI/2,-Math.PI/2+Math.PI*2*G.magT/240);ctx.stroke();ctx.lineWidth=1;}txt(sk.ic,SKB.x+15,SKB.y+9,11,P.w);txt('x'+G.skillUses,SKB.x+26,SKB.y+22,7,P.y);}}
 UIB=[];if(state==='garage')drawGarage();if(state==='profile')drawProfile();if(state==='players')drawPlayers();if(state==='board')drawBoard();if(state==='vsmenu')drawVsMenu();if(state==='vscount')drawVsCount();if(mode==='vs'&&(state==='play'||state==='over'))drawVsHud();
 if(state==='title'){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(10,30,140,40);txt(TITLE1,92,33,16,P.y,'center',116);txt(TITLE2,92,51,14,P.p,'center',116);
@@ -624,7 +624,7 @@ ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(10,73,140,51);ctx.drawImage(DSFI
 ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(6,144,148,82);
 button(10,146,140,14,`▶ 關卡模式（到 ${lvLabel(prog.u)}）`,'rgba(56,183,100,0.92)',()=>goSelect());
 button(10,162,69,14,'★ 每日挑戰','rgba(65,166,246,0.92)',startDaily);button(81,162,69,14,'⬇ 潛得最深','rgba(59,93,201,0.95)',startDeep);
-button(10,178,69,14,'⚔ 商人比賽','rgba(178,46,84,0.92)',goVs);button(81,178,69,14,'🏆 排行榜','rgba(239,125,87,0.92)',()=>goBoard('deep'));
+button(10,178,69,14,'⚔ 雙人比賽','rgba(178,46,84,0.92)',goVs);button(81,178,69,14,'🏆 排行榜','rgba(239,125,87,0.92)',()=>goBoard('deep'));
 button(10,194,69,14,'🐱 車庫','rgba(255,119,168,0.92)',goGarage);button(81,194,69,14,'👥 換玩家','rgba(41,54,111,0.95)',goPlayers);button(2,128,32,12,LANG==='zh'?'\u4e2d|EN':'EN|\u4e2d','rgba(26,28,44,0.8)',()=>{const pth=location.pathname;location.href=LANG==='zh'?pth.replace(/[^\/]*$/,'')+'en/':pth.replace(/en\/[^\/]*$/,'');});
 txt('👤 '+meName()+'・'+distName(meDist()),80,210,8,P.y);txt(`珍珠 ${wallet.p}　最高分 ${best}`,80,219,7,P.g);if(badges()){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(100,23,57,7);txt(badges(),156,23,6,P.y,'right',56);}ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(0,226,W,12);txt(TIPS[(tick/240|0)%TIPS.length],80,228,7,P.y);ctx.globalAlpha=.8;txt(GAME_VER,156,16,6,P.w,'right');ctx.globalAlpha=1;drawStartDecor();drawMascot();window.__tb=titleBoxes();}
 if(state==='select'){ctx.fillStyle='rgba(26,28,44,0.72)';ctx.fillRect(4,16,152,206);const w=selW;
@@ -712,7 +712,7 @@ function goBoard(k,tab){board={k:k||'deep',tab:tab==null?(meDist()>=0?meDist()+1
 function tabLayout(){const L=[];let x=0;['全部',...DISTS].forEach((n,i)=>{const w=Math.ceil(txtW(n,9))+10;L.push({n,x,w});x+=w+2;});L.max=Math.max(0,x-148);return L;}
 function boardRows(){const k=board.k,t=board.tab;let a=loadLB(k==='deep'?'mmsea_lb_deep':'mmsea_lb_vs');if(t>0)a=a.filter(e=>e.d===t-1);
 if(k==='deep')a.sort((x,y)=>(y.m|0)-(x.m|0));else a.sort((x,y)=>((y.w|0)-(x.w|0))||((x.l|0)-(y.l|0)));return a;}
-function drawBoard(){ctx.fillStyle='rgba(26,28,44,0.9)';ctx.fillRect(4,14,152,222);txt(board.k==='deep'?'🏆 潛得最深':'⚔ 商人比賽 勝場',80,16,11,P.y);txt('📱 本機排行榜（只存喺呢部機）',80,29,7,P.c);
+function drawBoard(){ctx.fillStyle='rgba(26,28,44,0.9)';ctx.fillRect(4,14,152,222);txt(board.k==='deep'?'🏆 潛得最深':'⚔ 雙人比賽 勝場',80,16,11,P.y);txt('📱 本機排行榜（只存喺呢部機）',80,29,7,P.c);
 const L=tabLayout();ctx.save();ctx.beginPath();ctx.rect(6,37,148,15);ctx.clip();L.forEach((t,i)=>{const x=6+t.x-board.sx;if(x+t.w<6||x>154)return;button(x,38,t.w,13,t.n,i===board.tab?'rgba(255,119,168,0.95)':'rgba(59,93,201,0.85)',()=>{board.tab=i;beep(880,.03);});});ctx.restore();
 ctx.fillStyle='rgba(26,28,44,0.95)';if(board.sx>0){ctx.fillRect(6,38,8,13);txt('◀',7,41,7,P.y,'left');}if(board.sx<L.max){ctx.fillRect(146,38,8,13);txt('▶',153,41,7,P.y,'right');}
 const a=boardRows(),own=a.findIndex(e=>e.id===pid());txt(board.tab?DISTS[board.tab-1]+' 頭 10 名':'全港（本機）頭 10 名',80,54,8,P.w);
@@ -730,7 +730,7 @@ txt(meName()+'・'+distName(meDist()),80,136,8,P.c);txt((meDist()>=0?`${distName
 button(12,170,44,16,'分享 📤','rgba(65,166,246,0.9)',doShare);button(58,170,46,16,'限時動態','rgba(255,119,168,0.92)',storyShare);button(106,170,42,16,'排行榜','rgba(239,125,87,0.92)',()=>goBoard('deep'));button(14,190,64,14,'換玩家','rgba(41,54,111,0.95)',goPlayers);button(82,190,64,14,'返主頁','rgba(26,28,44,0.9)',goTitle);
 if(tick>30&&tick%40<28)txt('㩒其他位置再潛',80,208,9,P.c);}
 
-// ===== 商人比賽：real-time 1v1 (PeerJS) =====
+// ===== 雙人比賽：real-time 1v1 (PeerJS) =====
 const VS_LOBBY='meowdeepsea-lobby-',VS_ROOM='meowdeepsea-room-',VS_N=10;
 let vs={st:'idle',msg:''},vsGen=0,vsRng=null,vsLog=[];
 function vlog(s){vsLog.push((Date.now()%1e6)+' '+s);if(vsLog.length>80)vsLog.shift();}
@@ -790,7 +790,7 @@ function vsJoinUI(){vsCleanup();vs={st:'join',msg:'',timers:[],peers:[]};showInp
 async function vsJoinGo(code){code=String(code||(inEl?inEl.value:'')).toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length!==6){showToast('房號要 6 位');return;}hideInput();const g=vsGen;vs.st='search';vs.msg='加入緊房 '+code+'…';
 try{await loadPeer();}catch(e){if(g===vsGen)vsFail('載入唔到 PeerJS（檢查網絡）');return;}if(g!==vsGen)return;const r=await mkPeer(null,g);if(g!==vsGen)return;if(r.err){vsFail('連唔到 PeerJS 伺服器（'+r.err+'）');return;}
 let bad=0;r.p.on('error',e=>{if(e&&e.type==='peer-unavailable')bad=1;});const c=await scanLobbies(r.p,[VS_ROOM+code],g,8000);if(g!==vsGen)return;if(c){vsStartConn(c,'client',c._ok);return;}vsFail(bad?'搵唔到房間 '+code:'加入唔到（房滿或者連唔到）');}
-function drawVsMenu(){ctx.fillStyle='rgba(26,28,44,0.88)';ctx.fillRect(4,14,152,222);txt('⚔ 商人比賽',80,17,13,P.y);txt('1v1 即時生存：邊個先沉就輸',80,34,8,P.c);txt('👤 '+meName()+'・'+distName(meDist()),80,46,8,P.g);
+function drawVsMenu(){ctx.fillStyle='rgba(26,28,44,0.88)';ctx.fillRect(4,14,152,222);txt('⚔ 雙人比賽',80,17,13,P.y);txt('1v1 即時生存：邊個先沉就輸',80,34,8,P.c);txt('👤 '+meName()+'・'+distName(meDist()),80,46,8,P.g);
 const s=vs.st;if(s==='search'||s==='host'){const dots='.'.repeat(((tick/20)|0)%4);txt('配對中'+dots,80,70,14,P.y);txt(vs.msg,80,92,8,P.w);if(vs.hostT){const sec=((Date.now()-vs.hostT)/1000)|0;txt(`已等 ${sec} 秒`,80,106,8,P.c);if(sec>60)txt('暫時冇人，可以用房號約朋友',80,118,7,P.y);}
 drawSubFull(ctx,64,132+Math.round(Math.sin(tick*.1)*3),(tick>>3)&3,cfg,2);button(40,180,80,18,'✕ 取消','rgba(178,46,84,0.92)',goVs);return;}
 if(s==='room'){txt('房號',80,66,9,P.w);txt(vs.code||'',80,78,20,P.y);txt('叫朋友㩒「加入房號」入呢個號',80,106,8,P.c);txt('等朋友加入'+'.'.repeat(((tick/20)|0)%4),80,120,9,P.w);button(40,180,80,18,'✕ 取消','rgba(178,46,84,0.92)',goVs);return;}
@@ -808,7 +808,7 @@ const T=(t,x,y,sz,col,al)=>txtOn(c,t,x,y,sz,col,al,LW-8,.6);
 const g=c.createLinearGradient(0,0,0,LH);g.addColorStop(0,'#73eff7');g.addColorStop(.45,'#41a6f6');g.addColorStop(1,'#29366f');c.fillStyle=g;c.fillRect(0,0,LW,LH);
 c.fillStyle='rgba(255,255,255,0.18)';for(let i=0;i<14;i++){const x=(i*53)%LW,y=60+(i*97)%220;c.fillRect(x,y,2,2);c.fillRect(x+1,y-1,1,1);}
 c.fillStyle='#ffcd75';c.fillStyle='rgba(255,205,117,0.35)';c.fillRect(0,LH-31,LW,31);c.fillStyle='#ffcd75';for(let x=0;x<LW;x+=6)c.fillRect(x,LH-34+((x/6)&1),5,3);
-const m=mode,dm=Math.floor(G.depth/10);let head=m==='deep'?'⬇ 潛得最深':m==='vs'?('⚔ 商人比賽 '+(vs.res==='win'?'勝利！':vs.res==='lose'?'惜敗':vs.res==='draw'?'平手':'')):m==='level'?`第 ${lvLabel(LV)} 關`+(G.won?' 過關！':''):'★ 每日挑戰';
+const m=mode,dm=Math.floor(G.depth/10);let head=m==='deep'?'⬇ 潛得最深':m==='vs'?('⚔ 雙人比賽 '+(vs.res==='win'?'勝利！':vs.res==='lose'?'惜敗':vs.res==='draw'?'平手':'')):m==='level'?`第 ${lvLabel(LV)} 關`+(G.won?' 過關！':''):'★ 每日挑戰';
 T('🐱 喵喵深海尋珠記',90,48,13,'#ffcd75');T(head,90,66,11,'#f4f4f4');
 c.fillStyle='rgba(26,28,44,0.55)';c.fillRect(20,84,140,64);T('分數',90,88,9,'#73eff7');T(String(G.score),90,100,26,'#ffcd75');T('最深 '+dm+'m　最高連擊 x'+(G.cMax|0),90,132,9,'#f4f4f4');
 drawSubFull(c,58,166,0,cfg,4);
