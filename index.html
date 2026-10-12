@@ -152,7 +152,8 @@ const CATS=[
 {n:'奶牛貓',t:'k',f:['ckccwc','ckwwwc','ckkwkc','cwppwc']},
 {n:'周星星',t:'w',f:['ckkkSc','ckykyc','cyyyyc','cywwmc']},
 {n:'潛水貓',t:'S',f:['cSccSc','cbbbbc','cSSSSc','cSppSc']},
-{n:'深海發光貓',t:'g',f:['cgccgc','cggggc','cgwgwc','cgppgc']}];// zhouxingxing hidden cat
+{n:'深海發光貓',t:'g',f:['cgccgc','cggggc','cgwgwc','cgppgc']},
+{n:'幸運招財貓',t:'y',f:['cwccwc','cwwwwc','cwkwkc','cwmmwc']}];// zhouxingxing hidden cat
 const MODELS=[
 {n:'標準艇',d:'平衡型',spd:1,o2:1,hp:3},
 {n:'坦克艇',d:'4 個心　慢少少',spd:.8,o2:1,hp:4},
@@ -187,7 +188,7 @@ function drawSubFull(c,x,y,f,cf,sc,rot){const D=MD[cf.model]||MD[0];c.save();c.t
 if(cf.cat===7){c.globalAlpha=.45+.25*Math.sin(tick*.1);c.drawImage(GLOW,-6,-6,28,28);c.globalAlpha=1;}
 if(cf.model===2){c.globalAlpha=.25;c.fillStyle=P.y;c.beginPath();c.moveTo(1,11);c.lineTo(-22,4);c.lineTo(-22,18);c.fill();c.globalAlpha=1;}
 if(cf.model===3){c.fillStyle='rgba(244,244,244,0.6)';for(let i=0;i<3;i++){const ly=5+((tick*3+i*37)%9),lx=17+((tick*2+i*5)%6);c.fillRect(lx,ly,3+((tick+i*13)%5),1);}}
-c.drawImage(curSub(cf)[f],0,0);
+c.drawImage(curSub(cf)[f],0,0);if(cf.cat===8){const w=Math.round(Math.sin(tick*.25)*1.5);c.fillStyle=P.k;c.fillRect(D.fx+5,D.fy-1+w,4,4);c.fillStyle=P.w;c.fillRect(D.fx+6,D.fy+w,2,2);}
 if(cf.prop===2){c.fillStyle=tick%4<2?P.o:P.y;c.fillRect(16,D.pr,2+(tick%3),2);c.fillStyle=P.y;c.fillRect(16,D.pr,1,2);}
 c.fillStyle=P.k;
 if(cf.model===0){const dir=Math.sin(tick*.03)>0;c.fillRect(10,-2,1,4);c.fillRect(dir?10:8,-3,3,2);c.fillStyle=P.c;c.fillRect(dir?12:8,-3,1,1);}
@@ -204,7 +205,7 @@ const SKB={x:126,y:204,w:30,h:30};
 function inSkill(q){const sk=SKILLS[cfg.skill];return state==='play'&&sk.id!=='none'&&skillOpen(cfg.skill)&&q.x>=SKB.x&&q.x<=SKB.x+SKB.w&&q.y>=SKB.y&&q.y<=SKB.y+SKB.h;}
 function goGarage(){state='garage';tick=0;}
 function cyc(k,n,d){cfg[k]=(cfg[k]+d+n)%n;saveCfg();}
-function bankPearls(){if(G.banked)return;G.banked=1;wallet.p+=G.pearls;saveCfg();}
+function bankPearls(){if(G.banked)return;G.banked=1;questAdd('depth',Math.floor(G.depth/10));wallet.p+=G.pearls;saveCfg();}
 
 // ===== zhouxingxing secret cat =====
 let zxx={taps:0,on:false};try{const z=JSON.parse(localStorage.getItem('mmsea_zxx')||'null');if(z)zxx=Object.assign(zxx,z);}catch(e){}
@@ -221,20 +222,39 @@ function celebrate(m){const d=MSDEF[m];const first=!ms[d.k];if(first){ms[d.k]=tr
 G.banner={a:m+'m！稱號：'+d.ic+d.title,b:first?'解鎖新貓仔：'+d.catN+'！':'',l:first?220:150};
 const cols=[P.p,P.y,P.g,P.c,P.v,P.o,P.w];for(let i=0;i<46;i++)G.parts.push({x:G.x+8,y:G.y+8,vx:rnd(-2,2),vy:rnd(-2.6,.6),l:rnd(30,60),c:cols[i%cols.length]});
 [523,659,784,1046,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,.14,'triangle'),i*110));say(d.line,140,true);}
-function availCats(){const a=[0,1,2,3,4];if(zxx.on)a.push(5);if(ms.m100)a.push(6);if(ms.m200)a.push(7);return a;}
+function availCats(){const a=[0,1,2,3,4];if(zxx.on)a.push(5);if(ms.m100)a.push(6);if(ms.m200)a.push(7);if(quest.ever)a.push(8);return a;}
 function catCycle(dir){const a=availCats();let i=a.indexOf(cfg.cat);if(i<0)i=0;cfg.cat=a[(i+dir+a.length)%a.length];saveCfg();}
 function badges(){return (ms.m100?'🏅深海新主 ':'')+(ms.m200?'👑深淵貓王':'');}
 function drawBanner(){if(!G.banner||state!=='play')return;const b=G.banner;b.l--;if(b.l<=0){G.banner=null;return;}const k=Math.min(1,b.l/20),sl=Math.min(1,(220-b.l)/12);ctx.globalAlpha=k;const y=Math.round(34-(1-sl)*20);
 ctx.fillStyle=tick%10<5?'rgba(177,62,83,0.9)':'rgba(239,125,87,0.9)';ctx.fillRect(4,y,152,b.b?30:18);ctx.fillStyle=P.y;ctx.fillRect(4,y,152,1);ctx.fillRect(4,y+(b.b?29:17),152,1);txt(b.a,80,y+4,10,P.y);if(b.b)txt(b.b,80,y+17,9,P.w);ctx.globalAlpha=1;}
 function catCount(){return zxx.on?6:5;}
 if(!zxx.on&&cfg.cat===5)cfg.cat=0;
-function zxxTap(){if(zxx.on)return;zxx.taps++;saveZxx();if(zxx.taps>=3){zxx.on=true;saveZxx();reveal=1;beep(523,.15);setTimeout(()=>beep(659,.15),120);setTimeout(()=>beep(784,.15),240);setTimeout(()=>beep(1046,.3),360);}else showToast('🕶 '+zxx.taps+'/3');}
+
+// ===== daily quest =====
+const QTYPES=[{k:'pearls',n:30,t:n=>`今日執 ${n} 粒珍珠`},{k:'depth',n:150,t:n=>`今日累積潛 ${n}m`},{k:'fish',n:20,t:n=>`今日食 ${n} 條魚仔`},{k:'sfish',n:2,t:n=>`每日挑戰捉 ${n} 次${DSF.n}`},{k:'runs50',n:3,t:n=>`今日 ${n} 局潛過 50m`}];
+const QDAY=QTYPES[(mulberry(hashStr('quest'+TODAY))()*QTYPES.length)|0];
+function ymd(off){const d=new Date();d.setDate(d.getDate()+off);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+let quest={date:TODAY,prog:0,done:false,streak:0,last:'',ever:false};
+try{const q=JSON.parse(localStorage.getItem('mmsea_quest')||'null');if(q){quest=Object.assign(quest,q);if(quest.date!==TODAY){quest.date=TODAY;quest.prog=0;quest.done=false;}}}catch(e){}
+function saveQuest(){try{localStorage.setItem('mmsea_quest',JSON.stringify(quest));}catch(e){}}
+saveQuest();
+const LUCKY_LINES=['招財招財，珍珠滾滾來！','今日財運：大吉！','舉手唔係問問題，係招財呀！'];
+const LUCKY_PORT=spr(['..k........k.kk.','.kwk......kwkwwk','.kwwkkkkkkwwkwwk','.kwwwwwwwwwwkwwk','kwwkwwwwkwwwkwk.','kwwkwwwwkwwwwk..','kwwwwppwwwwwwk..','kwwwwmmwwwwwk...','.kkmmmmmmmmkk...','.kmmmyyyymmmk...','.kwwwyykywwwk...','.kwwwyyyywwwk...','.kwwwwwwwwwwk...','.kwwkwwwwkwwk...','..kkkkkkkkkk....','................']);
+let revealKind='zxx';
+function questAdd(k,n){if(quest.done||QDAY.k!==k||!n)return;const before=quest.prog;quest.prog=Math.min(QDAY.n,quest.prog+n);saveQuest();
+const q4=Math.floor(before*4/QDAY.n),n4=Math.floor(quest.prog*4/QDAY.n);if(quest.prog>=QDAY.n)questComplete();else if(n4>q4)showToast('每日任務 '+quest.prog+'/'+QDAY.n);}
+function questComplete(){quest.done=true;quest.streak=(quest.last===ymd(-1))?quest.streak+1:1;quest.last=TODAY;const first=!quest.ever;let msg;
+if(first){quest.ever=true;msg='解鎖隱藏貓仔！';}else{const bonus=20+Math.min(10,quest.streak)*5;wallet.p+=bonus;saveCfg();msg='獎勵 🦪+'+bonus+'　連續 '+quest.streak+' 日';}
+saveQuest();[659,784,988,1318].forEach((f,i)=>setTimeout(()=>beep(f,.16,'triangle'),i*120));
+if(G){const cols=[P.y,P.o,P.p,P.g,P.c];for(let i=0;i<40;i++)G.parts.push({x:G.x+8,y:G.y+8,vx:rnd(-2,2),vy:rnd(-2.6,.6),l:rnd(30,60),c:cols[i%5]});if(state==='play'){G.banner={a:'🎉 每日任務完成！',b:msg,l:200};say(cfg.cat===8?LUCKY_LINES[0]:'任務完成！收工！',140,true);}}
+showToast('每日任務完成！');if(first){revealKind='lucky';reveal=1;}}
+function zxxTap(){if(zxx.on)return;zxx.taps++;saveZxx();if(zxx.taps>=3){zxx.on=true;saveZxx();revealKind='zxx';reveal=1;beep(523,.15);setTimeout(()=>beep(659,.15),120);setTimeout(()=>beep(784,.15),240);setTimeout(()=>beep(1046,.3),360);}else showToast('🕶 '+zxx.taps+'/3');}
 function drawReveal(){if(!reveal)return;reveal++;const t=reveal;ctx.fillStyle=t%8<4?P.y:P.o;ctx.fillRect(0,0,W,H);
 ctx.save();ctx.translate(80,110);ctx.rotate(t*.01);for(let i=0;i<12;i++){ctx.rotate(Math.PI/6);ctx.fillStyle=i%2?P.p:P.w;ctx.globalAlpha=.5;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-14,-170);ctx.lineTo(14,-170);ctx.fill();}ctx.restore();ctx.globalAlpha=1;
 for(let i=0;i<20;i++){const a=i*1.7+t*.05,r=(t*2+i*13)%120;ctx.fillStyle=i%2?P.w:P.c;ctx.fillRect(Math.round(80+Math.cos(a)*r),Math.round(110+Math.sin(a)*r),2,2);}
-const sc=Math.min(6,Math.floor(t/6)+1);ctx.save();ctx.translate(80-8*sc,108-8*sc);ctx.scale(sc,sc);ctx.drawImage(ZXX_PORT,0,0);ctx.restore();
-ctx.fillStyle='rgba(26,28,44,0.85)';ctx.fillRect(6,24,148,34);txt('隱藏貓仔解鎖！',80,27,12,P.y);txt('周星星',80,42,13,P.p);
-ctx.fillStyle='rgba(26,28,44,0.85)';ctx.fillRect(6,166,148,44);txt('「做貓呢，最緊要係型。」',80,170,9,P.w);txt('去車庫揀佢啦',80,186,9,P.g);if(t>60&&t%40<28)txt('㩒一下繼續',80,198,9,P.c);}
+const sc=Math.min(6,Math.floor(t/6)+1);ctx.save();ctx.translate(80-8*sc,108-8*sc);ctx.scale(sc,sc);ctx.drawImage(revealKind==='lucky'?LUCKY_PORT:ZXX_PORT,0,0);ctx.restore();
+ctx.fillStyle='rgba(26,28,44,0.85)';ctx.fillRect(6,24,148,34);txt('隱藏貓仔解鎖！',80,27,12,P.y);txt(revealKind==='lucky'?'幸運招財貓':'周星星',80,42,13,P.p);
+ctx.fillStyle='rgba(26,28,44,0.85)';ctx.fillRect(6,166,148,44);txt(revealKind==='lucky'?'「招財招財，珍珠滾滾來！」':'「做貓呢，最緊要係型。」',80,170,9,P.w);txt('去車庫揀佢啦',80,186,9,P.g);if(t>60&&t%40<28)txt('㩒一下繼續',80,198,9,P.c);}
 
 // ===== humour =====
 function say(t,fr,force){if(!G||(!force&&G.sayCd>0))return;G.say={t,l:fr||90};G.sayCd=(fr||90)+150;}
@@ -319,7 +339,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('㩒一下開始 🔊',0,-7,12,P.y);ctx.restore();
 txt('（會有音樂播放）',80,190,8,P.k);drawMute();}
-const GAME_VER='v2026.10.12-1715';
+const GAME_VER='v2026.10.12-1730';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -381,7 +401,7 @@ else{e.vx=e.dvx;e.y+=e.dvy+G.speed;}return;}}
 function burst(x,y,col,n){for(let i=0;i<n;i++)G.parts.push({x,y,vx:rnd(-1,1),vy:rnd(-1.4,.4),l:rnd(15,30),c:col});}
 function update(){tick++;if(reveal)return;
 if(state!=='play')return;
-const diff=curDiff();G.t++;G.speed=.5+diff*1.1;G.depth+=G.speed*.25;{const mm=G.depth/10;if(mm>=100&&!G.ms100){G.ms100=1;celebrate(100);}if(mm>=200&&!G.ms200){G.ms200=1;celebrate(200);}}
+const diff=curDiff();G.t++;G.speed=.5+diff*1.1;G.depth+=G.speed*.25;{const mm=G.depth/10;if(mm>=50&&!G.q50){G.q50=1;questAdd('runs50',1);}if(mm>=100&&!G.ms100){G.ms100=1;celebrate(100);}if(mm>=200&&!G.ms200){G.ms200=1;celebrate(200);}}
 let ax=0,ay=0;if(keys.arrowleft||keys.a)ax--;if(keys.arrowright||keys.d)ax++;if(keys.arrowup||keys.w)ay--;if(keys.arrowdown||keys.s)ay++;
 if(tiltOn&&!drag){tsx+=(tiltX-tsx)*.15;tsy+=(tiltY-tsy)*.15;ax+=tsx;ay+=tsy;}
 if(drag){drag.tx=Math.max(0,Math.min(W-16,drag.tx));drag.ty=Math.max(14,Math.min(H-16,drag.ty));const fk=Math.min(.6,.3*MODEL().spd),nx=G.x+(drag.tx-G.x)*fk,ny=G.y+(drag.ty-G.y)*fk;G.vx=nx-G.x;G.vy=ny-G.y;G.x=nx;G.y=ny;}else{
@@ -398,9 +418,9 @@ if(e.t==='angler')e.y+=Math.sign(G.y-e.y)*.25;if(e.t==='mine')e.x+=Math.sin(tick
 if(e.mag){e.y+=G.speed;e.mv=Math.min(5,(e.mv||.6)*1.12);const dx=G.x-e.x,dy=G.y-e.y,dd=Math.hypot(dx,dy)||1;const st=Math.min(dd,e.mv);e.x+=dx/dd*st-dy/dd*st*.35;e.y+=dy/dd*st+dx/dd*st*.35;if(tick%2===0)G.parts.push({x:e.x+8,y:e.y+8,vx:0,vy:0,l:12,c:P.l});}
 if(e.t==='boss'){e.ph++;e.y+=G.speed;e.x=64+Math.sin(e.ph*.02)*56;e.y=150+Math.sin(e.ph*.013)*55;}
 const hs=e.t==='boss'?16:8;const hit=Math.abs(e.x+hs-(G.x+8))<hs+2&&Math.abs(e.y+hs-(G.y+8))<hs+1;
-if(hit&&!e.dead){if(e.t==='pearl'){if(Math.random()<.35)say(cfg.cat===5?ZXX_LINES[(Math.random()*4)|0]:'發達喇！',80);G.pearls++;G.score+=10;e.dead=1;burst(e.x+8,e.y+8,P.l,10);G.pops.push({x:e.x+8,y:e.y,s:'+10',l:30});beep(1046,.1);}
-else if(e.t==='sfish'){G.score+=50;G.sf++;e.dead=1;burst(e.x+8,e.y+8,P[SF.a],20);burst(e.x+8,e.y+8,P.y,10);G.pops.push({x:e.x+8,y:e.y,s:'+50 '+SF.n,l:50});beep(1318,.15);setTimeout(()=>beep(1568,.15),90);}
-else if(e.t==='fish'){G.fish++;G.score+=5;e.dead=1;burst(e.x+8,e.y+8,P.o,8);G.pops.push({x:e.x+8,y:e.y,s:'+5',l:30});beep(880,.08);}
+if(hit&&!e.dead){if(e.t==='pearl'){if(Math.random()<.35)say(cfg.cat===5?ZXX_LINES[(Math.random()*4)|0]:'發達喇！',80);G.pearls++;questAdd('pearls',1);G.score+=10;e.dead=1;burst(e.x+8,e.y+8,P.l,10);G.pops.push({x:e.x+8,y:e.y,s:'+10',l:30});beep(1046,.1);}
+else if(e.t==='sfish'){G.score+=50;G.sf++;if(mode==='daily')questAdd('sfish',1);e.dead=1;burst(e.x+8,e.y+8,P[SF.a],20);burst(e.x+8,e.y+8,P.y,10);G.pops.push({x:e.x+8,y:e.y,s:'+50 '+SF.n,l:50});beep(1318,.15);setTimeout(()=>beep(1568,.15),90);}
+else if(e.t==='fish'){G.fish++;questAdd('fish',1);G.score+=5;e.dead=1;burst(e.x+8,e.y+8,P.o,8);G.pops.push({x:e.x+8,y:e.y,s:'+5',l:30});beep(880,.08);}
 else if(e.t==='bub'){G.o2=Math.min(100,G.o2+35);e.dead=1;burst(e.x+8,e.y+8,P.c,12);G.pops.push({x:e.x+8,y:e.y,s:'O2',l:30});beep(520,.12,'sine');}
 else if(G.inv===0&&G.shield<=0){G.hp--;G.hits++;say(cfg.cat===5?'唔好咁睇住我呀！':'哎呀我條尾！',90,true);G.inv=70;burst(G.x+8,G.y+8,P.p,16);beep(140,.25,'sawtooth');}}}
 G.ents=G.ents.filter(e=>e.t==='boss'||!e.dead&&e.y>-24&&e.x>-30&&e.x<W+30);
@@ -495,7 +515,7 @@ if(state==='play'){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(0,13,W,11);i
 const sk=SKILLS[cfg.skill];if(sk.id!=='none'&&skillOpen(cfg.skill)){const on=G.skillUses>0;ctx.globalAlpha=on?.85:.35;ctx.fillStyle=P.k;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,0,7);ctx.fill();ctx.fillStyle=on?P.v:P.S;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,12,0,7);ctx.fill();ctx.globalAlpha=1;if(G.magT>0){ctx.strokeStyle=P.y;ctx.lineWidth=2;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,-Math.PI/2,-Math.PI/2+Math.PI*2*G.magT/240);ctx.stroke();ctx.lineWidth=1;}txt(sk.ic,SKB.x+15,SKB.y+9,11,P.w);txt('x'+G.skillUses,SKB.x+26,SKB.y+22,7,P.y);}}
 UIB=[];if(state==='garage')drawGarage();
 if(state==='title'){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(10,30,140,40);txt('喵喵深海',80,33,16,P.y);txt('尋珠記',80,51,14,P.p);
-ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(10,74,140,46);ctx.drawImage(DSFIMG[f],12,86);txt('今日挑戰：'+DTHEME.n,82,76,10,P.y);txt('特別魚：'+DSF.n+'（+50）',82,90,9,P.c);txt('今日最高 '+daily.best+'　'+(daily.caught>0?'已捉到 ✔ x'+daily.caught:'未捉到'),82,104,8,P.w);
+ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(10,73,140,51);ctx.drawImage(DSFIMG[f],12,80);txt('今日挑戰：'+DTHEME.n,82,74,10,P.y);txt('特別魚：'+DSF.n+'（+50）',82,86,8,P.c);txt('今日最高 '+daily.best+'　'+(daily.caught>0?'已捉到 ✔ x'+daily.caught:'未捉到'),82,96,7,P.w);ctx.fillStyle='rgba(255,205,117,0.25)';ctx.fillRect(12,105,136,1);txt('📜 '+QDAY.t(QDAY.n)+(quest.done?' ✔':''),80,107,7,quest.done?P.g:P.y);ctx.fillStyle=P.k;ctx.fillRect(20,117,96,5);ctx.fillStyle=quest.done?P.g:P.o;ctx.fillRect(21,118,Math.round(94*quest.prog/QDAY.n),3);txt(quest.prog+'/'+QDAY.n+(quest.streak>1&&quest.last===TODAY?' 🔥'+quest.streak:''),134,115,7,P.w);
 ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(10,148,140,76);
 button(18,152,124,18,'▶ 關卡模式（到 '+lvLabel(prog.u)+'）','rgba(56,183,100,0.92)',()=>goSelect());
 button(18,174,124,18,'★ 每日挑戰','rgba(65,166,246,0.92)',startDaily);
@@ -540,5 +560,5 @@ function step(){if(state==='intro'){drawIntro();drawMute();if(state==='intro'&&!
 const STEP=1000/60;let lastTs=null,acc=0;
 function loop(ts){if(lastTs===null)lastTs=ts;let dt=ts-lastTs;lastTs=ts;if(dt<0)dt=0;if(dt>100)dt=100;acc+=dt;let n=0;while(acc>=STEP-0.5&&n<6){step();acc-=STEP;n++;}if(acc<0)acc=0;requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
-window.__sub=curSub;window.__drawSubFull=drawSubFull;window.__game={celebrate:m=>celebrate(m),get ms(){return ms},availCats,sharkPats:()=>G.ents.filter(e=>e.t==='shark').map(e=>e.pat),get audio2(){return{ctx:AC?AC.state:'none',master:MASTER?MASTER.gain.value:null,sfx:SFXN,muted,silentEl:!!silentEl,music:!!(music&&music.playing)}},toggleMute:()=>toggleMute(),GAME_VER,get audio(){return{ctx:AC?AC.state:'none',music:!!(music&&music.playing),muted}},get introT(){return introT},INTRO_D,get zxx(){return zxx},forceEgg:()=>{egg={side:0,t:40,y:100};},get egg(){return egg},get reveal(){return reveal},say,forceGag:k=>gags.push({k,x:40,y:120,vx:.2}),get cfg(){return cfg},setCfg:o=>{Object.assign(cfg,o);saveCfg();},goGarage,useSkill,get wallet(){return wallet},MODELS,daily:()=>({THEME:DTHEME.n,SF:DSF.n,SF_AT,daily}),share:()=>doShare(),startLevel,goSelect,unlockAll:()=>{prog.u=100;saveProg();},level:()=>lvl&&({L:lvl.L,label:lvLabel(lvl.L),theme:lvl.theme.n,goal:goalText(lvl),pool:lvl.pool,boss:lvl.boss,base:lvl.base}),get tilt(){return tiltOn},start:()=>startDaily(),get state(){return state},get G(){return G}};
+window.__sub=curSub;window.__drawSubFull=drawSubFull;window.__game={get quest(){return{q:QDAY.k,n:QDAY.n,text:QDAY.t(QDAY.n),...quest}},questAdd,get revealKind(){return revealKind},celebrate:m=>celebrate(m),get ms(){return ms},availCats,sharkPats:()=>G.ents.filter(e=>e.t==='shark').map(e=>e.pat),get audio2(){return{ctx:AC?AC.state:'none',master:MASTER?MASTER.gain.value:null,sfx:SFXN,muted,silentEl:!!silentEl,music:!!(music&&music.playing)}},toggleMute:()=>toggleMute(),GAME_VER,get audio(){return{ctx:AC?AC.state:'none',music:!!(music&&music.playing),muted}},get introT(){return introT},INTRO_D,get zxx(){return zxx},forceEgg:()=>{egg={side:0,t:40,y:100};},get egg(){return egg},get reveal(){return reveal},say,forceGag:k=>gags.push({k,x:40,y:120,vx:.2}),get cfg(){return cfg},setCfg:o=>{Object.assign(cfg,o);saveCfg();},goGarage,useSkill,get wallet(){return wallet},MODELS,daily:()=>({THEME:DTHEME.n,SF:DSF.n,SF_AT,daily}),share:()=>doShare(),startLevel,goSelect,unlockAll:()=>{prog.u=100;saveProg();},level:()=>lvl&&({L:lvl.L,label:lvLabel(lvl.L),theme:lvl.theme.n,goal:goalText(lvl),pool:lvl.pool,boss:lvl.boss,base:lvl.base}),get tilt(){return tiltOn},start:()=>startDaily(),get state(){return state},get G(){return G}};
 </script></body></html>
