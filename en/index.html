@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('Tap to start 🔊',0,-7,12,P.y);ctx.restore();
 txt('(music will play)',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0120';
+const GAME_VER='v2026.10.14-0130';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -831,17 +831,17 @@ else if(k==='sweat'||k==='o2'){const yy=fy-2+((tick>>3)%4);F(P.c,fx+7,yy,1,2);F(
 if(EXPR.say&&EXPR.t>20&&!G.say){const s=EXPR.say;ctx.fillStyle='rgba(26,28,44,0.85)';const w=Math.min(70,s.length*(LANG==='en'?4:7)+6);ctx.fillRect(x+8-w/2,y-15,w,11);ctx.fillRect(x+6,y-4,2,2);txt(s,x+8,y-14,8,P.w,'center',w-2);}}
 // ---- relax mode
 let RX=null;
-const HTR=[{m:[50,57,58,60,62,64,65,67,69,72],b:0,n:{zh:'\u975c\u97f3\uff08\u53ea\u5f97\u89f8\u78b0\uff09',en:'Silence (touch only)',ja:'\u7121\u97f3\uff08\u30bf\u30c3\u30c1\u306e\u307f\uff09'}},
-{m:[50,57,58,60,62,64,65,67,69,72],b:.95,n:{zh:'\u6df1\u6d77\u5b89\u5be7',en:'Deep Sea Calm',ja:'\u6df1\u6d77\u306e\u9759\u3051\u3055'}},
-{m:[49,56,57,59,61,64,66,68,69],b:1.15,n:{zh:'\u6708\u5149\u6f6e\u6c50',en:'Moonlit Tide',ja:'\u6708\u591c\u306e\u6f6e'}},
-{m:[53,55,56,60,63,65,67,68,72],b:.85,n:{zh:'\u73ca\u745a\u547c\u5438',en:'Coral Breath',ja:'\u30b5\u30f3\u30b4\u306e\u547c\u5438'}},
-{m:[50,57,60,62,64,65,67,69,72],b:.72,n:{zh:'\u6668\u7063',en:'Morning Bay',ja:'\u671d\u306e\u5165\u308a\u6c5f'}},
-{m:[52,59,60,62,64,66,67,69,71],b:1.3,n:{zh:'\u6d77\u661f\u5922',en:'Starfish Dream',ja:'\u30d2\u30c8\u30c7\u306e\u5922'}}];
+const HTR=[{m:[62,69,72,74,76,77,79,81,84],b:0,n:{zh:'\u975c\u97f3\uff08\u53ea\u5f97\u89f8\u78b0\uff09',en:'Silence (touch only)',ja:'\u7121\u97f3\uff08\u30bf\u30c3\u30c1\u306e\u307f\uff09'}},
+{m:[52,57,59,60,64,67,69,71,74],b:1.35,n:{zh:'\u6df1\u6d77\u8108\u52d5 \u00b7 E Low Pygmy',en:'Deep Pulse \u00b7 E Low Pygmy',ja:'\u6df1\u6d77\u306e\u9f13\u52d5 \u00b7 E Low Pygmy'}},
+{m:[55,60,62,63,67,70,72,74,77],b:1.15,n:{zh:'\u6708\u5149\u7948\u9858 \u00b7 G Pygmy',en:'Moonlit Wish \u00b7 G Pygmy',ja:'\u6708\u591c\u306e\u9858\u3044 \u00b7 G Pygmy'}},
+{m:[59,66,67,69,71,73,74,76,78,81],b:1.05,n:{zh:'\u6df1\u85cd\u591c\u66f2 \u00b7 B Kurd',en:'Deep Blue Nocturne \u00b7 B Kurd',ja:'\u6df1\u3044\u9752\u306e\u591c\u60f3\u66f2 \u00b7 B Kurd'}},
+{m:[59,66,69,71,73,74,76,78,81],b:.95,n:{zh:'\u73ca\u745a\u5fae\u5149 \u00b7 B Celtic Minor',en:'Coral Glow \u00b7 B Celtic Minor',ja:'\u30b5\u30f3\u30b4\u306e\u304d\u3089\u3081\u304d \u00b7 B Celtic Minor'}},
+{m:[62,69,72,74,76,77,79,81,84],b:.9,n:{zh:'\u6668\u7063\u6f2b\u6b65 \u00b7 D Celtic Minor',en:'Morning Bay \u00b7 D Celtic Minor',ja:'\u671d\u306e\u5165\u308a\u6c5f \u00b7 D Celtic Minor'}}];
 const curTr=()=>HTR[(cfg.rtrack==null?1:cfg.rtrack)%HTR.length]||HTR[1];
-let HPB=null;function hpBus(){if(HPB)return HPB;if(!ensureAC())return null;try{const ac=AC,bus=ac.createGain();bus.gain.value=1;bus.connect(MASTER);const cv2=ac.createConvolver(),len=ac.sampleRate*2.6|0,ir=ac.createBuffer(2,len,ac.sampleRate);for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3.2);}cv2.buffer=ir;const wet=ac.createGain();wet.gain.value=.35;bus.connect(cv2);cv2.connect(wet);wet.connect(MASTER);HPB=bus;}catch(e){HPB=MASTER;}return HPB;}
+let HPB=null;function hpBus(){if(HPB)return HPB;if(!ensureAC())return null;try{const ac=AC,bus=ac.createGain();bus.gain.value=1;const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2400;lp.Q.value=.5;const body=ac.createBiquadFilter();body.type='peaking';body.frequency.value=320;body.gain.value=4;body.Q.value=.9;bus.connect(lp);lp.connect(body);body.connect(MASTER);const cv2=ac.createConvolver(),len=ac.sampleRate*4.2|0,ir=ac.createBuffer(2,len,ac.sampleRate);for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.4)*(i<ac.sampleRate*.02?i/(ac.sampleRate*.02):1);}cv2.buffer=ir;const wet=ac.createGain();wet.gain.value=.45;body.connect(cv2);cv2.connect(wet);wet.connect(MASTER);HPB=bus;}catch(e){HPB=MASTER;}return HPB;}
 function hpResume(){try{if(ensureAC()&&AC.state!=='running')AC.resume().catch(()=>{});}catch(e){}}
 function hpVoice(midi,vel,at){try{if(!ensureAC())return false;if(AC.state!=='running'){hpResume();window.__hpLast='suspended '+midi;return false;}const bus=hpBus(),t=Math.max(AC.currentTime+.01,at||0),f0=440*Math.pow(2,(midi-69)/12);
-[[1,1,'sine',3.2],[1.004,.35,'sine',2.8],[2,.32,'sine',1.6],[2.98,.12,'triangle',.9],[4.07,.04,'sine',.45]].forEach(([m,a,ty,d])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f0*m;const pk=.11*vel*a,dd=d*(.6+.4*vel);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,pk),t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dd);o.connect(g);g.connect(bus);o.start(t);o.stop(t+dd+.05);});
+[[1,1,'sine',5.8,.028],[1.0025,.4,'sine',5.2,.03],[.998,.25,'sine',4.6,.03],[2,.16,'sine',2.6,.02],[2.76,.035,'sine',1.1,.015]].forEach(([m,a,ty,d,att])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f0*m;const pk=.12*vel*a,dd=d*(.7+.3*vel);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,pk),t+att);g.gain.exponentialRampToValueAtTime(.0001,t+dd);o.connect(g);g.connect(bus);o.start(t);o.stop(t+dd+.05);});
 window.__hpN=(window.__hpN||0)+1;window.__hpLast=midi+' @'+AC.state;return true;}catch(e){window.__hpLast='ERR '+e.name;return false;}}
 function hpNote(i){const m=curTr().m;hpVoice(m[i%m.length]+(i>=m.length?12:0),.9);}
 function hpGen(){const R=RX,tr=curTr();if(!tr.b||!AC||AC.state!=='running')return;const now=AC.currentTime;if(!R.gn||R.gn<now-1)R.gn=now+1.2;if(R.gn>now+.3)return;
