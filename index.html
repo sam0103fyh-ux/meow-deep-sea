@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-HK"><head><meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>喵喵深海尋珠記</title>
 <style>html,body{margin:0;height:100%;background:#0b2a4a;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
@@ -59,7 +62,7 @@ if(kelp&&rnd()<.5){for(let k=0;k<40;k+=4){x.fillStyle=k%8?P.G:P.g;x.fillRect(i+6
 return c;}
 const L1=mkLayer(7,'#22406e','#2b5280',70,false),L2=mkLayer(13,'#1f6b7a','#2f8a8a',45,true),L3=mkLayer(29,P.y,P.o,18,false);
 // sound (tiny webaudio)
-let AC=null;function beep(f,d,t){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t||'square';o.frequency.value=f;g.gain.value=.04;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d);}catch(e){}}
+let AC=null,MASTER=null,SFXN=0;function beep(f,d,t){try{if(!ensureAC()||AC.state!=='running')return;SFXN++;const o=AC.createOscillator(),g=AC.createGain();o.type=t||'square';o.frequency.value=f;g.gain.value=.04;o.connect(g);g.connect(MASTER);o.start();g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d);}catch(e){}}
 // state
 
 // ===== Daily Challenge =====
@@ -260,11 +263,24 @@ if(T<.06){ctx.fillStyle='rgba(26,28,44,'+(1-T/.06)+')';ctx.fillRect(0,0,W,H);}
 if(T>.95){ctx.fillStyle='rgba(26,28,44,'+((T-.95)/.05)+')';ctx.fillRect(0,0,W,H);}}
 
 // ===== intro BGM (Web Audio, generated) + tap gate + mute =====
-let muted=false;try{muted=localStorage.getItem('mmsea_mute')==='1';}catch(e){}
+
+// ===== audio core: one shared AudioContext + master gain (mute affects BGM + SFX) =====
+let muted=false;try{localStorage.removeItem('mmsea_mute');muted=localStorage.getItem('mmsea_mute2')==='1';}catch(e){}
+function ensureAC(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(!MASTER){MASTER=AC.createGain();MASTER.gain.value=muted?0:1;MASTER.connect(AC.destination);}}catch(e){return null;}return AC;}
+let silentEl=null;
+function unlockGesture(){const ac=ensureAC();if(!ac)return;
+try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
+try{if(!silentEl){silentEl=document.createElement('audio');silentEl.setAttribute('playsinline','');silentEl.setAttribute('webkit-playsinline','');silentEl.loop=true;silentEl.preload='auto';silentEl.src='data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';silentEl.volume=0.01;}const pr=silentEl.play();if(pr&&pr.catch)pr.catch(()=>{});}catch(e){}
+try{const b=ac.createBuffer(1,1,22050),src=ac.createBufferSource();src.buffer=b;src.connect(ac.destination);src.start(0);}catch(e){}
+if(ac.state!=='running'){try{const r=ac.resume();if(r&&r.then)r.then(onAudioRunning).catch(()=>{});}catch(e){}}else onAudioRunning();}
+function onAudioRunning(){if(AC&&AC.state==='running'&&state==='intro'&&!(music&&music.playing))startMusic();}
+['touchstart','touchend','pointerdown','pointerup','mousedown','click','keydown'].forEach(ev=>document.addEventListener(ev,unlockGesture,{capture:true,passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AC&&AC.state!=='running'){try{AC.resume().catch(()=>{});}catch(e){}}});
+
 let music=null;
-function getAC(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(e){}return AC;}
-function startMusic(){const ac=getAC();if(!ac)return;const t0=ac.currentTime+.05,dur=Math.max(1.5,(INTRO_D-introT)/60+.3);const m=ac.createGain();m.gain.setValueAtTime(0,t0);m.gain.linearRampToValueAtTime(muted?0:.09,t0+1.5);m.gain.setValueAtTime(muted?0:.09,t0+dur-1.2);m.gain.linearRampToValueAtTime(0,t0+dur);
-const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;lp.connect(m);m.connect(ac.destination);const nodes=[];
+function getAC(){const a=ensureAC();try{if(a&&a.state!=='running')a.resume().catch(()=>{});}catch(e){}return a;}
+function startMusic(){const ac=getAC();if(!ac)return;const t0=ac.currentTime+.05,dur=Math.max(1.5,(INTRO_D-introT)/60+.3);const m=ac.createGain();m.gain.setValueAtTime(0,t0);m.gain.linearRampToValueAtTime(.09,t0+1.5);m.gain.setValueAtTime(.09,t0+dur-1.2);m.gain.linearRampToValueAtTime(0,t0+dur);
+const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;lp.connect(m);m.connect(MASTER);const nodes=[];
 const hz=n=>440*Math.pow(2,(n-69)/12);
 const chords=[[48,55,64,71],[45,52,60,67],[41,48,57,64],[43,50,59,65]];
 for(let i=0;i*2<dur;i++){const ch=chords[i%4],ts=t0+i*2;for(const n of ch){for(const dt of[-4,4]){const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=hz(n);o.detune.value=dt;g.gain.setValueAtTime(0,ts);g.gain.linearRampToValueAtTime(.05,ts+.6);g.gain.linearRampToValueAtTime(0,ts+2.3);o.connect(g);g.connect(lp);o.start(ts);o.stop(ts+2.4);nodes.push(o);}}
@@ -273,7 +289,7 @@ for(let k=0;k<8;k++){const tn=ts+k*.25;if(tn>t0+dur-.3)break;const o=ac.createOs
 for(let i=0;i<Math.floor(dur*1.5);i++){const tn=t0+.5+Math.random()*(dur-1),o=ac.createOscillator(),g=ac.createGain();o.type='sine';const f0=600+Math.random()*500;o.frequency.setValueAtTime(f0,tn);o.frequency.exponentialRampToValueAtTime(f0*2.2,tn+.08);g.gain.setValueAtTime(.0001,tn);g.gain.linearRampToValueAtTime(.05,tn+.01);g.gain.exponentialRampToValueAtTime(.0001,tn+.12);o.connect(g);g.connect(m);o.start(tn);o.stop(tn+.15);nodes.push(o);}
 music={m,nodes,playing:true};}
 function stopMusic(){if(!music||!music.playing)return;music.playing=false;const ac=AC,mm=music;try{const n=ac.currentTime;mm.m.gain.cancelScheduledValues(n);mm.m.gain.setValueAtTime(mm.m.gain.value,n);mm.m.gain.linearRampToValueAtTime(0,n+.4);setTimeout(()=>{for(const o of mm.nodes){try{o.stop();}catch(e){}}try{mm.m.disconnect();}catch(e){}},500);}catch(e){}}
-function toggleMute(){muted=!muted;try{localStorage.setItem('mmsea_mute',muted?'1':'0');}catch(e){}if(music&&music.playing&&AC){const n=AC.currentTime;music.m.gain.cancelScheduledValues(n);music.m.gain.setValueAtTime(muted?0:.09,n);}}
+function toggleMute(){muted=!muted;try{localStorage.setItem('mmsea_mute2',muted?'1':'0');}catch(e){}if(ensureAC()&&MASTER){MASTER.gain.cancelScheduledValues(0);MASTER.gain.value=muted?0:1;}}
 const MUTEB={x:138,y:4,w:18,h:14};
 function inMute(q){return q.x>=MUTEB.x&&q.x<=MUTEB.x+MUTEB.w&&q.y>=MUTEB.y&&q.y<=MUTEB.y+MUTEB.h;}
 function drawMute(){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(MUTEB.x,MUTEB.y,MUTEB.w,MUTEB.h);txt(muted?'🔇':'🔊',MUTEB.x+9,MUTEB.y+2,9,P.w);}
@@ -286,6 +302,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('㩒一下開始 🔊',0,-7,12,P.y);ctx.restore();
 txt('（會有音樂播放）',80,190,8,P.k);drawMute();}
+const GAME_VER='v2026.10.12-1655';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -451,7 +468,7 @@ ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(10,74,140,46);ctx.drawImage(DSFI
 ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(10,148,140,76);
 button(18,152,124,18,'▶ 關卡模式（到 '+lvLabel(prog.u)+'）','rgba(56,183,100,0.92)',()=>goSelect());
 button(18,174,124,18,'★ 每日挑戰','rgba(65,166,246,0.92)',startDaily);
-button(18,196,124,16,'🐱 車庫／準備','rgba(255,119,168,0.92)',goGarage);txt('珍珠 '+wallet.p+'　最高分 '+best,80,214,8,P.g);ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(0,226,W,12);txt(TIPS[(tick/240|0)%TIPS.length],80,228,7,P.y);}
+button(18,196,124,16,'🐱 車庫／準備','rgba(255,119,168,0.92)',goGarage);txt('珍珠 '+wallet.p+'　最高分 '+best,80,214,8,P.g);ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(0,226,W,12);txt(TIPS[(tick/240|0)%TIPS.length],80,228,7,P.y);ctx.globalAlpha=.8;txt(GAME_VER,156,16,6,P.w,'right');ctx.globalAlpha=1;}
 if(state==='select'){ctx.fillStyle='rgba(26,28,44,0.72)';ctx.fillRect(4,16,152,206);const w=selW;
 txt('第 '+(w+1)+' 世界',80,19,9,P.c);txt(THEMES[w].n,80,30,13,P.y);
 if(w>0)button(8,22,20,18,'◀','rgba(59,93,201,0.9)',()=>goSelect(w-1));
@@ -485,9 +502,12 @@ row(182,'技能',SKILLS[cfg.skill].n,'skill',SKILLS.length);
 const sk=SKILLS[cfg.skill];if(sk.id!=='none'){if(skillOpen(cfg.skill))txt(sk.ic+' '+sk.d+'（每局 1 次）',80,198,8,P.g);else{txt('🔒 過 '+lvLabel(sk.lv)+' 關 或 '+sk.cost+' 粒珍珠',80,198,8,P.p);if(wallet.p>=sk.cost)button(56,208,48,12,'買','rgba(56,183,100,0.92)',()=>{wallet.p-=sk.cost;wallet.own.push(sk.id);saveCfg();showToast('解鎖！');});}}
 txt('🦪 '+wallet.p,30,222,8,P.y);button(112,220,40,14,'完成','rgba(56,183,100,0.92)',goTitle);}
 function button(x,y,w,h,label,col,fn){ctx.fillStyle=col;ctx.fillRect(x,y,w,h);ctx.fillStyle='rgba(255,255,255,0.7)';ctx.fillRect(x,y,w,1);ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(x,y+h-1,w,1);if(label)txt(label,x+w/2,y+(h-10)/2+1,9,P.w);UIB.push({x,y,w,h,fn});}
-function drawBtn(){if(state==='play'||state==='world'||state==='garage')return;const y=state==='select'?178:126;button(40,y,80,16,'📱 體感：'+(tiltOn?'開':'關'),tiltOn?'rgba(56,183,100,0.85)':'rgba(26,28,44,0.7)',toggleTilt);}
+function drawBtn(){if(state!=='play'&&state!=='world'&&state!=='intro')button(138,1,18,12,muted?'🔇':'🔊','rgba(26,28,44,0.7)',toggleMute);if(state==='play'||state==='world'||state==='garage')return;const y=state==='select'?178:126;button(40,y,80,16,'📱 體感：'+(tiltOn?'開':'關'),tiltOn?'rgba(56,183,100,0.85)':'rgba(26,28,44,0.7)',toggleTilt);}
 function drawToast(){if(!toast)return;toast.l--;ctx.globalAlpha=Math.min(1,toast.l/20);ctx.fillStyle='rgba(26,28,44,0.9)';ctx.fillRect(45,60,70,18);txt(toast.t,80,64,10,P.g);ctx.globalAlpha=1;if(toast.l<=0)toast=null;}
-function loop(){if(state==='intro'){drawIntro();drawMute();if(state==='intro'&&!audioOn()){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(2,226,66,12);txt('🔇 㩒一下開聲',35,228,8,P.w);}requestAnimationFrame(loop);return;}update();draw();drawBtn();drawToast();drawReveal();if(fadeIn>0){ctx.fillStyle='rgba(26,28,44,'+(fadeIn/24)+')';ctx.fillRect(0,0,W,H);fadeIn--;}requestAnimationFrame(loop);}
+function step(){if(state==='intro'){drawIntro();drawMute();if(state==='intro'&&!audioOn()){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(2,226,66,12);txt('🔇 㩒一下開聲',35,228,8,P.w);}return;}update();draw();drawBtn();drawToast();drawReveal();if(fadeIn>0){ctx.fillStyle='rgba(26,28,44,'+(fadeIn/24)+')';ctx.fillRect(0,0,W,H);fadeIn--;}}
+// fixed 60 Hz logic step, independent of display refresh rate (60/90/120 Hz)
+const STEP=1000/60;let lastTs=null,acc=0;
+function loop(ts){if(lastTs===null)lastTs=ts;let dt=ts-lastTs;lastTs=ts;if(dt<0)dt=0;if(dt>100)dt=100;acc+=dt;let n=0;while(acc>=STEP-0.5&&n<6){step();acc-=STEP;n++;}if(acc<0)acc=0;requestAnimationFrame(loop);}
 requestAnimationFrame(loop);
-window.__sub=curSub;window.__drawSubFull=drawSubFull;window.__game={get audio(){return{ctx:AC?AC.state:'none',music:!!(music&&music.playing),muted}},get introT(){return introT},INTRO_D,get zxx(){return zxx},forceEgg:()=>{egg={side:0,t:40,y:100};},get egg(){return egg},get reveal(){return reveal},say,forceGag:k=>gags.push({k,x:40,y:120,vx:.2}),get cfg(){return cfg},setCfg:o=>{Object.assign(cfg,o);saveCfg();},goGarage,useSkill,get wallet(){return wallet},MODELS,daily:()=>({THEME:DTHEME.n,SF:DSF.n,SF_AT,daily}),share:()=>doShare(),startLevel,goSelect,unlockAll:()=>{prog.u=100;saveProg();},level:()=>lvl&&({L:lvl.L,label:lvLabel(lvl.L),theme:lvl.theme.n,goal:goalText(lvl),pool:lvl.pool,boss:lvl.boss,base:lvl.base}),get tilt(){return tiltOn},start:()=>startDaily(),get state(){return state},get G(){return G}};
+window.__sub=curSub;window.__drawSubFull=drawSubFull;window.__game={get audio2(){return{ctx:AC?AC.state:'none',master:MASTER?MASTER.gain.value:null,sfx:SFXN,muted,silentEl:!!silentEl,music:!!(music&&music.playing)}},toggleMute:()=>toggleMute(),GAME_VER,get audio(){return{ctx:AC?AC.state:'none',music:!!(music&&music.playing),muted}},get introT(){return introT},INTRO_D,get zxx(){return zxx},forceEgg:()=>{egg={side:0,t:40,y:100};},get egg(){return egg},get reveal(){return reveal},say,forceGag:k=>gags.push({k,x:40,y:120,vx:.2}),get cfg(){return cfg},setCfg:o=>{Object.assign(cfg,o);saveCfg();},goGarage,useSkill,get wallet(){return wallet},MODELS,daily:()=>({THEME:DTHEME.n,SF:DSF.n,SF_AT,daily}),share:()=>doShare(),startLevel,goSelect,unlockAll:()=>{prog.u=100;saveProg();},level:()=>lvl&&({L:lvl.L,label:lvLabel(lvl.L),theme:lvl.theme.n,goal:goalText(lvl),pool:lvl.pool,boss:lvl.boss,base:lvl.base}),get tilt(){return tiltOn},start:()=>startDaily(),get state(){return state},get G(){return G}};
 </script></body></html>
