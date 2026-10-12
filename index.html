@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('㩒一下開始 🔊',0,-7,12,P.y);ctx.restore();
 txt('（會有音樂播放）',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0110';
+const GAME_VER='v2026.10.14-0120';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -1438,7 +1438,19 @@ F(K,cx-2,ey+3,1,1);F(K,cx-1,ey+4,1,1);F(K,cx,ey+3,1,1);F(K,cx+1,ey+4,1,1);F(K,cx
 if(v===2){F('#ffcd75',cx+3,top-2,2,2);F('#ffcd75',cx+6,top-2,2,2);F('#ef7d57',cx+5,top-1,1,1);}
 if(v===1&&k%3===0){F(WH,1,4,1,1);F(WH,16,9,1,1);}
 return c;}
-const JCAT=[0,1,2,3,4,5].map(k=>jellyV(2,k));
+function seahorseV(v,k){const c=document.createElement('canvas');c.width=18;c.height=26;const x=c.getContext('2d');
+const R=["......o.o.o.......",".....ovovovo......","....ollllllllo....","...ollllllllllo...","...olll.kk.lllooo.","...ollkwwkllllppo.","...ollkwkkllllooo.","...ollbkk.bllo....","....ollllllllo....",".....olllllo......","...vvopplvlo......","..vvvopplllo......","...vvopplvllo.....","..vvvoppllllo.....","...vvopplvlo......",".....opplllo......","......opplo.......","......oppo........","......opo..ooo....","......opo.oppo....","......oppopo.o....",".......opppo......","........ooo......."];
+const C={o:'#5d275d',w:'#f4f4f4',k:'#1a1c2c',b:'#ff77a8'};
+if(v===0){C.l='#ffe8f0';C.p='#ff77a8';C.v='#c58cf7';}else if(v===1){C.l='#ffe8f0';C.p='#c58cf7';C.v='#ff77a8';}else{C.l='#c58cf7';C.p='#ff77a8';C.v='#ffe8f0';C.b='#ff77a8';}
+const fl=k%2,sw=[0,1,1,0,-1,-1][k%6];
+R.forEach((row,y)=>{let r=row;if(y>=10&&y<=14&&fl)r=r.replace(/^(\.*)v/,'$1.');if(y>=18)r=(sw>0?'.'+r.slice(0,-1):sw<0?r.slice(1)+'.':r);
+for(let i=0;i<r.length;i++){const ch=r[i];if(ch==='.')continue;let col=C[ch];if(y>=4&&y<=7&&ch==='.'){continue;}x.fillStyle=col;x.fillRect(i,y+1,1,1);}});
+// eye fill for '.' holes inside eye rows (rounded eye corners use body)
+x.fillStyle=C.l;[[7,5],[10,5],[9,8]].forEach(([a,b])=>x.fillRect(a,b,1,1));
+if(v!==0){x.fillStyle='#ffcd75';x.fillRect(3,2,2,2);x.fillRect(6,2,2,2);x.fillStyle='#ef7d57';x.fillRect(5,3,1,1);}
+x.fillStyle='#f4f4f4';x.fillRect(5,4,1,1);
+return c;}
+const JCAT=[0,1,2,3,4,5].map(k=>seahorseV(1,k));
 function drawCompanion(){if(LANG!=='zh'||!G||state!=='play')return;const m=G.depth/10,boost=mode==='level'&&lvl?lvl.w*40:0;const a=Math.min(.7,(m+boost)/400*.7);if(a<=.01)return;
 const f=((tick/10)|0)%6,x=10,y=H-32+Math.round(Math.sin(tick*.04)*2),pu=.75+.25*Math.sin(tick*.07);
 ctx.globalAlpha=a*.55*pu;ctx.drawImage(GLOW,x+2,y+2,12,10);ctx.globalAlpha=a*.35*pu;ctx.fillStyle=P.y;ctx.fillRect(x+7,y+8,2,2);ctx.globalAlpha=a;ctx.drawImage(JCAT[f],x,y);ctx.globalAlpha=1;window.__compA=a;}
