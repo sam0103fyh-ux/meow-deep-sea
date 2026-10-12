@@ -787,7 +787,7 @@ function renderStory(){try{const k=6,LW=180,LH=320,c0=document.createElement('ca
 const T=(t,x,y,sz,col,al)=>{c.font=`bold ${sz}px sans-serif`;c.textAlign=al||'center';c.textBaseline='top';c.fillStyle='#1a1c2c';c.fillText(t,x+.6,y+.6);c.fillStyle=col;c.fillText(t,x,y);};
 const g=c.createLinearGradient(0,0,0,LH);g.addColorStop(0,'#73eff7');g.addColorStop(.45,'#41a6f6');g.addColorStop(1,'#29366f');c.fillStyle=g;c.fillRect(0,0,LW,LH);
 c.fillStyle='rgba(255,255,255,0.18)';for(let i=0;i<14;i++){const x=(i*53)%LW,y=60+(i*97)%220;c.fillRect(x,y,2,2);c.fillRect(x+1,y-1,1,1);}
-c.fillStyle='#ffcd75';for(let x=0;x<LW;x+=6)c.fillRect(x,LH-34+((x/6)&1),5,3);c.fillStyle='rgba(255,205,117,0.35)';c.fillRect(x,LH-31,5,31);c.fillStyle='#ffcd75';
+c.fillStyle='#ffcd75';c.fillStyle='rgba(255,205,117,0.35)';c.fillRect(0,LH-31,LW,31);c.fillStyle='#ffcd75';for(let x=0;x<LW;x+=6)c.fillRect(x,LH-34+((x/6)&1),5,3);
 const m=mode,dm=Math.floor(G.depth/10);let head=m==='deep'?'⬇ 潛得最深':m==='vs'?('⚔ 商人比賽 '+(vs.res==='win'?'勝利！':vs.res==='lose'?'惜敗':vs.res==='draw'?'平手':'')):m==='level'?'第 '+lvLabel(LV)+' 關'+(G.won?' 過關！':''):'★ 每日挑戰';
 T('🐱 喵喵深海尋珠記',90,48,13,'#ffcd75');T(head,90,66,11,'#f4f4f4');
 c.fillStyle='rgba(26,28,44,0.55)';c.fillRect(20,84,140,64);T('分數',90,88,9,'#73eff7');T(String(G.score),90,100,26,'#ffcd75');T('最深 '+dm+'m　最高連擊 x'+(G.cMax|0),90,132,9,'#f4f4f4');
@@ -795,7 +795,7 @@ drawSubFull(c,58,166,0,cfg,4);
 if(m==='vs'&&vs.opp)T('vs '+vs.opp.n+'（'+distName(vs.opp.d)+'）',90,233,8,'#f4f4f4');
 T('👤 '+meName()+'・'+distName(meDist()),90,243,10,'#a7f070');
 T(location.href.split('?')[0].replace(/^https?:\/\//,''),90,258,6,'#f4f4f4');
-const u=c0.toDataURL('image/png'),bin=atob(u.split(',')[1]),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);storyBlob=new Blob([a],{type:'image/png'});}catch(e){storyBlob=null;}}
+const u=c0.toDataURL('image/png'),bin=atob(u.split(',')[1]),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);storyBlob=new Blob([a],{type:'image/png'});}catch(e){storyBlob=null;window.__storyErr=String(e&&e.stack||e);}}
 function storyShare(){window.__storyLog='';if(!storyBlob)renderStory();let f;try{f=new File([storyBlob],'meow-story.png',{type:'image/png'});}catch(e){}
 if(!f||!navigator.share||!navigator.canShare||!navigator.canShare({files:[f]})){window.__storyLog='unsupported';showToast('呢部機分享唔到限時動態');return;}
 window.__storyLog='files';navigator.share({files:[f]}).catch(e=>{if(e&&e.name!=='AbortError')showToast('呢部機分享唔到限時動態');});}
