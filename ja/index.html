@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('タップでスタート 🔊',0,-7,12,P.y);ctx.restore();
 txt('（音楽が流れます）',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0100';
+const GAME_VER='v2026.10.14-0110';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -1414,27 +1414,31 @@ ctx.fillStyle='#38b764';ctx.fillRect(e.gx-1,ey+10,1,4);ctx.fillRect(e.gx+e.gw,ey
 const SAY_CITY=['ビルがぎゅうぎゅうで息がつまるにゃ！','上から何か落ちてくるから気をつけてにゃ！'];
 
 // ===== silent jellyfish-cat companion (HK build only; no text, no collision) =====
-const JCAT=[0,1,2,3,4,5].map(k=>{const c=document.createElement('canvas');c.width=16;c.height=26;const x=c.getContext('2d');const F=(col,a,b,w,h,al)=>{x.globalAlpha=al==null?1:al;x.fillStyle=col;x.fillRect(a,b,w||1,h||1);};
-const ph=k/6*Math.PI*2,s=Math.sin(ph),bw=13+Math.round(s),bh=9-Math.round(s),cx=8,top=1+Math.round(-s*.5);
-const hw=y=>{const t=y/(bh-1);return Math.max(1,Math.round(bw/2*(.55+.45*Math.sqrt(Math.max(0,1-(1-t)*(1-t))))));};
-// tentacles (behind)
-for(let i=0;i<5;i++){const bx=cx-5+i*2.5,L=9+((i*5)%4);for(let t=0;t<L;t++){const xx=Math.round(bx+Math.sin(ph+i*1.4+t*.45)*(t/L)*2);F(t%3===0?'#ff77a8':'#c58cf7',xx,top+bh+1+t,1,1,1-t/L*.6);}}
-// bell
-for(let y=0;y<bh;y++){const w=hw(y);F('#ffe8f0',cx-w,top+y,w*2,1,.82);F('#ff77a8',cx-w,top+y,1,1);F('#ff77a8',cx+w-1,top+y,1,1);}
-F('#ff77a8',cx-hw(0)+2,top-1,hw(0)*2-4,1);
-// inner bell + gonads
-for(let y=2;y<bh-2;y++){const w=Math.max(1,hw(y)-3);F('#c58cf7',cx-w,top+y,w*2,1,.35);}
-[[-2,2],[1,2],[-2,3],[1,3]].forEach(([dx,dy])=>F('#c58cf7',cx+dx,top+dy,1,1,.8));
-// highlight rim
-F('#f4f4f4',cx-hw(1)+1,top+1,2,1);F('#f4f4f4',cx-hw(2)+1,top+2,1,2);F('#f4f4f4',cx-1,top,2,1,.7);
-// scalloped rim
-const rw=hw(bh-1);for(let xx=cx-rw;xx<cx+rw;xx++){F(((xx+k)&1)?'#ff77a8':'#c58cf7',xx,top+bh,1,1);if(((xx-cx)&1)===0)F('#ff77a8',xx,top+bh+1,1,1,.8);}
-// oral arms
-for(let i=0;i<3;i++){const ax=cx-2+i*2;for(let t=0;t<5;t++){const xx=ax+((t+i+k)%2?1:0)-0;F(t%2?'#ff77a8':'#c58cf7',xx,top+bh+1+t,1,1,.95);}}
-// face
-const ey=top+bh-5;F('#1a1c2c',cx-3,ey,2,2);F('#1a1c2c',cx+2,ey,2,2);F('#f4f4f4',cx-3,ey,1,1);F('#f4f4f4',cx+2,ey,1,1);F('#ff77a8',cx-5,ey+2,2,1,.9);F('#ff77a8',cx+4,ey+2,2,1,.9);F('#1a1c2c',cx-2,ey+2,1,1);F('#1a1c2c',cx+1,ey+2,1,1);F('#1a1c2c',cx-1,ey+3,2,1);
-// glow specks
-[[2,4],[14,6],[1,12],[15,15]].forEach(([a,b],n)=>{if((k+n)%3===0)F('#ffe8f0',a,b,1,1,.6);});x.globalAlpha=1;return c;});
+function jellyV(v,k){const c=document.createElement('canvas');c.width=18;c.height=26;const x=c.getContext('2d');const F=(col,a,b,w,h)=>{x.fillStyle=col;x.fillRect(a,b,w||1,h||1);};
+const PL='#5d275d',PK='#ff77a8',LV='#c58cf7',LT='#ffe8f0',WH='#f4f4f4',K='#1a1c2c';
+const ph=k/6*Math.PI*2,s=Math.sin(ph),cx=9;
+const base=[3,5,6,7,7,8,8,8,8,8,8,8,7];const sq=Math.round(s);const hws=base.map((w,i)=>w+(i>6?Math.max(0,sq):0)-(i<3?Math.max(0,-sq):0));const bh=hws.length-(sq>0?1:0),top=2+(sq>0?1:0);
+// tentacles
+const tc=v===2?[LV,PK,LV,PK]:[PK,LV,LT,LV];const tx=[-5,-2,1,4];
+for(let i=0;i<4;i++){const L=6+((i*3)%3)-(i===0||i===3?1:0);for(let t=0;t<L;t++){const xx=cx+tx[i]+Math.round(Math.sin(ph+i*1.6+t*.7)*1);F(PL,xx-1,top+bh+t,4,1);}
+for(let t=0;t<L;t++){const xx=cx+tx[i]+Math.round(Math.sin(ph+i*1.6+t*.7)*1);F(tc[i],xx,top+bh+t,2,1);}const tl=top+bh+L,xe=cx+tx[i]+Math.round(Math.sin(ph+i*1.6+L*.7)*1);F(PL,xe,tl,2,1);}
+// bell outline + fill
+for(let y=0;y<bh;y++){const w=hws[y];F(PL,cx-w-1,top+y,w*2+2,1);}F(PL,cx-hws[0],top-1,hws[0]*2,1);F(PL,cx-hws[bh-1],top+bh,hws[bh-1]*2,1);
+for(let y=0;y<bh;y++){const w=hws[y],t=y/(bh-1);let col;
+if(v===0){col=t<.45?PK:t<.6?null:LV;if(col===null){for(let xx=cx-w;xx<cx+w;xx++)F(((xx+y)&1)?PK:LV,xx,top+y);continue;}}
+else if(v===1){col=t<.7?LT:t<.8?null:PK;if(col===null){for(let xx=cx-w;xx<cx+w;xx++)F(((xx+y)&1)?LT:PK,xx,top+y);continue;}}
+else{col=t<.5?LT:t<.65?null:PK;if(col===null){for(let xx=cx-w;xx<cx+w;xx++)F(((xx+y)&1)?LT:LV,xx,top+y);continue;}if(t>=.65)col=LV;}
+F(col,cx-w,top+y,w*2,1);}
+// shine heart on top
+const hx=cx-4,hy=top+1;F(WH,hx,hy,1,1);F(WH,hx+2,hy,1,1);F(WH,hx,hy+1,3,1);F(WH,hx+1,hy+2,1,1);F(WH,cx+3,top+1,1,1);
+// face (low)
+const ey=top+bh-6;[[cx-5,0],[cx+2,0]].forEach(([ex])=>{F(K,ex+1,ey-1,2,4);F(K,ex,ey,4,2);F(WH,ex+1,ey,1,1);F(WH,ex+2,ey,1,1);F(WH,ex+1,ey+1,1,1);});
+const bc=v===0?WH:PK;F(v===0?LT:PK,cx-7,ey+3,2,1);F(v===0?LT:PK,cx+5,ey+3,2,1);
+F(K,cx-2,ey+3,1,1);F(K,cx-1,ey+4,1,1);F(K,cx,ey+3,1,1);F(K,cx+1,ey+4,1,1);F(K,cx+2,ey+3,1,1);if(v!==1){F(K,cx-2,ey+2,0,0);}
+if(v===2){F('#ffcd75',cx+3,top-2,2,2);F('#ffcd75',cx+6,top-2,2,2);F('#ef7d57',cx+5,top-1,1,1);}
+if(v===1&&k%3===0){F(WH,1,4,1,1);F(WH,16,9,1,1);}
+return c;}
+const JCAT=[0,1,2,3,4,5].map(k=>jellyV(2,k));
 function drawCompanion(){if(LANG!=='zh'||!G||state!=='play')return;const m=G.depth/10,boost=mode==='level'&&lvl?lvl.w*40:0;const a=Math.min(.7,(m+boost)/400*.7);if(a<=.01)return;
 const f=((tick/10)|0)%6,x=10,y=H-32+Math.round(Math.sin(tick*.04)*2),pu=.75+.25*Math.sin(tick*.07);
 ctx.globalAlpha=a*.55*pu;ctx.drawImage(GLOW,x+2,y+2,12,10);ctx.globalAlpha=a*.35*pu;ctx.fillStyle=P.y;ctx.fillRect(x+7,y+8,2,2);ctx.globalAlpha=a;ctx.drawImage(JCAT[f],x,y);ctx.globalAlpha=1;window.__compA=a;}
