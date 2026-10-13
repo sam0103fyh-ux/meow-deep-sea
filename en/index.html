@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('Tap to start 🔊',0,-7,12,P.y);ctx.restore();
 txt('(music will play)',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0345';
+const GAME_VER='v2026.10.14-0400';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -2229,6 +2229,17 @@ txt('Version & language attached: '+GAME_VER+' / '+LANG,80,167,6,P.s,'center',14
 button(10,178,68,18,'🚀 Send','rgba(56,183,100,0.95)',fbSend);button(82,178,68,18,'📋 Copy text','rgba(59,93,201,0.95)',fbCopy);
 if(fb.sent)txt('Thanks for your feedback, meow!',80,199,9,P.g,'center',144);txt('Send opens a new GitHub issue; if not, copy the text, meow',80,210,6,P.s,'center',146);
 button(56,220,48,14,'Back','rgba(26,28,44,0.95)',goTitle);}
+
+/*SAY 0400 more cat lines*/
+/*easy-edit: sihing praise lines*/const SAY_SIHING=['Sharp one, bro, meow!','Solid one, bro, meow!'];SAY_COMBO.push(...SAY_SIHING);SAY_BEST.push(...SAY_SIHING);
+SAY_IDLE.push('Hey, hello? Are you even there, meow?','I\'m helping, I\'m helping, meow!','I want a nap, meow…','My tail goes wiggle wiggle, meow~','Anyone wanna pat my head, meow?','Milk tea break first, meow.');
+SAY_NEW.push('Huh? What\'s that, meow?');
+SAY_COMBO.push('So firm, meow!','Feeling awesome, meow!','Can\'t stop eating, meow!');
+SAY_BEST.push('I\'m the king of the sea cats, meow!','So firm, meow!');
+SAY_O2.push('Can\'t catch my breath, meow…','Together, let\'s hang in there, meow!');
+GO_LINES.push('I\'m calling it quits, meow…','Going home to groom my fur, meow.');
+const SAY_HIT=['Ow ow ow, meow!','Who bumped me, meow?!','My fur\'s all messed up, meow!','Stop messing around, meow!','Together, let\'s hang in there, meow!'];
+{const _h=hurtP;hurtP=function(){const h=G&&G.hp;_h.apply(this,arguments);if(G&&G.hp<h&&G.say&&Math.random()<.5){const t=SAY_HIT[(Math.random()*SAY_HIT.length)|0];G.say.t=t;(window.__chatLog=window.__chatLog||[]).push({k:'hit',t});}};}
 
 /*PK2 0345 more subs and decorations*/
 const PK2M0=MD.length;[[.9,1,4,'Star Ferry boat','4 hearts, steady'],[.9,.8,3,'Red-sail junk','Saves O2 · bit slower'],[1,1,3,'Lanternfish sub','Glowing lure, balanced'],[1.15,1.05,3,'Cat-head sub','A bit faster, very cute']].forEach(a=>MODELS.push({spd:a[0],o2:a[1],hp:a[2],n:a[3],d:a[4]}));

@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('タップでスタート 🔊',0,-7,12,P.y);ctx.restore();
 txt('（音楽が流れます）',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0345';
+const GAME_VER='v2026.10.14-0400';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -2229,6 +2229,17 @@ txt('バージョンとげんごをつけるよ：'+GAME_VER+' / '+LANG,80,167,6
 button(10,178,68,18,'🚀 おくる','rgba(56,183,100,0.95)',fbSend);button(82,178,68,18,'📋 コピー','rgba(59,93,201,0.95)',fbCopy);
 if(fb.sent)txt('フィードバックありがとうにゃ！',80,199,9,P.g,'center',144);txt('おくるとGitHubのissueがひらくよ。だめならコピーしてにゃ',80,210,6,P.s,'center',146);
 button(56,220,48,14,'もどる','rgba(26,28,44,0.95)',goTitle);}
+
+/*SAY 0400 more cat lines*/
+/*easy-edit: sihing praise lines*/const SAY_SIHING=['さすがだにゃ、先輩！','おみごとにゃ、先輩！'];SAY_COMBO.push(...SAY_SIHING);SAY_BEST.push(...SAY_SIHING);
+SAY_IDLE.push('おーい、ハロー、いないのかにゃ？','てつだってる、てつだってるにゃ！','おひるねしたいにゃ…','しっぽがゆらゆらにゃ～','だれかあたまなでてにゃ？','まずミルクティーにゃ。');
+SAY_NEW.push('なになににゃ？');
+SAY_COMBO.push('超ファームにゃ！','さいこうにゃ！','たべるのとまらないにゃ！');
+SAY_BEST.push('うみのねこキングにゃ！','超ファームにゃ！');
+SAY_O2.push('いきができないにゃ…','いっしょにがんばろうにゃ！');
+GO_LINES.push('もうおしまいにゃ…','かえってけづくろいするにゃ。');
+const SAY_HIT=['いたたたにゃ！','だれがぶつかったにゃ？！','けがぼさぼさにゃ！','やめてにゃ！','いっしょにがんばろうにゃ！'];
+{const _h=hurtP;hurtP=function(){const h=G&&G.hp;_h.apply(this,arguments);if(G&&G.hp<h&&G.say&&Math.random()<.5){const t=SAY_HIT[(Math.random()*SAY_HIT.length)|0];G.say.t=t;(window.__chatLog=window.__chatLog||[]).push({k:'hit',t});}};}
 
 /*PK2 0345 more subs and decorations*/
 const PK2M0=MD.length;[[.9,1,4,'スターフェリー号','ハート4つ、あんてい'],[.9,.8,3,'あかいほのジャンク船','酸素節約　ちょい遅い'],[1,1,3,'ちょうちんアンコウ号','あたまにライト、バランス'],[1.15,1.05,3,'ねこあたま号','すこしはやい、かわいい']].forEach(a=>MODELS.push({spd:a[0],o2:a[1],hp:a[2],n:a[3],d:a[4]}));
