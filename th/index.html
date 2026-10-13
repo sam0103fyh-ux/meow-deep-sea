@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('แตะเพื่อเริ่ม 🔊',0,-7,12,P.y);ctx.restore();
 txt('(มีเพลงนะ)',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0400b';
+const GAME_VER='v2026.10.14-0415';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -969,14 +969,14 @@ ctx.fillStyle=P.k;ctx.fillRect(31,4,38,6);ctx.fillStyle=G.o2<25&&tick%20<10?P.m:
 num(Math.floor(G.depth/10)+'m',73,4,P.g);drawScore();if(state==='play')drawCombo();
 if(state==='play'){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(0,13,W,11);if(mode==='level')txt(lvLabel(LV)+' '+goalText(lvl).replace(/^บอส: อึดให้ได้ (\d+) วิ กับ(.+)ยักษ์$/,'$2ยักษ์: $1 วิ')+' '+Math.min(goalVal(),lvl.n)+'/'+lvl.n,80,14,8,lvl.boss?P.p:P.y);else txt(mode==='deep'?'⬇ ดำลึกสุด  '+meName()+' · '+distName(meDist()):mode==='vs'?'⚔ ดวลพ่อค้า: ใครลอยรอดคนสุดท้ายชนะ':'ประจำวัน: '+THEME.n,80,14,8,P.y);
 const sk=SKILLS[cfg.skill];if(sk.id!=='none'&&skillOpen(cfg.skill)){const on=G.skillUses>0;ctx.globalAlpha=on?.85:.35;ctx.fillStyle=P.k;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,0,7);ctx.fill();ctx.fillStyle=on?P.v:P.S;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,12,0,7);ctx.fill();ctx.globalAlpha=1;if(G.magT>0){ctx.strokeStyle=P.y;ctx.lineWidth=2;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,-Math.PI/2,-Math.PI/2+Math.PI*2*G.magT/240);ctx.stroke();ctx.lineWidth=1;}txt(sk.ic,SKB.x+15,SKB.y+9,11,P.w);txt('x'+G.skillUses,SKB.x+26,SKB.y+22,7,P.y);}v2SkDraw();}
-UIB=[];if(state==='garage')drawGarage();if(state==='profile')drawProfile();if(state==='players')drawPlayers();if(state==='board')drawBoard();if(state==='region')drawRegion();if(state==='loc')drawLocSel();if(state==='oboard')drawOBoard();if(state==='vsmenu')drawVsMenu();if(state==='dex')drawDex();if(state==='feedback')drawFeedback();v2HkOver();if(state==='vscount')drawVsCount();if(mode==='vs'&&(state==='play'||state==='over'))drawVsHud();
+UIB=[];if(state==='garage')drawGarage();if(state==='profile')drawProfile();if(state==='players')drawPlayers();if(state==='board')drawBoard();if(state==='region')drawRegion();if(state==='loc')drawLocSel();if(state==='oboard')drawOBoard();if(state==='vsmenu')drawVsMenu();if(state==='dex')drawDex();if(state==='feedback')drawFeedback();if(state==='dock')drawDock();v2HkOver();if(state==='vscount')drawVsCount();if(mode==='vs'&&(state==='play'||state==='over'))drawVsHud();
 if(state==='title'){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(10,30,140,40);txt(TITLE1,92,33,16,P.y,'center',116);txt(TITLE2,92,51,14,P.p,'center',116);
 ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(10,73,140,51);ctx.drawImage(DSFIMG[f],12,80);txt('ประจำวัน: '+DTHEME.n,82,74,10,P.y);txt('ปลาพิเศษ: '+DSF.n+' (+50)',82,86,8,P.c);txt('ดีสุดวันนี้ '+daily.best+' '+(daily.caught>0?'จับได้ ✔ x'+daily.caught:'ยังจับไม่ได้'),82,96,7,P.w);ctx.fillStyle='rgba(255,205,117,0.25)';ctx.fillRect(12,105,136,1);txt('📜 '+QDAY.t(QDAY.n)+(quest.done?' ✔':''),80,107,7,quest.done?P.g:P.y);ctx.fillStyle=P.k;ctx.fillRect(20,117,96,5);ctx.fillStyle=quest.done?P.g:P.o;ctx.fillRect(21,118,Math.round(94*quest.prog/QDAY.n),3);txt(quest.prog+'/'+QDAY.n+(quest.streak>1&&quest.last===TODAY?' 🔥'+quest.streak:''),134,115,7,P.w);
 ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(6,144,148,82);
 bigLv(10,146,68,20,`▶ ด่าน (ถึง ${lvLabel(prog.u)})`,'rgba(56,183,100,0.92)',()=>goSelect());button(80,146,70,20,'','rgba(197,140,247,0.92)',startRelax);txt(XS().rbtn.replace(/^\S+ /,''),115,147,18,P.w,'center',66);
 button(10,168,46,12,'★ ประจำวัน','rgba(65,166,246,0.92)',startDaily);button(57,168,46,12,'⬇ ดำลึกสุด','rgba(59,93,201,0.95)',startDeep);
 button(104,168,46,12,'⚔ ดวลพ่อค้า','rgba(178,46,84,0.92)',goVs);button(10,181,46,12,'🏆 อันดับ','rgba(239,125,87,0.92)',()=>goOBoard('deepest'));
-button(57,181,46,12,TR(0),'rgba(255,119,168,0.92)',goGarage);button(104,181,46,12,TR(1),'rgba(41,54,111,0.95)',goPlayers);button(10,194,46,12,TR(2),'rgba(56,183,100,0.92)',goDex);button(57,194,46,12,TR(3),'rgba(177,62,83,0.92)',goHK);button(104,194,46,12,TR(4),'rgba(41,54,111,0.95)',goBK);langSw();
+button(57,181,46,12,'⚓ อู่ต่อเรือ','rgba(255,119,168,0.92)',goDock);button(104,181,46,12,TR(1),'rgba(41,54,111,0.95)',goPlayers);button(10,194,46,12,TR(2),'rgba(56,183,100,0.92)',goDex);button(57,194,46,12,TR(3),'rgba(177,62,83,0.92)',goHK);button(104,194,46,12,TR(4),'rgba(41,54,111,0.95)',goBK);langSw();
 txt('👤 '+meName()+' · '+distName(meDist()),68,210,8,P.y,'center',112);button(124,208,32,11,'💬 ความเห็น','rgba(255,119,168,0.92)',goFeedback);txt(`ไข่มุก ${wallet.p}  สูงสุด ${best}`,80,219,7,P.g);if(badges()){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(100,23,57,7);txt(badges(),156,23,6,P.y,'right',56);}ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(0,226,W,12);txt(TIPS[(tick/240|0)%TIPS.length],80,228,7,P.y);ctx.globalAlpha=.8;txt(GAME_VER,156,16,6,P.w,'right');ctx.globalAlpha=1;drawStartDecor();drawMascot();window.__tb=titleBoxes();}
 if(state==='select'){ctx.fillStyle='rgba(26,28,44,0.72)';ctx.fillRect(4,16,152,206);const w=selW;
 txt(BONUS[w]?BONUS[w].ic+' บทพิเศษ':`โลก ${w+1}`,80,19,9,P.c);txt(THEMES[w].n,80,30,13,P.y);
@@ -1012,7 +1012,7 @@ row(182,'สกิล',SKILLS[cfg.skill].n,'skill',SKILLS.length);
 const sk=SKILLS[cfg.skill];if(sk.id!=='none'){if(skillOpen(cfg.skill))txt(sk.ic+' '+sk.d+' (1 ครั้งต่อรอบ)',80,198,8,P.g);else{txt(`🔒 ผ่าน ${lvLabel(sk.lv)} หรือ ${sk.cost} ไข่มุก`,80,198,8,P.p);if(wallet.p>=sk.cost)button(56,208,48,12,'ซื้อ','rgba(56,183,100,0.92)',()=>{wallet.p-=sk.cost;wallet.own.push(sk.id);saveCfg();showToast('ปลดล็อกแล้ว!');});}}
 txt('🦪 '+wallet.p,24,222,8,P.y);if(badges())txt(badges(),80,210,7,P.y);button(56,220,52,14,'👤 โปรไฟล์','rgba(59,93,201,0.92)',()=>goProfile('edit'));button(112,220,40,14,'เสร็จ','rgba(56,183,100,0.92)',goTitle);}
 function button(x,y,w,h,label,col,fn){ctx.fillStyle=col;ctx.fillRect(x,y,w,h);ctx.fillStyle='rgba(255,255,255,0.7)';ctx.fillRect(x,y,w,1);ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(x,y+h-1,w,1);if(label)txt(label,x+w/2,y+(h-10)/2+1,9,P.w,'center',w-3);UIB.push({x,y,w,h,fn});}
-function drawBtn(){if(state==='selfie'){drawSelfieUI();return;}if(state==='title'&&LOCON())locTitleBtn();if(state==='world'&&!hapPrimed&&vibOn())txt('📳 แตะเพื่อเริ่ม (เปิดการสั่น)',80,176,8,P.y);if(state!=='play'&&state!=='intro')button(state==='world'?128:114,state==='world'?40:1,state==='world'?28:22,16,vibOn()?'📳':'📴',vibOn()?'rgba(56,183,100,0.7)':'rgba(26,28,44,0.7)',toggleVib);if(state!=='play'&&state!=='world'&&state!=='intro')button(138,1,18,12,muted?'🔇':'🔊','rgba(26,28,44,0.7)',toggleMute);if(state==='dex'||state==='feedback'||state==='loc'||state==='play'||state==='world'||state==='garage'||state==='profile'||state==='players'||state==='board'||state==='region'||state==='oboard'||state==='vsmenu'||state==='vscount'||(state==='over'&&(mode==='deep'||mode==='vs')))return;const y=state==='select'?178:126,tx=state==='title'?58:40,tw=state==='title'?62:80;button(tx,y,tw,16,'📱 เอียงเครื่อง: '+(tiltOn?'เปิด':'ปิด'),tiltOn?'rgba(56,183,100,0.85)':'rgba(26,28,44,0.7)',toggleTilt);}
+function drawBtn(){if(state==='selfie'){drawSelfieUI();return;}if(state==='title'&&LOCON())locTitleBtn();if(state==='world'&&!hapPrimed&&vibOn())txt('📳 แตะเพื่อเริ่ม (เปิดการสั่น)',80,176,8,P.y);if(state!=='play'&&state!=='intro')button(state==='world'?128:114,state==='world'?40:1,state==='world'?28:22,16,vibOn()?'📳':'📴',vibOn()?'rgba(56,183,100,0.7)':'rgba(26,28,44,0.7)',toggleVib);if(state!=='play'&&state!=='world'&&state!=='intro')button(138,1,18,12,muted?'🔇':'🔊','rgba(26,28,44,0.7)',toggleMute);if(state==='dex'||state==='feedback'||state==='loc'||state==='dock'||state==='play'||state==='world'||state==='garage'||state==='profile'||state==='players'||state==='board'||state==='region'||state==='oboard'||state==='vsmenu'||state==='vscount'||(state==='over'&&(mode==='deep'||mode==='vs')))return;const y=state==='select'?178:126,tx=state==='title'?58:40,tw=state==='title'?62:80;button(tx,y,tw,16,'📱 เอียงเครื่อง: '+(tiltOn?'เปิด':'ปิด'),tiltOn?'rgba(56,183,100,0.85)':'rgba(26,28,44,0.7)',toggleTilt);}
 function drawToast(){if(!toast)return;toast.l--;ctx.globalAlpha=Math.min(1,toast.l/20);ctx.fillStyle='rgba(26,28,44,0.9)';const ty=state==='feedback'?194:(state==='play'&&mode==='level'&&lvl&&lvl.w>=14)?128:60;ctx.fillRect(45,ty,70,18);txt(toast.t,80,ty+4,10,P.g);ctx.globalAlpha=1;if(toast.l<=0)toast=null;}
 
 // ===== player profile =====
@@ -2229,6 +2229,41 @@ txt('แนบเวอร์ชันและภาษาให้อัตโ
 button(10,178,68,18,'🚀 ส่ง','rgba(56,183,100,0.95)',fbSend);button(82,178,68,18,'📋 คัดลอกข้อความ','rgba(59,93,201,0.95)',fbCopy);
 if(fb.sent)txt('ขอบคุณสำหรับความเห็นนะ เหมียว!',80,199,9,P.g,'center',144);txt('กดส่งจะเปิด GitHub issue ใหม่ ถ้าไม่ได้ให้คัดลอกข้อความ เหมียว',80,210,6,P.s,'center',146);
 button(56,220,48,14,'กลับ','rgba(26,28,44,0.95)',goTitle);}
+
+/*DOCK 0415 boatman dock: free refits, progress kept*/
+const SUITS=[{n:'ไม่ใส่',c:null},{n:'ชุดดำน้ำสีเหลือง',c:'#ffcd75'},{n:'ชุดดำน้ำสีแดง',c:'#b13e53'},{n:'ชุดดำน้ำสีน้ำเงิน',c:'#3b5dc9'},{n:'ชุดดำน้ำสีเขียว',c:'#38b764'},{n:'ชุดดำน้ำสีชมพู',c:'#ff77a8'},{n:'ชุดดำน้ำสีดำ',c:'#333c57'}];
+function suitSane(){if(!(Number.isInteger(cfg.suit)&&cfg.suit>=0&&cfg.suit<SUITS.length))cfg.suit=0;}
+const _pfxDock=v2PropFx;v2PropFx=function(c,cf,D){_pfxDock(c,cf,D);const s=SUITS[cf.suit|0];if(s&&s.c&&D&&D.fx!=null){c.fillStyle=s.c;c.fillRect(D.fx+1,D.fy+3,4,1);c.fillStyle='#f4f4f4';c.fillRect(D.fx+2,D.fy+3,1,1);}};
+const DOCK_TALK=['ค่อย ๆ เลือก ไม่ต้องรีบ เหมียว','แต่งใหม่แทนเริ่มใหม่ ความคืบหน้าอยู่ครบ เหมียว!','อยากเปลี่ยนอะไรก็ได้ ฟรีหมด เหมียว','วันนี้ทะเลสงบ เหมาะกับแต่งเรือ เหมียว','เหนื่อยก็นั่งจิบชาก่อน เหมียว'];
+let dockRet=0;
+function goDock(){hideInput();suitSane();state='dock';tick=0;dockRet=0;}
+const _goTitleDock=goTitle;goTitle=function(){if(state==='garage'&&dockRet){dockRet=0;saveCfg();goDock();return;}_goTitleDock();};
+const _profLeaveDock=profLeave;profLeave=function(){if(pf&&pf.back==='dock'){hideInput();pf=null;goDock();return;}_profLeaveDock();};
+function dockRename(){goProfile('edit');if(pf)pf.back='dock';}
+function dockGarage(){goGarage();dockRet=1;}
+function dockSuit(){suitSane();cfg.suit=(cfg.suit+1)%SUITS.length;saveCfg();beep(784,.06,'square');}
+const BOATMAN=['....kkkkkk....','...kbbbbbbk...','..kbbbbbbbbk..','.kwwwwwwwwwwk.','..kggggggggk..','.kgkggggkgggk.','.kggggppggggk.','.kgwgkkkkgwgk.','..kggggggggk..','...kkgggkkk...','..kwbwbwbwbk..','.kgkbwbwbwkgk.','.kgkwbwbwbkgk.','..kkbwbwbwkk..','...kssssssk...','...ksk..ksk...','...kkk..kkk...'];
+const BMC={k:'#1a1c2c',b:'#29366f',w:'#f4f4f4',g:'#94b0c2',p:'#ff77a8',s:'#566c86',y:'#ffcd75'};
+function dockGrid(g,x,y,s,map){for(let r=0;r<g.length;r++)for(let q=0;q<g[r].length;q++){const ch=g[r][q];if(ch==='.')continue;ctx.fillStyle=map[ch]||P[ch]||'#f0f';ctx.fillRect(x+q*s,y+r*s,s,s);}}
+function drawDock(){const t=tick;ctx.fillStyle='#1a1c2c';ctx.fillRect(0,0,W,14);ctx.fillStyle='#73eff7';ctx.fillRect(4,14,152,60);ctx.fillStyle='#f4f4f4';for(let i=0;i<3;i++){const cx=((t*0.2+i*60)%190)-20;ctx.fillRect(cx,22+i*9,14,3);ctx.fillRect(cx+3,20+i*9,8,2);}
+ctx.fillStyle='#41a6f6';ctx.fillRect(4,74,152,40);ctx.fillStyle='#3b5dc9';for(let i=0;i<8;i++)ctx.fillRect(4+((i*23+t/3)%150|0),80+(i%3)*10,8,1);
+ctx.fillStyle='#a7703a';ctx.fillRect(4,96,152,18);ctx.fillStyle='#5d3a1a';for(let i=0;i<10;i++)ctx.fillRect(4+i*16,96,1,18);ctx.fillRect(4,96,152,1);
+ctx.fillStyle='#566c86';ctx.beginPath();ctx.moveTo(70,96);ctx.lineTo(150,70);ctx.lineTo(150,74);ctx.lineTo(78,96);ctx.fill();ctx.fillStyle='#333c57';for(let i=0;i<5;i++)ctx.fillRect(80+i*15,92-i*5,2,4);
+const bob=Math.round(Math.sin(t*.06));drawSubFull(ctx,100,48+bob,(t>>3)&3,cfg,2.5);
+ctx.fillStyle='#5d3a1a';ctx.fillRect(14,60,3,36);ctx.fillStyle='#c2a370';for(let i=0;i<4;i++){ctx.fillRect(10+i,86-i*2,11-i*2,1);}
+ctx.fillStyle='#333c57';const ax=140,ay=100;ctx.fillRect(ax,ay,2,10);ctx.fillRect(ax-3,ay+2,8,1);ctx.fillRect(ax-4,ay+8,10,2);ctx.fillRect(ax-4,ay+6,1,2);ctx.fillRect(ax+5,ay+6,1,2);ctx.fillRect(ax-1,ay-2,4,2);
+const ph=(t/90|0)%4,bx=20,by=46;const g=BOATMAN.slice();if(ph===1&&t%90<40){g[7]='.kgwgkppkgwgk.';}
+const st=ph===2&&t%90<45?-1:0;dockGrid(g,bx,by+st*3,3,BMC);if(ph===0&&t%90<50){const w=(t>>3)%2;ctx.fillStyle=BMC.g;ctx.fillRect(bx+(w?40:42),by+24-(w?6:3)+st*3,3,9);}else{ctx.fillStyle=BMC.g;ctx.fillRect(bx+38,by+33,3,6);}
+txt('คนเรือ',bx+21,by+52,7,P.w,'center',40);
+const cat=CATS[cfg.cat]||CATS[0],cp=(t/110|0)%3,cy=st===0&&cp===1&&t%110<50?-2:0,cx2=62,cyy=78+cy;const f=cat.f.slice();if(cp===2&&t%110<30)f[3]=f[3].slice(0,2)+'kk'+f[3].slice(4);
+const CG=['k......k','kk....kk','k'+f[0]+'k','k'+f[1]+'k','k'+f[2]+'k','k'+f[3]+'k','.kcccck.','.kcwwck.','.kcwwckk','.kcccckc','.kk..kk.'];dockGrid(CG,cx2,cyy-14,3,{c:P[cat.t]||P.o});const s=SUITS[cfg.suit|0];if(s&&s.c){ctx.fillStyle=s.c;ctx.fillRect(cx2+6,cyy+4,12,6);ctx.fillRect(cx2+3,cyy+7,3,3);ctx.fillRect(cx2+18,cyy+7,3,3);ctx.fillStyle='#f4f4f4';ctx.fillRect(cx2+11,cyy+4,2,6);}
+ctx.fillStyle='rgba(26,28,44,0.9)';ctx.fillRect(4,114,152,122);ctx.fillStyle='#29366f';ctx.fillRect(10,118,140,34);ctx.fillStyle='#f4f4f4';ctx.fillRect(10,118,140,1);ctx.fillRect(10,151,140,1);ctx.fillRect(10,118,1,34);ctx.fillRect(149,118,1,34);ctx.fillStyle='#29366f';ctx.fillRect(26,113,6,5);
+txt('⚓ อู่ต่อเรือ',80,16,10,P.k,'center',80);
+txt('สวัสดีจ้า %s!'.replace('%s',meName()),80,121,9,P.y,'center',136);txt('ครั้งก่อนไปถึง %s เหมียว'.replace('%s',lvLabel(prog.u)),80,132,7,P.c,'center',136);txt(DOCK_TALK[(t/300|0)%DOCK_TALK.length],80,142,7,P.w,'center',136);
+button(10,156,140,16,'🎨 สีขน · เรือ · ลาย','rgba(255,119,168,0.95)',dockGarage);
+button(10,175,68,16,'✏️ เปลี่ยนชื่อ','rgba(59,93,201,0.95)',dockRename);button(82,175,68,16,'🤿 ชุดดำน้ำ','rgba(65,166,246,0.95)',dockSuit);
+txt(SUITS[cfg.suit|0].n,116,193,7,P.y,'center',68);txt('ฟรี · เปลี่ยนได้ตลอด · ความคืบหน้าคงอยู่',80,203,7,P.g,'center',144);
+button(56,216,48,16,'กลับ','rgba(26,28,44,0.95)',goTitle);}
 
 /*SAY 0400 more cat lines*/
 /*easy-edit: sihing praise lines*/const SAY_SIHING=['เก่งจริงพี่ เหมียว!','เจ๋งเลยพี่ เหมียว!'];SAY_COMBO.push(...SAY_SIHING);SAY_BEST.push(...SAY_SIHING);
