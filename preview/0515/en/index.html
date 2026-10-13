@@ -2611,6 +2611,10 @@ const ny=Math.max(1,Math.round(h/(r*1.7)));for(let i=0;i<=ny;i++){const py=y+r*.
 const ex=cx<mx?x+w:x,ey=y+h,d1x=ex+(mx-ex)*.42,d1y=ey+(my-ey)*.42,d2x=ex+(mx-ex)*.74,d2y=ey+(my-ey)*.74;hx.moveTo(d1x+fs*.42+d,d1y);hx.arc(d1x,d1y,fs*.42+d,0,7);hx.moveTo(d2x+fs*.26+d,d2y);hx.arc(d2x,d2y,fs*.26+d,0,7);};
 hx.save();hx.translate(2,3);hx.fillStyle='rgba(0,0,0,0.25)';blob(0);hx.fill('nonzero');hx.restore();hx.fillStyle='#1a1c2c';blob(1.6);hx.fill('nonzero');hx.fillStyle='#fff8e8';blob(0);hx.fill('nonzero');
 L.forEach((l,i)=>txtOn(hx,l,cx,y+fs*.6+i*fs*1.25,fs,'#2a2140','center',0,0));hx.restore();}
+function hdPlateInfo(){const p=me();let demo=0;const n=p&&p.name?p.name:(demo=1,'Meow-meow');const d=meDist();const r=d>=0&&d<18?DISTS[d]:(demo=1,'Sham Shui Po');let c='';try{c=cfg.loc&&cfg.loc!=='skip'?locInfo(cfg.loc).n:'';}catch(e){c='';}if(!c){demo=1;c='Hong Kong';}return{s:n+' · '+r+' · '+c,demo};}
+function hdPlate(cx,y,h,mw){const I=hdPlateInfo(),fs=h*.5;let w=Math.min(mw,hdTW(I.s,fs)+h*1.6+(I.demo?hdTW('demo',fs*.7)+8:0));const x=cx-w/2;hdBox(x,y,w,h,h*.3,'#173b7c','#e3a33a',2.5);
+hx.fillStyle='#e3a33a';hx.beginPath();hx.arc(x+h*.45,y+h/2,h*.13,0,7);hx.arc(x+w-h*.45,y+h/2,h*.13,0,7);hx.fill();
+const tw=w-h*1.4-(I.demo?hdTW('demo',fs*.7)+8:0);hdT(I.s,x+h*.7+tw/2,y+h*.22,fs,'#fff6e0','center',tw);if(I.demo)hdT('demo',x+w-h*.7,y+h*.3,fs*.7,'#ffcd75','right');}
 /* layouts */
 function hdLand(Wv,Hv){const s=Math.min(Hv/720,Wv/1280*1.18),bw=1280*s,ox=(Wv-bw)/2,oy=(Hv-720*s)/2,R=(x)=>ox+x*s,Y=(y)=>oy+y*s;
 if(hdOK('bgL')){const im=HDI.bgL;if(ox>0){hx.save();hx.scale(-1,1);hx.drawImage(im,0,0,ox/s,720,-ox,oy,ox,720*s);hx.drawImage(im,1280-(Wv-ox-bw)/s,0,(Wv-ox-bw)/s,720,-Wv,oy,Wv-ox-bw,720*s);hx.restore();}
@@ -2620,7 +2624,7 @@ hdTitle(L0,Y(8),Math.max(R(420)-L0,150),82*s);const ms=72*s;hdMenu(RT-ms,Y(10),m
 hdSide(L0+6*s,Y(108),112*s,100*s,13*s);
 const on=todoOn();if(on)hdCard(R(372),Y(328),R(935)-R(372),262*s);const gy=on?Y(596):Y(450);hdGo(R(432),gy,R(868)-R(432),92*s);
 hdRelax(RT-128*s,Y(560),122*s,130*s);
-hdSay(R(662),Y(258),R(150),Y(100),R(500)-R(150),Y(268)-Y(100),Math.max(10,22*s));}
+hdPlate(R(905),Y(112),42*s,R(1110)-R(735));hdSay(R(662),Y(258),R(150),Y(100),R(500)-R(150),Y(268)-Y(100),Math.max(10,22*s));}
 function hdPort(Wv,Hv){const k=Math.min(Wv/360,Hv/700),bob=Math.sin(tick*.05)*2*k;
 if(hdOK('bgP')){const im=HDI.bgP,sc=Math.max(Wv/im.naturalWidth,Hv/im.naturalHeight);hx.drawImage(im,(Wv-im.naturalWidth*sc)/2,Hv-im.naturalHeight*sc,im.naturalWidth*sc,im.naturalHeight*sc);}
 hdFx(Wv,Hv);const ox=(Wv-360*k)/2,X=x=>ox+x*k,on=todoOn();
@@ -2628,8 +2632,8 @@ const M=6*k,ms=34*k;hdMenu(Wv-M-ms,M,ms);const pw=Math.min(118*k,Wv*.36);hdLang(
 const sw=58*k,sh=60*k;hdSide(M+2*k,Math.max(58*k,M+ms+30*k),sw,sh,8*k);
 const cx0=X(70),cw=Wv-cx0-M-4*k;
 const subW=Math.min(cw*.82,232*k),subS=subW/(HDI.sub.naturalWidth||352),subH=(HDI.sub.naturalHeight||274)*subS,subX=cx0+(cw-subW)/2,subY=118*k+bob;
-const cardY=subY-bob+subH+22*k,cardH=on?178*k:0;
-if(hdOK('dol')){const dw=104*k;hdImg('dol',Wv*.5-dw*.2,Hv-dw*.85-70*k+Math.sin(tick*.04)*3*k,dw);}
+hdPlate(subX+subW/2,subY-bob+subH+4*k,22*k,cw);const cardY=subY-bob+subH+44*k,cardH=on?178*k:0;
+if(hdOK('dol')){const dw=104*k;hdImg('dol',Wv*.5-dw*.2,Hv-dw*.85-38*k+Math.sin(tick*.04)*3*k,dw);}
 if(hdOK('croc')){const cw2=112*k;hdImg('croc',M,Hv-cw2*.75-58*k,cw2);}
 hdImg('sub',subX,subY,subW,subH);
 if(on)hdCard(cx0,cardY,cw,cardH);const gy=on?cardY+cardH+14*k:cardY+10*k;hdGo(cx0+8*k,gy,cw-16*k,58*k);
