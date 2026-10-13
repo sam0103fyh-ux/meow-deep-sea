@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('แตะเพื่อเริ่ม 🔊',0,-7,12,P.y);ctx.restore();
 txt('(มีเพลงนะ)',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0400';
+const GAME_VER='v2026.10.14-0400b';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -2215,7 +2215,7 @@ window.__v2={goHK,v2TC,get HKLM(){return HKLM},dexList,dexFind,goDex,v2Card,v2Ca
 /*V2END*/
 /*FBMOD player feedback*/
 let fb=null;
-function goFeedback(){hideInput();state='feedback';tick=0;fb={sent:0};const mk=(tag,ph)=>{const e=document.createElement(tag);e.placeholder=ph;e.maxLength=tag==='textarea'?1500:20;Object.assign(e.style,{position:'fixed',zIndex:20,boxSizing:'border-box',font:'16px Noto Sans Thai,Loma,sans-serif',border:'2px solid #1a1c2c',borderRadius:'0',background:'#f4f4f4',color:'#1a1c2c',padding:'6px',margin:'0'});document.body.appendChild(e);return e;};
+function goFeedback(){hideInput();state='feedback';tick=0;fb={sent:0};const mk=(tag,ph)=>{const e=document.createElement(tag);e.placeholder=ph;e.maxLength=tag==='textarea'?1500:20;e.className='mmov';e.autocomplete='off';['keydown','keyup','keypress'].forEach(k=>e.addEventListener(k,ev=>ev.stopPropagation()));Object.assign(e.style,{touchAction:'auto',userSelect:'text',webkitUserSelect:'text',pointerEvents:'auto',position:'fixed',zIndex:20,boxSizing:'border-box',font:'16px Noto Sans Thai,Loma,sans-serif',border:'2px solid #1a1c2c',borderRadius:'0',background:'#f4f4f4',color:'#1a1c2c',padding:'6px',margin:'0'});document.body.appendChild(e);return e;};
 fb.nm=mk('input','ชื่อ (ไม่ใส่ก็ได้)');fb.ta=mk('textarea','เขียนความคิดเห็นหรือข้อเสนอแนะ…');fb.ta.style.resize='none';try{fb.ta.value=localStorage.getItem('mmsea_fb')||'';}catch(e){}fb.ta.oninput=()=>{try{localStorage.setItem('mmsea_fb',fb.ta.value);}catch(e){}};try{fb.nm.value=meName()||'';}catch(e){}fbPos();}
 function fbPos(){if(!fb||!fb.ta)return;const r=cv.getBoundingClientRect(),k=r.width/W;const S=(e,x,y,w,h)=>Object.assign(e.style,{left:(r.left+x*k)+'px',top:(r.top+y*k)+'px',width:(w*k)+'px',height:(h*k)+'px'});S(fb.nm,12,50,136,16);S(fb.ta,12,78,136,86);}
 function fbKill(){if(fb){for(const e of[fb.ta,fb.nm])if(e&&e.parentNode)e.parentNode.removeChild(e);}fb=null;}
