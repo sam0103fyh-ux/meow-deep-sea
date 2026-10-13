@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('แตะเพื่อเริ่ม 🔊',0,-7,12,P.y);ctx.restore();
 txt('(มีเพลงนะ)',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0415b';
+const GAME_VER='v2026.10.14-0430';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -976,20 +976,20 @@ ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(6,144,148,82);
 bigLv(10,146,68,20,`▶ ด่าน (ถึง ${lvLabel(prog.u)})`,'rgba(56,183,100,0.92)',()=>goSelect());button(80,146,70,20,'','rgba(197,140,247,0.92)',startRelax);txt(XS().rbtn.replace(/^\S+ /,''),115,147,18,P.w,'center',66);
 button(10,168,46,12,'★ ประจำวัน','rgba(65,166,246,0.92)',startDaily);button(57,168,46,12,'⬇ ดำลึกสุด','rgba(59,93,201,0.95)',startDeep);
 button(104,168,46,12,'⚔ ดวลพ่อค้า','rgba(178,46,84,0.92)',goVs);button(10,181,46,12,'🏆 อันดับ','rgba(239,125,87,0.92)',()=>goOBoard('deepest'));
-button(57,181,46,12,'⚓ อู่ต่อเรือ','rgba(255,119,168,0.92)',goDock);button(104,181,46,12,TR(1),'rgba(41,54,111,0.95)',goPlayers);button(10,194,46,12,TR(2),'rgba(56,183,100,0.92)',goDex);button(57,194,46,12,TR(3),'rgba(177,62,83,0.92)',goHK);button(104,194,46,12,TR(4),'rgba(41,54,111,0.95)',goBK);langSw();
-txt('👤 '+meName()+' · '+distName(meDist()),68,210,8,P.y,'center',112);button(124,208,32,11,'💬 ความเห็น','rgba(255,119,168,0.92)',goFeedback);txt(`ไข่มุก ${wallet.p}  สูงสุด ${best}`,80,219,7,P.g);if(badges()){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(100,23,57,7);txt(badges(),156,23,6,P.y,'right',56);}ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(0,226,W,12);txt(TIPS[(tick/240|0)%TIPS.length],80,228,7,P.y);ctx.globalAlpha=.8;txt(GAME_VER,156,16,6,P.w,'right');ctx.globalAlpha=1;drawStartDecor();drawMascot();window.__tb=titleBoxes();}
+button(57,181,46,12,'⚓ อู่ต่อเรือ','rgba(255,119,168,0.92)',goDock);button(104,181,46,12,TR(1),'rgba(41,54,111,0.95)',goPlayers);button(10,194,46,12,TR(2),'rgba(56,183,100,0.92)',goDex);langSw();
+txt('👤 '+meName()+' · '+distName(meDist()),68,210,8,P.y,'center',112);button(124,208,32,11,'💬 ความเห็น','rgba(255,119,168,0.92)',goFeedback);txt(`ไข่มุก ${wallet.p}  สูงสุด ${best}`,80,219,7,P.g);if(badges()){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(100,23,57,7);txt(badges(),156,23,6,P.y,'right',56);}ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(0,226,W,12);txt(TIPS[(tick/240|0)%TIPS.length],80,228,7,P.y);ctx.globalAlpha=.8;txt(GAME_VER,156,16,6,P.w,'right');ctx.globalAlpha=1;drawStartDecor();drawMascot();window.__tb=titleBoxes();drawHome();}
 if(state==='select'){ctx.fillStyle='rgba(26,28,44,0.72)';ctx.fillRect(4,16,152,206);const w=selW;
 txt(BONUS[w]?BONUS[w].ic+' บทพิเศษ':`โลก ${w+1}`,80,19,9,P.c);txt(THEMES[w].n,80,30,13,P.y);
 if(w>0)button(8,22,20,18,'◀','rgba(59,93,201,0.9)',()=>goSelect(w>=10?null:w-1));
 if(w<9&&w*10+11<=prog.u)button(132,22,20,18,'▶','rgba(59,93,201,0.9)',()=>goSelect(w+1));
 const nwI=WORLD_NEW[w];txt(nwI?('ศัตรูใหม่: '+EN_NAMES[nwI]):'ศัตรูมากันครบ!',80,47,8,P.p);
-{let bi=0;const BL={10:'ผ่านโลก 1 ก่อน',11:'ผ่านโลก 2 ก่อน',12:'ผ่านโลก 3 ก่อน',13:'ผ่านโลก 4 ก่อน'};for(const bw of[10,11,12,13]){if(w>=14)break;if(bw===w)continue;const ok=prog.u>=BONUS[bw].need;button(6+bi*50,157,48,14,(ok?BONUS[bw].ic:'🔒')+' '+THEMES[bw].n,ok?'rgba(41,54,111,0.95)':'rgba(86,108,134,0.85)',ok?()=>goSelect(bw):()=>showToast(BL[bw]));bi++;}}
+{let bi=0;const BL={10:'ผ่านโลก 1 ก่อน',11:'ผ่านโลก 2 ก่อน',12:'ผ่านโลก 3 ก่อน',13:'ผ่านโลก 4 ก่อน'};for(const bw of[10,11,12,13,14,15]){if(bw===w)continue;const ok=prog.u>=BONUS[bw].need;button(6+(bi%3)*50,153+(bi/3|0)*14,48,13,(ok?BONUS[bw].ic:'🔒')+' '+THEMES[bw].n,ok?'rgba(41,54,111,0.95)':'rgba(86,108,134,0.85)',ok?()=>goSelect(bw):()=>showToast(BL[bw]));bi++;}}
 for(let i=0;i<10;i++){const L=w*10+i+1,x=8+(i%5)*29,y=60+(i/5|0)*32,lock=L>(BONUS[w]?bUnl(w):prog.u),done=prog.c[L]!=null;
 const col=lock?'rgba(86,108,134,0.85)':done?'rgba(56,183,100,0.92)':i===9?'rgba(177,62,83,0.92)':'rgba(255,205,117,0.92)';
 button(x,y,26,28,'',col,lock?()=>showToast('ล็อกอยู่'):(w>=10&&i===0)?()=>{LV=L;lvl=getLevel(L);THEME=lvl.theme;state='world';tick=0;}:()=>startLevel(L));
 txt(lock?'🔒':(i===9?'บอส':String(i+1)),x+13,y+5,lock?9:10,P.w);if(done)txt('✔',x+13,y+17,8,P.w);}
 const ln=Math.min(BONUS[w]?bUnl(w):prog.u,w*10+10);txt(`ถัดไป: ${lvLabel(Math.max(ln,w*10+1))} `+goalText(getLevel(Math.max(ln,w*10+1))),80,146,8,P.w);
-button(40,200,80,16,'หน้าแรก','rgba(26,28,44,0.9)',goTitle);}
+button(40,202,80,16,'หน้าแรก','rgba(26,28,44,0.9)',goTitle);}
 if(state==='world'){ctx.fillStyle='rgba(26,28,44,0.78)';ctx.fillRect(8,40,144,150);txt(BONUS[lvl.w]?BONUS[lvl.w].ic+' บทพิเศษ':`🌊 โลก ${lvl.w+1}`,80,48,12,P.c);if(lvl.w===12||lvl.w===13){ctx.fillStyle='rgba(115,239,247,0.35)';ctx.fillRect(8,40,144,4);ctx.fillRect(8,186,144,4);txt(lvl.w===12?'จังหวะประตู หลบห่วงจับ':'ระวังสนิมย้อยกับโซ่',80,128,8,P.c);}if(lvl.w===11){ctx.fillStyle='rgba(115,239,247,0.35)';ctx.fillRect(8,40,144,4);ctx.fillRect(8,186,144,4);txt('ระวังหินร่วงและช่องแคบ',80,128,8,P.c);}if(lvl.w===10){ctx.fillStyle='rgba(232,147,90,0.35)';ctx.fillRect(8,40,144,4);ctx.fillRect(8,186,144,4);txt('พองแล้วมีหนาม แฟบแล้วปลอดภัย',80,128,8,P.y);}txt(lvl.theme.n,80,66,16,P.y);
 const nwI=WORLD_NEW[lvl.w];if(nwI){ctx.save();ctx.translate(80,112);ctx.scale(3,3);ctx.drawImage(EIMG[nwI](f),-8,-8);ctx.restore();txt('ศัตรูใหม่: '+EN_NAMES[nwI],80,140,10,P.p);}else txt('ศัตรูทุกตัวกำลังมา!',80,112,10,P.p);
 txt('เป้าหมาย: '+goalText(lvl),80,156,9,P.w);if(tick>20&&tick%40<28)txt('แตะเพื่อเริ่ม',80,172,11,P.y);}
@@ -1012,7 +1012,7 @@ row(182,'สกิล',SKILLS[cfg.skill].n,'skill',SKILLS.length);
 const sk=SKILLS[cfg.skill];if(sk.id!=='none'){if(skillOpen(cfg.skill))txt(sk.ic+' '+sk.d+' (1 ครั้งต่อรอบ)',80,198,8,P.g);else{txt(`🔒 ผ่าน ${lvLabel(sk.lv)} หรือ ${sk.cost} ไข่มุก`,80,198,8,P.p);if(wallet.p>=sk.cost)button(56,208,48,12,'ซื้อ','rgba(56,183,100,0.92)',()=>{wallet.p-=sk.cost;wallet.own.push(sk.id);saveCfg();showToast('ปลดล็อกแล้ว!');});}}
 txt('🦪 '+wallet.p,24,222,8,P.y);if(badges())txt(badges(),80,210,7,P.y);button(56,220,52,14,'👤 โปรไฟล์','rgba(59,93,201,0.92)',()=>goProfile('edit'));button(112,220,40,14,'เสร็จ','rgba(56,183,100,0.92)',goTitle);}
 function button(x,y,w,h,label,col,fn){ctx.fillStyle=col;ctx.fillRect(x,y,w,h);ctx.fillStyle='rgba(255,255,255,0.7)';ctx.fillRect(x,y,w,1);ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(x,y+h-1,w,1);if(label)txt(label,x+w/2,y+(h-10)/2+1,9,P.w,'center',w-3);UIB.push({x,y,w,h,fn});}
-function drawBtn(){if(state==='selfie'){drawSelfieUI();return;}if(state==='title'&&LOCON())locTitleBtn();if(state==='world'&&!hapPrimed&&vibOn())txt('📳 แตะเพื่อเริ่ม (เปิดการสั่น)',80,176,8,P.y);if(state!=='play'&&state!=='intro')button(state==='world'?128:114,state==='world'?40:1,state==='world'?28:22,16,vibOn()?'📳':'📴',vibOn()?'rgba(56,183,100,0.7)':'rgba(26,28,44,0.7)',toggleVib);if(state!=='play'&&state!=='world'&&state!=='intro')button(138,1,18,12,muted?'🔇':'🔊','rgba(26,28,44,0.7)',toggleMute);if(state==='dex'||state==='feedback'||state==='loc'||state==='dock'||state==='play'||state==='world'||state==='garage'||state==='profile'||state==='players'||state==='board'||state==='region'||state==='oboard'||state==='vsmenu'||state==='vscount'||(state==='over'&&(mode==='deep'||mode==='vs')))return;const y=state==='select'?178:126,tx=state==='title'?58:40,tw=state==='title'?62:80;button(tx,y,tw,16,'📱 เอียงเครื่อง: '+(tiltOn?'เปิด':'ปิด'),tiltOn?'rgba(56,183,100,0.85)':'rgba(26,28,44,0.7)',toggleTilt);}
+function drawBtn(){if(state==='selfie'){drawSelfieUI();return;}if(state==='title'&&LOCON())locTitleBtn();if(state==='world'&&!hapPrimed&&vibOn())txt('📳 แตะเพื่อเริ่ม (เปิดการสั่น)',80,176,8,P.y);if(state!=='play'&&state!=='intro')button(state==='world'?128:114,state==='world'?40:1,state==='world'?28:22,16,vibOn()?'📳':'📴',vibOn()?'rgba(56,183,100,0.7)':'rgba(26,28,44,0.7)',toggleVib);if(state!=='play'&&state!=='world'&&state!=='intro')button(138,1,18,12,muted?'🔇':'🔊','rgba(26,28,44,0.7)',toggleMute);if(state==='dex'||state==='feedback'||state==='loc'||state==='dock'||state==='play'||state==='world'||state==='garage'||state==='profile'||state==='players'||state==='board'||state==='region'||state==='oboard'||state==='vsmenu'||state==='vscount'||(state==='over'&&(mode==='deep'||mode==='vs')))return;const y=state==='select'?183:126,tx=state==='title'?58:40,tw=state==='title'?62:80;button(tx,y,tw,16,'📱 เอียงเครื่อง: '+(tiltOn?'เปิด':'ปิด'),tiltOn?'rgba(56,183,100,0.85)':'rgba(26,28,44,0.7)',toggleTilt);}
 function drawToast(){if(!toast)return;toast.l--;ctx.globalAlpha=Math.min(1,toast.l/20);ctx.fillStyle='rgba(26,28,44,0.9)';const ty=state==='feedback'?194:(state==='play'&&mode==='level'&&lvl&&lvl.w>=14)?128:60;ctx.fillRect(45,ty,70,18);txt(toast.t,80,ty+4,10,P.g);ctx.globalAlpha=1;if(toast.l<=0)toast=null;}
 
 // ===== player profile =====
@@ -2256,23 +2256,30 @@ const ph=(t/90|0)%4,bx=20,by=46;const g=BOATMAN.slice();if(ph===1&&t%90<40){g[7]
 const st=ph===2&&t%90<45?-1:0;dockGrid(g,bx,by+st*3,3,BMC);if(ph===0&&t%90<50){const w=(t>>3)%2;ctx.fillStyle=BMC.g;ctx.fillRect(bx+(w?40:42),by+24-(w?6:3)+st*3,3,9);}else{ctx.fillStyle=BMC.g;ctx.fillRect(bx+38,by+33,3,6);}
 txt('คนเรือ',bx+21,by+52,7,P.w,'center',40);
 const cat=CATS[cfg.cat]||CATS[0],cp=(t/110|0)%3,cy=st===0&&cp===1&&t%110<50?-2:0,cx2=62,cyy=78+cy;const f=cat.f.slice();if(cp===2&&t%110<30)f[3]=f[3].slice(0,2)+'kk'+f[3].slice(4);
-const CG=['k......k','kk....kk','k'+f[0]+'k','k'+f[1]+'k','k'+f[2]+'k','k'+f[3]+'k','.kcccck.','.kcwwck.','.kcwwckk','.kcccckc','.kk..kk.'];dockGrid(CG,cx2,cyy-14,3,{c:P[cat.t]||P.o});const s=SUITS[cfg.suit|0];if(s&&s.c){ctx.fillStyle=s.c;ctx.fillRect(cx2+6,cyy+4,12,6);ctx.fillRect(cx2+3,cyy+7,3,3);ctx.fillRect(cx2+18,cyy+7,3,3);ctx.fillStyle='#f4f4f4';ctx.fillRect(cx2+11,cyy+4,2,6);}
+const CG=['k......k','kk....kk','k'+f[0]+'k','k'+f[1]+'k','k'+f[2]+'k','k'+f[3]+'k','.kcccck.','.kcwwck.','.kcwwckk','.kcccckc','.kk..kk.'];dockGrid(CG,cx2,cyy-14,3,{c:P[cat.t]||P.o});if(typeof tdUnl==='function'&&tdUnl()>=8){ctx.fillStyle=P.k;ctx.fillRect(cx2+26,cyy+8,22,10);ctx.fillStyle=P.m;ctx.fillRect(cx2+27,cyy+9,20,8);ctx.fillStyle=P.l;ctx.fillRect(cx2+29,cyy+11,16,4);ctx.fillStyle=P.p;ctx.fillRect(cx2+31,cyy+12,4,2);}const s=SUITS[cfg.suit|0];if(s&&s.c){ctx.fillStyle=s.c;ctx.fillRect(cx2+6,cyy+4,12,6);ctx.fillRect(cx2+3,cyy+7,3,3);ctx.fillRect(cx2+18,cyy+7,3,3);ctx.fillStyle='#f4f4f4';ctx.fillRect(cx2+11,cyy+4,2,6);}
 ctx.fillStyle='rgba(26,28,44,0.9)';ctx.fillRect(4,114,152,122);ctx.fillStyle='#29366f';ctx.fillRect(10,118,140,34);ctx.fillStyle='#f4f4f4';ctx.fillRect(10,118,140,1);ctx.fillRect(10,151,140,1);ctx.fillRect(10,118,1,34);ctx.fillRect(149,118,1,34);ctx.fillStyle='#29366f';ctx.fillRect(26,113,6,5);
 txt('⚓ อู่ต่อเรือ',80,16,10,P.k,'center',80);
 txt('สวัสดีจ้า %s!'.replace('%s',meName()),80,121,9,P.y,'center',136);txt('ครั้งก่อนไปถึง %s เหมียว'.replace('%s',lvLabel(prog.u)),80,132,7,P.c,'center',136);txt(DOCK_TALK[(t/300|0)%DOCK_TALK.length],80,142,7,P.w,'center',136);
 button(10,156,140,16,'🎨 สีขน · เรือ · ลาย','rgba(255,119,168,0.95)',dockGarage);
-button(10,175,68,16,'✏️ เปลี่ยนชื่อ','rgba(59,93,201,0.95)',dockRename);button(82,175,68,16,'🤿 ชุดดำน้ำ','rgba(65,166,246,0.95)',dockSuit);
-txt(SUITS[cfg.suit|0].n,116,193,7,P.y,'center',68);txt('ฟรี · เปลี่ยนได้ตลอด · ความคืบหน้าคงอยู่',80,203,7,P.g,'center',144);
-button(56,216,48,16,'กลับ','rgba(26,28,44,0.95)',goTitle);}
+button(10,175,68,16,'✏️ เปลี่ยนชื่อ','rgba(59,93,201,0.95)',dockRename);button(82,175,68,16,'🤿 '+SUITS[cfg.suit|0].n,'rgba(65,166,246,0.95)',dockSuit);
+button(10,194,68,14,'🤝 '+dockBudName(),'rgba(56,183,100,0.95)',dockBud);button(82,194,68,14,'🎀 '+(accSane(),ACC_N[cfg.acc|0]),'rgba(197,140,247,0.95)',accNext);txt('ฟรี · เปลี่ยนได้ตลอด · ความคืบหน้าคงอยู่',80,210,7,P.g,'center',144);
+button(56,220,48,14,'กลับ','rgba(26,28,44,0.95)',goTitle);}
+
+const DOCK_BUDK=['octo','shark','angler','kappa','ghost'];
+function dockBuds(){return DOCK_BUDK.filter(k=>DEX.f&&DEX.f[k]);}
+function dockBudName(){return dockBuds().length?frName(frPick()):'ยังไม่มีเพื่อน';}
+function dockBud(){const a=dockBuds();if(!a.length){showToast('ชนะบอสเพื่อได้เพื่อน เหมียว');return;}const o=[null,...a],i=o.indexOf(cfg.bud||null);cfg.bud=o[(i+1)%o.length];saveCfg();beep(784,.06,'square');}
+{const _bi=v2BudInit;v2BudInit=function(){_bi();const k=cfg.bud;if(!k||!G||!G.bud||mode==='vs'||mode==='relax'||!(DEX.f&&DEX.f[k]))return;G.bud=G.bud.filter(b=>b.k!==k);G.bud.unshift({k,x:G.x,y:G.y+20,cd:200,at:null});if(G.bud.length>2)G.bud.length=2;};}
 
 /*BOSS2 0415 kappa (train ch.) + water ghost (walled city) — comedic bosses*/
 BOSSDEF.kappa={n:'กัปปะ',hp:6,r:13,moves:['sumo','cuke']};BOSSDEF.ghost={n:'ผีน้ำ',hp:6,r:13,moves:['splash','drip','whip']};
-const B2K={kappa:1,ghost:1},B2LV={12:'kappa',11:'ghost'};
+const B2K={kappa:1,ghost:1},B2LV={12:'kappa',11:'ghost'};B2LV[BKW]='kappa';
+const _glB2=getLevel;getLevel=function(L){const l=_glB2(L);if(l&&l.w===BKW&&l.s===9){l.k='boss';l.n=1;l.boss='kappa';}return l;};
 for(const t of Object.values(V2L)){if(!t.boss)continue;t.boss.kappa=['กัปปะ','สุภาพมาก รักศักดิ์ศรี ชอบซูโม่กับแตงกวา เหมียว'];t.boss.ghost=['ผีน้ำ','พยายามทำตัวน่ากลัวแต่พลาดทุกที จริง ๆ แค่ทำรองเท้าแตะหาย เหมียว'];if(t.befL){t.befL.kappa='รับแตงกวาแล้ว ขอเป็นเพื่อนนะ เหมียว!';t.befL.ghost='เจอรองเท้าแตะแล้ว ไม่เหงาอีกต่อไป เหมียว!';}if(t.mv){t.mv.kappa='ผลักซูโม่!';t.mv.ghost='สาดน้ำ!';}}
 const B2T={kappa:{inn:'ข้าคือกัปปะ ยินดีที่ได้รู้จัก เหมียว!',ch:['ซูโม่! ฮึบ! ฮึบ เหมียว!','ดูท่ากระทืบเท้าของข้า เหมียว!','ข้ามีศักดิ์ศรีนะ ห้ามขำ เหมียว!'],ask:'🙇 อยู่นิ่ง ๆ = โค้ง!',askb:'กัปปะสุภาพมาก…',back:'อุ๊ย! น้ำบนหัวหกหมดแล้ว เหมียว!!',nob:'ไม่โค้งเหรอ? เสียมารยาทจัง เหมียว!',dz:['ไม่มีน้ำ… ไม่มีแรง… อายจัง เหมียว…','อย่ามองนะ ดูไม่ได้เลย เหมียว!'],ref:'เติมน้ำเต็มแล้ว! ศักดิ์ศรีกลับมา เหมียว!',cu:'มิสไซล์แตงกวา! อร่อยนะ เหมียว!',win:'รับมิตรภาพของข้าด้วย… ขอแตงกวาอีกลูกได้ไหม เหมียว?',cat:'ให้แตงกวานะ มาเป็นเพื่อนกัน เหมียว! 🥒'},
 ghost:{inn:'วู้~ ข้าคือผีน้ำสุดน่ากลัว เหมียว~',sp:'สาดน้ำใส่เลย เหมียว!',dr:'ท่อน้ำรั่วไม่ใช่ความผิดข้านะ เหมียว!',wh:'แส้ผม! …เดี๋ยว พันกันแล้ว เหมียว!',fail:{trip:'อุ๊ย! ลื่น เหมียว!',tangle:'ผมไปติดท่อน้ำแล้ว เหมียว!',sneeze:'ฮัดชิ่ว! หนาวจัง เหมียว…',scared:'ว้าย! ร้องเหมียวใส่ข้าเหรอ? น่ากลัว เหมียว!'},dz:['อย่าขำนะ… ข้าแค่ทำรองเท้าแตะหาย เหมียว…','จริง ๆ ข้ากลัวความมืดนะ เหมียว…'],win:'มีคนเล่นด้วย… ดีใจจัง เหมียว~',cat:'เจอรองเท้าแตะแล้ว มาเป็นเพื่อนกัน เหมียว! 🩴'}};
-const _goalB2=goalText;goalText=function(l){if(l&&l.k==='boss'&&B2LV[l.w])return l.w===12?'ด่านบอส: ชนะกัปปะ':'ด่านบอส: ชนะผีน้ำ';return _goalB2(l);};
-const _slB2=startLevel;startLevel=function(L){_slB2(L);if(G&&G.bossQ&&lvl&&B2LV[lvl.w])G.bossQ.k=B2LV[lvl.w];};
+const _goalB2=goalText;goalText=function(l){if(l&&l.k==='boss'&&B2LV[l.w])return B2LV[l.w]==='kappa'?'ด่านบอส: ชนะกัปปะ':'ด่านบอส: ชนะผีน้ำ';return _goalB2(l);};
+const _slB2=startLevel;startLevel=function(L){_slB2(L);if(G&&G.bossQ&&lvl&&B2LV[lvl.w]){G.bossQ.k=B2LV[lvl.w];if(lvl.w===BKW){G.bossQ.tier=3;G.bossQ.bk=1;}}G.kBlk=0;};
 const B2BLANK=document.createElement('canvas');B2BLANK.width=B2BLANK.height=1;
 const _biB2=bossImg;bossImg=function(B){return B2K[B.k]?B2BLANK:_biB2(B);};
 function b2Pop(B,s,l){G.pops.push({x:Math.max(30,Math.min(W-30,B.x)),y:B.y-26,s,l:l||90});}
@@ -2284,7 +2291,7 @@ function b2Update(B){const sp=B.sp*(B.ph2?1.25:1);B.t++;if(B.hitCd>0)B.hitCd--;B
 const dx=pCx()-B.x,dy=pCy()-B.y,dist=Math.hypot(dx,dy)||1;
 for(const p of B.pr){p.x+=p.vx;p.y+=p.vy;p.vy+=p.g||0;p.l--;if(B.st!=='dead'&&B.st!=='friend'&&Math.abs(p.x-pCx())<6&&Math.abs(p.y-pCy())<6){hurtP();p.l=0;burst(p.x,p.y,P.c,8);}}B.pr=B.pr.filter(p=>p.l>0&&p.y<H+10&&p.x>-10&&p.x<W+10);
 for(const c of B.cols){c.t++;if(c.t>45&&c.t<75&&Math.abs(pCx()-c.x)<7&&B.st!=='dead')hurtP();}B.cols=B.cols.filter(c=>c.t<80);
-if(B.st==='enter'){B.ex='calm';B.y+=(80-B.y)*.04;if(B.t===2)b2Pop(B,T.inn,120);if(B.t>100){B.st='idle';B.t=0;}return;}
+if(B.st==='enter'){B.ex='calm';B.y+=(80-B.y)*.04;if(lvl&&lvl.w===BKW)B.bk=1;if(B.t===2)b2Pop(B,B.bk?'ข้าคือกัปปะ มากรุงเทพฯ เพื่อเรียนซูโม่… ไม่ใช่ มาสอนซูโม่ต่างหาก เหมียว!':T.inn,120);if(B.t>100){B.st='idle';B.t=0;}return;}
 if(B.st==='dead'){B.ex='dizzy';B.pr=[];B.cols=[];if(B.t>50){B.st='friend';B.t=0;}return;}
 if(B.st==='friend'){B.ex=B.t>70?'happy':'shock';B.x+=(80-B.x)*.05;B.y+=(90-B.y)*.05;if(B.t===1)say(T.cat,160,'boss');if(B.t===75){b2Pop(B,T.win,120);burst(B.x,B.y,P.p,24);[784,988,1175,1568].forEach((f,i)=>setTimeout(()=>beep(f,.15,'square'),i*110));}
 if(B.t>=170){const bonus=300+B.tier*100;G.score+=bonus;G.pops.push({x:B.x,y:B.y-10,s:'+'+bonus,l:80});for(let i=0;i<14;i++){const a=i/14*6.283;G.ents.push({t:'pearl',x:Math.max(4,Math.min(W-20,B.x-8+Math.cos(a)*22)),y:B.y-8+Math.sin(a)*22,vx:Math.cos(a)*.25});}
@@ -2326,7 +2333,7 @@ c.save();c.rotate(bow*.5);const jx=ex==='flail'?Math.round(Math.sin(t*.8)):0;c.t
 b2R(c,-9,4,18,12,P.k);b2R(c,-8,5,16,10,G1);b2R(c,-5,6,10,7,P.g);b2R(c,-9,11,18,3,P.m);b2R(c,-2,11,4,5,P.m);
 const st=Math.round(Math.sin(t*.15));b2R(c,-9,15,6,5,P.k);b2R(c,-8,15,4,4,G1);b2R(c,3,15,6,5,P.k);b2R(c,4,15,4,4,G1);
 if(ex==='flail'||ex==='shock'){const a=Math.round(Math.sin(t*.9)*3);b2R(c,-14,-4+a,4,10,P.k);b2R(c,-13,-3+a,2,8,G1);b2R(c,10,-4-a,4,10,P.k);b2R(c,11,-3-a,2,8,G1);}else{b2R(c,-12,5,4,6,P.k);b2R(c,-11,6,2,4,G1);b2R(c,8,5,4,6,P.k);b2R(c,9,6,2,4,G1);}
-b2R(c,-10,-12,20,17,P.k);b2R(c,-9,-11,18,15,G1);b2R(c,-9,-11,18,2,G2);
+if(B.bk){b2R(c,-8,3,16,3,P.k);b2R(c,-7,3,14,2,P.B);b2R(c,-7,4,14,1,P.y);b2R(c,5,4,3,6,P.k);b2R(c,5,4,2,5,P.y);}b2R(c,-10,-12,20,17,P.k);b2R(c,-9,-11,18,15,G1);b2R(c,-9,-11,18,2,G2);
 b2R(c,-7,-16,14,5,P.k);b2R(c,-6,-15,12,3,P.w);if(!dry){b2R(c,-5,-15,10,2,P.c);if(t%30<15)b2R(c,-3,-15,2,1,P.w);}
 b2Eyes(c,ex,-6);b2R(c,-3,-1,6,3,P.k);b2R(c,-2,-1,4,2,BE);if(ex==='shock'||ex==='flail'){b2R(c,-2,1,4,2,P.m);}if(ex==='happy'){b2R(c,-8,-2,2,1,P.p);b2R(c,6,-2,2,1,P.p);}
 if(ex==='sweat'||ex==='flail'||ex==='shock'||ex==='dizzy'){const d=(t>>2)%6;b2R(c,10,-10+d,2,3,P.c);b2R(c,-12,-6+((d+3)%6),2,3,P.c);}
@@ -2355,6 +2362,8 @@ const _biniB2=v2BudInit;v2BudInit=function(){_biniB2();if(mode==='vs'||mode==='r
 const _bdB2=v2BudDraw;v2BudDraw=function(){if(!G||!G.bud)return _bdB2();const cu=G.bud.filter(b=>B2K[b.k]);if(!cu.length)return _bdB2();const all=G.bud;G.bud=all.filter(b=>!B2K[b.k]);_bdB2();G.bud=all;if(state!=='play'||mode==='vs'||mode==='relax')return;for(const b of cu){ctx.save();ctx.globalAlpha=.6;ctx.translate(Math.round(b.x),Math.round(b.y+Math.sin(tick*.07)*2));ctx.scale(.5,.5);const B={k:b.k,ex:'happy',st:'idle',t:0};b.k==='kappa'?b2DrawKappa(ctx,B,tick):b2DrawGhost(ctx,B,tick);ctx.restore();}};
 BUDC.kappa='#38b764';BUDC.ghost=P.c;
 
+const _hurtKB=hurtP;hurtP=function(){if(G&&G.inv===0&&G.shield<=0&&!G.kBlk&&DEX.f&&DEX.f.kappa&&cfg.bud==='kappa'&&mode!=='vs'&&mode!=='relax'&&state==='play'){G.kBlk=1;G.inv=70;G.pops.push({x:G.x+8,y:G.y-8,s:'กัปปะช่วยกันให้หนึ่งครั้ง เหมียว!',l:70});burst(G.x+8,G.y+8,'#38b764',14);beep(660,.1,'triangle');return;}return _hurtKB.apply(this,arguments);};
+
 /*SAY 0400 more cat lines*/
 /*easy-edit: sihing praise lines*/const SAY_SIHING=['เก่งจริงพี่ เหมียว!','เจ๋งเลยพี่ เหมียว!'];SAY_COMBO.push(...SAY_SIHING);SAY_BEST.push(...SAY_SIHING);
 SAY_IDLE.push('ฮัลโหล ไม่อยู่เหรอ เหมียว?','ช่วยอยู่ ช่วยอยู่นะ เหมียว!','อยากงีบสักหน่อย เหมียว…','หางกระดิกดุ๊กดิ๊ก เหมียว~','มีใครลูบหัวให้หน่อยไหม เหมียว?','ขอชานมก่อนนะ เหมียว');
@@ -2365,6 +2374,95 @@ SAY_O2.push('หายใจไม่ทัน เหมียว…','สู้
 GO_LINES.push('พอแล้ว เลิก ๆ เหมียว…','กลับไปเลียขนดีกว่า เหมียว');
 const SAY_HIT=['โอ๊ย ๆ ๆ เหมียว!','ใครชนฉัน เหมียว?!','ขนยุ่งหมดเลย เหมียว!','อย่าเล่นสิ เหมียว!','สู้ไปด้วยกันนะ เหมียว!'];
 {const _h=hurtP;hurtP=function(){const h=G&&G.hp;_h.apply(this,arguments);if(G&&G.hp<h&&G.say&&Math.random()<.5){const t=SAY_HIT[(Math.random()*SAY_HIT.length)|0];G.say.t=t;(window.__chatLog=window.__chatLog||[]).push({k:'hit',t});}};}
+/*0430 companion cat breath bubbles: more, still subtle (visual only)*/
+let CBUB=[];{const _cd=v2CatDraw;v2CatDraw=function(){_cd();if(!G||state!=='play'||mode==='vs'||mode==='relax'){CBUB=[];return;}
+if(tick%38===0||(tick%38===19&&Math.random()<.5)){const n=Math.random()<.35?2:1;for(let i=0;i<n&&CBUB.length<10;i++)CBUB.push({x:15+(Math.random()*4-2),y:180-i*4,l:70+(Math.random()*30|0),s:Math.random()<.3?2:1,p:Math.random()*6});}
+for(const b of CBUB){b.l--;b.y-=.35;b.x+=Math.sin(b.y*.15+b.p)*.15;const a=Math.min(1,b.l/25);ctx.globalAlpha=.75*a;ctx.fillStyle=P.c;ctx.fillRect(b.x|0,b.y|0,b.s+1,b.s+1);ctx.fillStyle=P.w;ctx.fillRect(b.x|0,b.y|0,1,1);}ctx.globalAlpha=1;CBUB=CBUB.filter(b=>b.l>0);};}
+
+/*HOME 0430 simple home, menu, friend pick, daily little things (cosmetic only)*/
+const HOME={v:null,t:0};
+function homeKill(){if(HOME.inp){try{HOME.inp.remove();}catch(e){}HOME.inp=null;}}
+function homeGo(v){homeKill();HOME.v=v;HOME.t=0;if(v==='todo')todoOpen();}
+function homeAct(f){return()=>{homeKill();HOME.v=null;f();};}
+{const _gt=goTitle;goTitle=function(){homeKill();HOME.v=null;_gt();};}
+function homeW(){const w=cfg.lastW;return Number.isInteger(w)&&w>=0&&THEMES[w]?w:Math.min(9,(prog.u-1)/10|0);}
+function homeNL(w){const ln=Math.min(BONUS[w]?bUnl(w):prog.u,w*10+10);return Math.max(ln,w*10+1);}
+{const _sl=startLevel;startLevel=function(L){_sl(L);try{if(lvl&&cfg.lastW!==lvl.w){cfg.lastW=lvl.w;saveCfg();}}catch(e){}};}
+/* friends: one pick, distinct modest specialties */
+const FR_K=['octo','shark','angler','kappa','ghost'];
+const FR_SP={octo:'ช่วยเคลียร์อันตรายใกล้ ๆ เป็นระยะ',shark:'ช่วยดันไข่มุกใกล้ ๆ มาหาเรา',angler:'ช่วยส่องทางรอบตัว',kappa:'กันดาเมจให้ด่านละครั้ง',ghost:'เติมออกซิเจนให้หนึ่งครั้งตอนเหลือน้อย'};
+function frList(){return FR_K.filter(k=>DEX.f&&DEX.f[k]);}
+function frPick(){const k=cfg.bud;return k&&frList().includes(k)?k:null;}
+function frName(k){const L=V2();return k?((L.boss[k]||[k])[0]):'ไม่มี';}
+function frIcon(k){return k==='octo'?OCTO[0]:k==='shark'?SHARKB[0]:k==='angler'?ANGLERB[0]:(B2IC[k]||(B2IC[k]=b2Icon(k)));}
+v2BudInit=function(){G.bud=[];if(mode==='vs'||mode==='relax')return;const k=frPick();if(k)G.bud.push({k,x:G.x,y:G.y+20,cd:200,at:null});G.frO2=0;};
+{const _bt=v2BudTick;v2BudTick=function(){if(!G.bud)v2BudInit();if(G.bud)for(const b of G.bud)if(b.k!=='octo')b.cd=999;_bt();if(!G||!G.bud||mode==='vs'||mode==='relax')return;const ks=G.bud.map(b=>b.k);
+if(ks.includes('shark')){for(const e of G.ents){if(e.t!=='pearl'||e.dead)continue;const dx=G.x-e.x,dy=G.y-e.y,d=Math.hypot(dx,dy);if(d<44&&d>2){e.x+=dx/d*.45;e.y+=dy/d*.45;}}}
+if(ks.includes('ghost')&&!G.frO2&&G.o2<25){G.frO2=1;G.o2=Math.min(100,G.o2+30);G.pops.push({x:G.x+8,y:G.y-8,s:'O2+30',l:50});burst(G.x+8,G.y+8,P.c,14);}};}
+{const _bd=v2BudDraw;v2BudDraw=function(){if(G&&G.bud&&G.bud.some(b=>b.k==='angler')&&state==='play'){ctx.globalAlpha=.28+.06*Math.sin(tick*.08);ctx.drawImage(GLOW,G.x-22,G.y-22,60,60);ctx.globalAlpha=1;}_bd();};}
+/* daily little things */
+const TD_ITEMS=['ดื่มน้ำสักแก้ว','บิดขี้เกียจสักหน่อย','หายใจช้า ๆ สามครั้ง','มองออกไปนอกหน้าต่าง','เก็บของเล็ก ๆ สักชิ้น','พูดขอบคุณใครสักคน','วันนี้กินข้าวดี ๆ แล้ว','นั่งเหม่อก็นับนะ','วันนี้ไม่ทำอะไร = วันพัก ก็นับนะ'];
+const TD_REW=[[1,'ที่ห้อยกาน้ำ'],[2,'ไม้กวาดจิ๋ว'],[3,'หมวกดำน้ำหยดน้ำ'],[4,'ผ้าพันคออุ่น ๆ'],[5,'กระถางต้นไม้จิ๋วบนเรือ'],[6,'เอฟเฟกต์หางฟองอากาศ'],[7,'กล่องเครื่องมือทอง + รอยฟองลมหายใจ'],[10,'ที่นอนแมวน้อย']];
+function tdDay(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+let TD=null;function tdLoad(){if(TD)return TD;try{TD=JSON.parse(localStorage.getItem('mmsea_todo')||'null');}catch(e){}if(!TD||!Array.isArray(TD.days))TD={days:[],d:'',tk:[0,0,0],note:'',seen:0};return TD;}
+function tdSave(){try{localStorage.setItem('mmsea_todo',JSON.stringify(TD));}catch(e){}}
+function tdToday(){tdLoad();const t=tdDay();if(TD.d!==t){TD.d=t;TD.tk=[0,0,0];TD.note='';tdSave();}return TD;}
+function tdPicks(){const t=tdDay();let h=7;for(const ch of t)h=(h*31+ch.charCodeAt(0))>>>0;const a=TD_ITEMS.map((_,i)=>i);for(let i=a.length-1;i>0;i--){h=(h*1103515245+12345)>>>0;const j=h%(i+1);[a[i],a[j]]=[a[j],a[i]];}return a.slice(0,3);}
+function tdCount(){return tdLoad().days.length;}
+function tdUnl(){const n=tdCount();return TD_REW.filter(r=>n>=r[0]).length;}
+function tdDone(){const T=tdToday();return T.days.includes(T.d);}
+function tdTick(i){const T=tdToday();T.tk[i]=T.tk[i]?0:1;if(T.tk[i]&&!T.days.includes(T.d)){T.days.push(T.d);burst(80,90,P.y,16);beep(988,.1,'sine');setTimeout(()=>beep(1318,.12,'sine'),90);}tdSave();}
+function todoOpen(){tdToday();const e=document.createElement('input');e.className='mmov';e.type='text';e.maxLength=40;e.placeholder='เรื่องเล็ก ๆ วันนี้ (ไม่เขียนก็ได้)';e.value=TD.note||'';e.autocomplete='off';['keydown','keyup','keypress'].forEach(k=>e.addEventListener(k,ev=>ev.stopPropagation()));e.addEventListener('input',()=>{TD.note=e.value;tdSave();});
+Object.assign(e.style,{position:'fixed',zIndex:20,boxSizing:'border-box',font:'16px Noto Sans Thai,Loma,sans-serif',border:'2px solid #1a1c2c',borderRadius:'0',background:'#f4f4f4',color:'#1a1c2c',padding:'2px 6px',touchAction:'auto',userSelect:'text',webkitUserSelect:'text'});document.body.appendChild(e);HOME.inp=e;homePos();}
+function homePos(){const e=HOME.inp;if(!e)return;const r=cv.getBoundingClientRect(),k=r.width/W;Object.assign(e.style,{left:(r.left+12*k)+'px',top:(r.top+124*k)+'px',width:(136*k)+'px',height:(16*k)+'px'});}
+function todoOn(){return !cfg.todoOff;}
+/* cosmetics (no stat effects) */
+const ACC_N=['ไม่มี','ที่ห้อยกาน้ำ','ไม้กวาดจิ๋ว','หมวกดำน้ำหยดน้ำ','ผ้าพันคออุ่น ๆ','กระถางต้นไม้จิ๋วบนเรือ','เอฟเฟกต์หางฟองอากาศ','กล่องเครื่องมือทอง + รอยฟองลมหายใจ'];
+function accSane(){const n=Math.min(7,tdUnl());if(!(Number.isInteger(cfg.acc)&&cfg.acc>=0&&cfg.acc<=n))cfg.acc=0;}
+function accNext(){accSane();const n=Math.min(7,tdUnl());if(!n){showToast('ทำเรื่องเล็ก ๆ วันนี้เพื่อปลดล็อกของแต่ง เหมียว');return;}cfg.acc=(cfg.acc+1)%(n+1);saveCfg();beep(784,.06,'square');}
+{const _pf=v2PropFx;v2PropFx=function(c,cf,D){_pf(c,cf,D);const a=cf.acc|0;if(!a||!D)return;const R=(x,y,w,h,col)=>{c.fillStyle=col;c.fillRect(x,y,w,h);};
+if(a===1){R(1,4,3,1,P.k);R(1,5,3,3,P.s);R(4,6,1,1,P.s);R(2,5,1,1,P.w);}
+if(a===2){R(12,1,1,7,'#a7703a');R(11,8,3,2,P.y);R(11,10,3,1,P.k);}
+if(a===3){R(D.fx+2,D.fy-4,2,3,P.c);R(D.fx+2,D.fy-5,1,1,P.c);R(D.fx+2,D.fy-3,1,1,P.w);}
+if(a===4){R(D.fx,D.fy+4,6,1,P.m);R(D.fx+5,D.fy+5,1,2,P.m);}
+if(a===5){R(6,-2,4,2,'#a7703a');R(7,-4,1,2,P.G);R(8,-5,1,3,P.g);R(9,-3,1,1,P.G);}
+if(a===6||a===7){const n=a===7?5:3;for(let i=0;i<n;i++){const y=8+Math.round(Math.sin(tick*.12+i)*1.5),x=-2-i*3;c.globalAlpha=.8-i*.12;R(x,y,i%2?1:2,i%2?1:2,P.c);}c.globalAlpha=1;}
+if(a===7){R(5,11,5,3,P.k);R(6,11,3,2,P.y);R(7,11,1,1,P.w);}};}
+/* drawing helpers */
+function homeBg(){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#29366f');g.addColorStop(1,'#1a1c2c');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(115,239,247,0.35)';for(let i=0;i<10;i++){const x=(i*37+11)%150+5,y=H-((tick*.3+i*53)%H);ctx.fillRect(x|0,y|0,i%3?1:2,i%3?1:2);}}
+function homePanel(t){ctx.fillStyle='rgba(26,28,44,0.94)';ctx.fillRect(4,14,152,222);ctx.fillStyle=P.c;ctx.fillRect(4,14,152,1);txt(t,80,18,11,P.y,'center',144);}
+function drawHome(){if(state!=='title')return;HOME.t++;homePos();UIB.length=0;homeBg();
+txt(TITLE1+TITLE2,80,16,12,P.y,'center',110);
+const bob=Math.round(Math.sin(tick*.05)*2);ctx.globalAlpha=.25;ctx.drawImage(GLOW,24,40+bob,112,112);ctx.globalAlpha=1;drawSubFull(ctx,40,58+bob,(tick>>3)&3,cfg,5);
+const w=homeW(),L=homeNL(w);txt((BONUS[w]?BONUS[w].ic+' ':'')+THEMES[w].n+' · '+lvLabel(L),80,150,8,P.c,'center',150);
+bigLv(30,162,100,26,'▶ ออกเดินทาง','rgba(56,183,100,0.95)',homeDepart);
+button(58,192,44,12,'🗺 บท','rgba(59,93,201,0.9)',homeAct(()=>goSelect(w)));
+txt('👤 '+meName()+' '+'ไข่มุก'+' '+wallet.p,80,210,7,P.s,'center',150);
+button(134,16,22,16,'☰','rgba(41,54,111,0.95)',()=>homeGo('menu'));if(todoOn()&&tdUnl()>(tdLoad().seen|0)){ctx.fillStyle=P.k;ctx.fillRect(150,14,5,5);ctx.fillStyle=P.l;ctx.fillRect(151,15,3,3);ctx.fillStyle=P.w;ctx.fillRect(151,15,1,1);}
+if(todoOn())button(4,16,22,16,tdDone()?'🫖':'🫖','rgba(41,54,111,0.95)',()=>homeGo('todo'));
+if(HOME.v)UIB.length=0;if(HOME.v==='menu')drawHomeMenu();else if(HOME.v==='set')drawHomeSet();else if(HOME.v==='todo')drawTodo();else if(HOME.v==='dep')drawDepart();}
+function homeDepart(){if(!frList().length){homeAct(homeStart)();return;}homeGo('dep');}
+function homeStart(){const w=homeW();startLevel(homeNL(w));}
+function drawHomeMenu(){homePanel('☰');const M=[['⚓ อู่ต่อเรือ',goDock],['🗺 บท',()=>goSelect(homeW())],['📖 สมุดภาพ',goDex],['🏆 อันดับ',()=>goOBoard('deepest')],['⚔ ดวลพ่อค้า',goVs],['★ ประจำวัน',startDaily],['⬇ ดำลึกสุด',startDeep],['☁ พักผ่อน',startRelax],['👤 ผู้เล่น',goPlayers],['⚙ ตั้งค่า',()=>homeGo('set')],['💬 ความเห็น',goFeedback]];
+M.forEach(([l,f],i)=>button(10+(i%2)*72,36+(i>>1)*24,68,20,l,'rgba(59,93,201,0.95)',l==='⚙ ตั้งค่า'?f:homeAct(f)));button(56,214,48,16,'กลับ','rgba(26,28,44,0.95)',()=>homeGo(null));}
+function drawHomeSet(){homePanel('⚙ ตั้งค่า');const on=s=>s?'เปิด':'ปิด';
+button(14,40,132,18,'🫖 เรื่องเล็ก ๆ: '+on(todoOn()),todoOn()?'rgba(56,183,100,0.95)':'rgba(86,108,134,0.95)',()=>{cfg.todoOff=todoOn()?1:0;saveCfg();});
+button(14,62,132,18,'📱 เอียงเครื่อง: '+on(tiltOn),tiltOn?'rgba(56,183,100,0.95)':'rgba(86,108,134,0.95)',toggleTilt);
+button(14,84,132,18,'📳 สั่น: '+on(vibOn()),vibOn()?'rgba(56,183,100,0.95)':'rgba(86,108,134,0.95)',toggleVib);
+button(14,106,132,18,'🔊 เสียง: '+on(!muted),!muted?'rgba(56,183,100,0.95)':'rgba(86,108,134,0.95)',toggleMute);
+const LS=[['zh','\u4e2d',''],['en','EN','en/'],['ja','\u65e5\u672c\u8a9e','ja/'],['th','ไทย','th/']];LS.forEach(([k,n,u],i)=>button(14+i*33,132,31,16,n,k===LANG?'rgba(255,119,168,0.95)':'rgba(41,54,111,0.95)',k===LANG?()=>{}:()=>{location.href=langBase()+u;}));
+button(56,214,48,16,'กลับ','rgba(26,28,44,0.95)',()=>homeGo('menu'));}
+function drawDepart(){homePanel('▶ ออกเดินทาง');const w=homeW();txt((BONUS[w]?BONUS[w].ic+' ':'')+THEMES[w].n+' · '+lvLabel(homeNL(w)),80,32,8,P.c,'center',144);txt('เลือกเพื่อนไปด้วย (ไม่เลือกก็ได้)',80,44,7,P.w,'center',144);
+const o=[null,...frList()],cur=frPick();o.forEach((k,i)=>{const x=10+(i%3)*48,y=56+((i/3)|0)*60,sel=k===cur;ctx.fillStyle=sel?'rgba(56,183,100,0.9)':'rgba(41,54,111,0.95)';ctx.fillRect(x,y,44,56);if(sel){ctx.fillStyle=P.y;ctx.fillRect(x,y,44,1);ctx.fillRect(x,y+55,44,1);ctx.fillRect(x,y,1,56);ctx.fillRect(x+43,y,1,56);}
+if(k){const im=frIcon(k),s=Math.min(28/im.width,24/im.height);ctx.drawImage(im,x+22-im.width*s/2,y+4,im.width*s,im.height*s);}else txt('🚫',x+22,y+10,10,P.w,'center',40);txt(frName(k),x+22,y+31,7,P.y,'center',42);UIB.push({x,y,w:44,h:56,fn:()=>{cfg.bud=k;saveCfg();beep(784,.05,'square');}});});
+txt(cur?FR_SP[cur]:'ไปคนเดียวก็ได้นะ เหมียว',80,180,7,P.g,'center',144);bigLv(30,190,100,22,'▶ ออกเดินทาง','rgba(56,183,100,0.95)',homeAct(homeStart));button(56,216,48,14,'กลับ','rgba(26,28,44,0.95)',()=>homeGo(null));}
+function drawTodo(){homePanel('🫖 เรื่องเล็ก ๆ วันนี้');const T=tdToday(),P3=tdPicks(),done=tdDone();txt(done?'วันนี้เหนื่อยหน่อยนะ เหมียว':'ยินดีต้อนรับกลับ เหมียว',80,32,8,P.c,'center',144);
+P3.forEach((ix,i)=>{const on=T.tk[i];button(10,44+i*22,140,19,'',on?'rgba(56,183,100,0.95)':'rgba(41,54,111,0.95)',()=>tdTick(i));txt((on?'☑ ':'☐ ')+TD_ITEMS[ix],16,48+i*22,8,P.w,'left',130);});
+txt('เรื่องเล็ก ๆ วันนี้ (ไม่เขียนก็ได้)',14,114,7,P.s,'left',136);
+const n=tdCount();txt('รวม: %s วัน'.replace('%s',n),80,146,9,P.y,'center',144);const nx=TD_REW.find(r=>n<r[0]);txt(nx?'อีก %s วัน: '.replace('%s',nx[0]-n)+nx[1]:'ปลดล็อกครบแล้ว เหมียว',80,158,7,P.w,'center',146);
+const u=TD_REW.slice(0,tdUnl()).map(r=>r[1]);txt(u.length?'ปลดล็อกแล้ว: '+u.join(', '):'เปลี่ยนของแต่งได้ที่ ⚓ อู่ต่อเรือ',80,170,6,P.s,'center',146);if(u.length)txt('เปลี่ยนของแต่งได้ที่ ⚓ อู่ต่อเรือ',80,180,6,P.s,'center',146);
+TD.seen=Math.max(TD.seen|0,tdUnl());button(56,214,48,16,'กลับ','rgba(26,28,44,0.95)',()=>{tdSave();homeGo(null);});}
+{const _db=drawBtn;drawBtn=function(){if(state==='title'){const s=state;state='dex';try{_db();}finally{state=s;}return;}_db();};}
 
 /*PK2 0345 more subs and decorations*/
 const PK2M0=MD.length;[[.9,1,4,'เรือสตาร์เฟอร์รี','4 หัวใจ มั่นคง'],[.9,.8,3,'เรือสำเภาใบแดง','ประหยัดออกซิเจน · ช้าลงนิด'],[1,1,3,'เรือปลาตะเกียง','มีไฟบนหัว สมดุล'],[1.15,1.05,3,'เรือหัวแมว','เร็วขึ้นนิด น่ารักมาก']].forEach(a=>MODELS.push({spd:a[0],o2:a[1],hp:a[2],n:a[3],d:a[4]}));
