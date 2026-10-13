@@ -515,7 +515,7 @@ ctx.fillStyle=P.w;for(let x=0;x<W;x+=8)ctx.fillRect(x,72+Math.round(Math.sin(x*.
 const by=Math.round(Math.sin(tick*.08)*4);drawSubFull(ctx,56,96+by,(tick>>3)&3,cfg,3);
 const pulse=1+Math.sin(tick*.12)*.06;ctx.save();ctx.translate(80,170);ctx.scale(pulse,pulse);ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(-56,-12,112,24);txt('㩒一下開始 🔊',0,-7,12,P.y);ctx.restore();
 txt('（會有音樂播放）',80,190,8,P.k);drawMute();drawVib();}
-const GAME_VER='v2026.10.14-0445';
+const GAME_VER='v2026.10.14-0500';
 let state='intro',tick=0,best=(()=>{try{return +(localStorage.getItem('mmsea_best')||0)}catch(e){return 0}})(),G;
 function newGame(){const M=MODEL();G={x:72,y:70,vx:0,vy:0,hp:M.hp,maxhp:M.hp,skillUses:1,shield:0,magFx:0,magT:0,say:null,sayCd:0,idle:0,lowO2:false,gag:'',o2:100,score:0,depth:0,inv:0,ents:[],parts:[],pops:[],spawn:0,speed:.5,newBest:false,sf:0,sfi:0,pearls:0,fish:0,hits:0,t:0,won:false,sfat:SF_AT};}
 newGame();
@@ -2502,12 +2502,44 @@ const HOME_LINES=['哎呀，我喺度陪住你呀喵','唔使驚，我一直都�
 function homeSay(sy){if(HOME.sn==null)HOME.sn=tick+240;if(tick>=HOME.sn&&!HOME.sl){HOME.sl=HOME_LINES[(Math.random()*HOME_LINES.length)|0];HOME.ss=tick;HOME.se=tick+180;}
 if(!HOME.sl)return;if(tick>HOME.se){HOME.sl=null;HOME.sn=tick+480+((Math.random()*240)|0);return;}
 const a=tick-HOME.ss,left=HOME.se-tick,sc=a<6?0.8+0.3*a/6:a<11?1.1-0.1*(a-6)/5:1,al=Math.min(1,left/18,a/4+0.3);
-const D=MD[cfg.model]||MD[0],mx=40+(D.fx+5)*4,my=sy+(D.fy+3)*4;const L=wrapL(HOME.sl,44,6).slice(0,6),w=48,h=4+L.length*7,x=108,y=Math.max(24,Math.min(my-h-8,66-h));
+const D=MD[cfg.model]||MD[0],mx=40+(D.fx+5)*4,my=sy+(D.fy+3)*4;const L=wrapL(HOME.sl,44,6).slice(0,6),w=48,h=4+L.length*7,x=108,y=Math.max(31,Math.min(my-h-8,70-h));
 ctx.save();ctx.globalAlpha=al;ctx.translate(x,y+h);ctx.scale(sc,sc);ctx.translate(-x,-(y+h));
 const cl=(d,col)=>{ctx.fillStyle=col;ctx.beginPath();const r=5;ctx.rect(x+3,y+1-d,w-6,h-2+2*d);ctx.rect(x+1-d,y+3,w-2+2*d,h-6);for(let k2=0;k2<=4;k2++){const cx=x+4+k2*(w-8)/4;ctx.moveTo(cx+r+d,y+2);ctx.arc(cx,y+2,r*0.7+d,0,7);ctx.moveTo(cx+r+d,y+h-2);ctx.arc(cx,y+h-2,r*0.7+d,0,7);}ctx.moveTo(x+2+d+4,y+h/2);ctx.arc(x+2,y+h/2,4+d,0,7);ctx.moveTo(x+w-2+d+4,y+h/2);ctx.arc(x+w-2,y+h/2,4+d,0,7);ctx.fill();};
 const dots=(d,col)=>{ctx.fillStyle=col;ctx.beginPath();const ax=x-3,ay=y+h+1;ctx.moveTo(ax+2.5+d,ay);ctx.arc(ax,ay,2.5+d,0,7);ctx.moveTo((ax+mx)/2+1.5+d,(ay+my)/2);ctx.arc((ax+mx)/2+1,(ay+my)/2,1.5+d,0,7);ctx.fill();};
 ctx.save();ctx.translate(1,2);cl(0,'rgba(0,0,0,0.25)');dots(0,'rgba(0,0,0,0.25)');ctx.restore();cl(1,P.k);dots(1,P.k);cl(0,'#fff8e8');dots(0,'#fff8e8');
 L.forEach((l,i)=>txtOn(ctx,l,x+w/2,y+1+i*7,6,P.k,'center',w-2,0));ctx.restore();}
+
+/*WX 0500 weather (Open-Meteo, no key), chip, weather+greeting lines, share line*/
+const WX_C={hk:['香港',22.32,114.17],bkk:['曼谷',13.75,100.5],tyo:['東京',35.68,139.69],tpe:['台北',25.03,121.56],sin:['新加坡',1.35,103.82],lon:['倫敦',51.51,-0.13]};
+const WX_K=Object.keys(WX_C);
+function wxDefCity(){return LANG==='ja'?'tyo':LANG==='th'?'bkk':'hk';}
+function wxCity(){return WX_C[cfg.wxCity]?cfg.wxCity:wxDefCity();}
+let WX=null;try{WX=JSON.parse(localStorage.getItem('mmsea_wx')||'null');}catch(e){}
+function wxKind(c){return c===0?'sun':c<=3?'cloud':c<=48?'fog':c<=67||(c>=80&&c<=82)?'rain':c<=77||c===85||c===86?'snow':c>=95?'storm':'cloud';}
+const WX_IC={sun:'☀️',cloud:'⛅',fog:'🌫️',rain:'🌧️',snow:'❄️',storm:'⛈️'};
+let wxBusy=0;
+function wxFetch(lat,lon,name,src){if(wxBusy)return;wxBusy=1;const ctl=window.AbortController?new AbortController():null;const to=setTimeout(()=>{try{ctl&&ctl.abort();}catch(e){}},8000);
+fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat.toFixed(2)+'&longitude='+lon.toFixed(2)+'&current=temperature_2m,weather_code&timezone=auto',ctl?{signal:ctl.signal}:{}).then(r=>r.ok?r.json():null).then(j=>{if(!j||!j.current)return;WX={t:Math.round(j.current.temperature_2m),c:j.current.weather_code|0,n:name,src,at:Date.now()};try{localStorage.setItem('mmsea_wx',JSON.stringify(WX));}catch(e){}}).catch(()=>{}).finally(()=>{clearTimeout(to);wxBusy=0;});}
+function wxCityFetch(){const k=wxCity(),c=WX_C[k];wxFetch(c[1],c[2],k,'city');}
+function wxUpdate(force){if(cfg.wxOff)return;if(!force&&WX&&Date.now()-WX.at<30*60e3)return;
+if(cfg.geo&&cfg.geo.lat!=null){wxFetch(cfg.geo.lat,cfg.geo.lon,'near','geo');return;}
+if(!cfg.geoAsked&&navigator.geolocation){cfg.geoAsked=1;saveCfg();try{navigator.geolocation.getCurrentPosition(p=>{cfg.geo={lat:p.coords.latitude,lon:p.coords.longitude};saveCfg();wxFetch(cfg.geo.lat,cfg.geo.lon,'near','geo');},()=>wxCityFetch(),{timeout:8000,maximumAge:3600e3});}catch(e){wxCityFetch();}return;}
+wxCityFetch();}
+function wxPlace(){if(!WX)return'';return WX.n==='near'?'你附近':(WX_C[WX.n]?WX_C[WX.n][0]:'');}
+function wxLines(){if(!WX)return[];const k=wxKind(WX.c),t=WX.t,a=['今日%s度呀喵'.replace('%s',t)];
+if(t>=30)a.push('好熱，要飲多啲水呀喵');else if(t<=15)a.push('有啲凍，記得著多件衫呀喵');
+if(k==='rain')a.push('今日有落雨，記得帶遮呀喵');else if(k==='storm')a.push('行雷閃電，留喺屋企好啲喵');else if(k==='sun')a.push('今日好天，曬吓太陽呀喵');else if(k==='cloud')a.push('今日有雲，涼涼哋幾舒服喵');else if(k==='fog')a.push('今日有霧，慢慢行呀喵');else if(k==='snow')a.push('落雪呀！小心凍親喵');return a;}
+const GREET_LINES=['你返嚟喇喵','好掛住你呀喵','歡迎返嚟，師兄師姐喵','欸欸，終於等到你喇喵'];
+function wxShareLine(){if(!WX)return'';const k=wxKind(WX.c),d={sun:'好天',cloud:'有雲',fog:'有霧',rain:'有落雨',snow:'落雪',storm:'行雷'}[k];return '今日%p %t 度，%d喵'.replace('%p',wxPlace()).replace('%t',WX.t).replace('%d',d);}
+{const _st=shareText;shareText=function(){const s=_st.apply(this,arguments),w=wxShareLine();return w?s+'\n'+w:s;};}
+/* chip under the language pill */
+function wxChip(){if(cfg.wxOff||!WX)return;const s=WX_IC[wxKind(WX.c)]+' '+WX.t+'°',x=100,y=18,w=32,h=10;ctx.fillStyle=P.k;ctx.fillRect(x-1,y-1,w+2,h+2);ctx.fillStyle='rgba(41,54,111,0.97)';ctx.fillRect(x,y,w,h);txt(s,x+w/2,y+1,7,P.w,'center',w-2);}
+/* pool: greeting first, then mix weather lines */
+{const _hs=homeSay;let greeted=0;homeSay=function(sy){if(HOME.sn==null){HOME.sn=tick+90;}if(!HOME.sl&&tick>=HOME.sn){if(!greeted){greeted=1;HOME.sl=GREET_LINES[(Math.random()*GREET_LINES.length)|0];}else{const w=wxLines();if(w.length&&Math.random()<.3)HOME.sl=w[(Math.random()*w.length)|0];}if(HOME.sl){HOME.ss=tick;HOME.se=tick+180;}}_hs(sy);};}
+{const _dh=drawHome;drawHome=function(){if(state==='title'&&HOME.t%600===1)wxUpdate();_dh();if(state==='title'&&!HOME.v)wxChip();};}
+/* settings: weather on/off + city */
+{const _ds=drawHomeSet;drawHomeSet=function(){_ds();const on=!cfg.wxOff;button(14,152,64,16,'⛅ '+(on?'開':'關'),on?'rgba(56,183,100,0.95)':'rgba(86,108,134,0.95)',()=>{cfg.wxOff=on?1:0;saveCfg();if(!cfg.wxOff)wxUpdate(1);});
+button(82,152,64,16,'📍 '+WX_C[wxCity()][0],'rgba(41,54,111,0.95)',()=>{const i=WX_K.indexOf(wxCity());cfg.wxCity=WX_K[(i+1)%WX_K.length];cfg.geo=null;saveCfg();WX=null;wxUpdate(1);});};}
 
 /*PK2 0345 more subs and decorations*/
 const PK2M0=MD.length;[[.9,1,4,'天星小輪艇','4 個心　穩陣'],[.9,.8,3,'紅帆船','慳氧氣　慢少少'],[1,1,3,'燈籠魚艇','頭頂有燈　平衡型'],[1.15,1.05,3,'貓頭艇','快少少　好可愛']].forEach(a=>MODELS.push({spd:a[0],o2:a[1],hp:a[2],n:a[3],d:a[4]}));
