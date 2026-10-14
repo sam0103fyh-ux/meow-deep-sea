@@ -668,11 +668,11 @@ function flagImg(f){const c=document.createElement('canvas');c.width=12;c.height
 // ---- JA cities
 const JCITY={
 tokyo:{n:'\u6771\u4eac',l:'\u6771\u4eac\u30bf\u30ef\u30fc\u3068\u30b9\u30ab\u30a4\u30c4\u30ea\u30fc\u306e\u4e0b\u3067\u6f5c\u308b\u306b\u3083',a:'rgba(239,125,87,0.06)',p:'neon',sk:R=>{lBlocks(R,0,160,7,26,1);lLattice(R,42,6,64,9,LC.o,LC.w);R(36,30,13,3,LC.o);R(38,21,9,2,LC.w);R(42,0,1,8,LC.w);R(108,0,2,64,SH);R(106,30,6,64,SH);R(104,50,10,14,SH);R(104,14,10,3,LC.s);R(103,22,12,3,LC.s);R(108,0,1,2,LC.r);}},
-kyoto:{n:'\u4eac\u90fd',l:'\u5343\u672c\u9ce5\u5c45\u3068\u4e94\u91cd\u5854\u306e\u4eac\u90fd\u306b\u3083',a:'rgba(255,119,168,0.06)',p:'sakura',sk:R=>{lHills(R,SIL2,3,6,22);for(let i=0;i<6;i++)lTorii(R,10+i*11,64,14-i,18-i*2,LC.r);lPagoda(R,118,64,5,24,SIL,'#1a1c2c');R(112,64-8,1,1,LC.y);}},
+kyoto:{n:'\u4eac\u90fd',l:'\u7af9\u6797\u3068\u4e94\u91cd\u5854\u306e\u4eac\u90fd\u306b\u3083',a:'rgba(255,119,168,0.06)',p:'sakura',sk:R=>{lHills(R,SIL2,3,6,22);for(let i=0;i<6;i++)lTorii(R,10+i*11,64,14-i,18-i*2,LC.r);lPagoda(R,118,64,5,24,SIL,'#1a1c2c');R(112,64-8,1,1,LC.y);}},
 osaka:{n:'\u5927\u962a',l:'\u5927\u962a\u57ce\u3068\u9053\u9813\u5800\u306e\u770b\u677f\u304c\u898b\u3048\u308b\u306b\u3083',a:'rgba(255,205,117,0.06)',p:'neon',sk:R=>{lBlocks(R,70,160,11,20,1);R(18,48,46,16,SH);R(24,40,34,8,LC.w);R(20,37,42,3,LC.t);R(28,30,26,7,LC.w);R(25,27,32,3,LC.t);R(32,20,18,7,LC.w);R(29,17,24,3,LC.t);R(29,16,2,2,LC.y);R(51,16,2,2,LC.y);R(98,20,30,24,'#ff77a8');R(99,21,28,22,LC.n);R(100,22,26,1,'#73eff7');R(100,42,26,1,'#73eff7');R(111,24,4,4,LC.w);R(110,28,6,7,LC.w);R(106,28,4,2,LC.w);R(116,28,5,2,LC.w);R(108,35,3,6,LC.w);R(115,35,3,4,LC.w);R(118,38,3,2,LC.w);R(106,26,2,2,LC.y);R(120,26,2,2,LC.y);R(142,18,4,46,SIL);R(140,22,8,6,SH);}},
 sapporo:{n:'\u672d\u5e4c\uff08\u5317\u6d77\u9053\uff09',l:'\u96ea\u306e\u672d\u5e4c\u3001\u30c6\u30ec\u30d3\u5854\u304c\u898b\u3048\u308b\u306b\u3083',a:'rgba(244,244,244,0.06)',p:'snow',sk:R=>{lHills(R,SH,5,10,26);for(let i=0;i<160;i+=4)R(i,64-26-Math.sin(i/23+5)*10-1,4,2,LC.w);R(28,40,26,24,LC.w);R(26,36,30,4,LC.r);R(36,26,10,10,LC.w);R(34,24,14,2,LC.r);R(39,29,4,4,LC.n);lLattice(R,116,8,64,8,LC.o,LC.r);R(110,24,13,5,SIL);R(113,25,7,3,LC.y);}},
 okinawa:{n:'\u6c96\u7e04',l:'\u30b5\u30f3\u30b4\u3068\u30b7\u30fc\u30b5\u30fc\u306e\u6c96\u7e04\u306b\u3083',a:'rgba(115,239,247,0.06)',p:'coral',sk:R=>{lPalm(R,20,64,30);lPalm(R,140,64,26);R(60,46,40,18,LC.w);R(56,40,48,6,LC.r);R(58,38,44,2,LC.o);R(76,52,8,12,SIL);R(72,32,6,6,LC.o);R(73,31,2,1,LC.k);R(82,32,6,6,LC.o);R(85,31,2,1,LC.k);for(let i=0;i<160;i+=9){R(i,60,3,4,LC.r==0?0:'#ff77a8');R(i+4,58,2,6,LC.o);}}},
-miyajima:{n:'\u5bae\u5cf6\uff08\u5e83\u5cf6\uff09',l:'\u6d77\u306b\u6d6e\u304b\u3076\u5927\u9ce5\u5c45\u3092\u304f\u3050\u308b\u306b\u3083',a:'rgba(177,62,83,0.06)',p:'maple',sk:R=>{lHills(R,SIL2,9,8,30);lTorii(R,80,58,48,40,LC.r);R(70,22,3,36,LC.r);R(87,22,3,36,LC.r);R(0,58,160,6,'#41a6f6');for(let i=0;i<160;i+=6)R(i,59,3,1,LC.w);R(118,46,40,12,SIL);R(116,44,44,2,LC.r);}},
+miyajima:{n:'\u5bae\u5cf6\uff08\u5e83\u5cf6\uff09',l:'\u6d77\u306b\u3046\u304b\u3076\u5cf6\u3092\u3081\u3050\u308b\u306b\u3083',a:'rgba(177,62,83,0.06)',p:'maple',sk:R=>{lHills(R,SIL2,9,8,30);lTorii(R,80,58,48,40,LC.r);R(70,22,3,36,LC.r);R(87,22,3,36,LC.r);R(0,58,160,6,'#41a6f6');for(let i=0;i<160;i+=6)R(i,59,3,1,LC.w);R(118,46,40,12,SIL);R(116,44,44,2,LC.r);}},
 nara:{n:'\u5948\u826f',l:'\u9e7f\u3055\u3093\u3068\u5927\u4ecf\u6bbf\u306e\u5948\u826f\u306b\u3083',a:'rgba(167,240,112,0.05)',p:'sakura',sk:R=>{lHills(R,SIL2,13,5,18);lPagoda(R,28,64,5,22,SIL,'#1a1c2c');R(84,40,64,24,SIL);R(80,34,72,6,'#1a1c2c');R(90,30,52,4,'#1a1c2c');R(88,29,3,2,LC.y);R(141,29,3,2,LC.y);[[56,60],[66,62]].forEach(([x,y])=>{R(x,y-6,8,4,LC.o);R(x,y-2,1,2,LC.o);R(x+7,y-2,1,2,LC.o);R(x+7,y-10,3,4,LC.o);R(x+8,y-12,1,2,'#566c86');R(x+2,y-5,1,1,LC.w);});}},
 fukuoka:{n:'\u798f\u5ca1',l:'\u798f\u5ca1\u30bf\u30ef\u30fc\u3068\u5c4b\u53f0\u306e\u591c\u306b\u3083',a:'rgba(65,166,246,0.06)',p:'neon',sk:R=>{lBlocks(R,60,100,21,18,1);for(let y=4;y<64;y++){const hw=1+(y-4)/60*5;R(124-hw,y,hw*2,1,(y>>2)%2?'#41a6f6':'#3b5dc9');}lDome(R,40,64,22,SH);R(18,62,44,2,SIL);[[2,1],[104,0]].forEach(([x])=>{R(x,52,16,12,SIL);R(x-1,50,18,2,LC.r);R(x+3,55,2,3,LC.r);R(x+11,55,2,3,LC.r);});}}
 };
@@ -782,7 +782,7 @@ else{ctx.drawImage(CS,dx+8,ky|0);}
 if(T>=250){for(let i=0;i<3;i++){const hy=ky-6-((T*0.6+i*14)%30),hx=dx+6+i*6+Math.sin(T*.1+i)*2;ctx.fillStyle='#ff77a8';ctx.fillRect(hx|0,hy|0,1,1);ctx.fillRect((hx|0)+2,hy|0,1,1);ctx.fillRect((hx|0),(hy|0)+1,3,1);ctx.fillRect((hx|0)+1,(hy|0)+2,1,1);}}
 if(T===250)sinkSnd('up');}
 if(T>=SINK_N-14){ctx.fillStyle='rgba(244,244,244,'+Math.min(1,(T-(SINK_N-14))/14)+')';ctx.fillRect(0,0,W,H);}
-if(T>20&&T%50<34)txt(LANG==='ja'?'\u30bf\u30c3\u30d7\u3067\u30b9\u30ad\u30c3\u30d7':LANG==='en'?'tap to skip':LANG==='th'?'\u0e41\u0e15\u0e30\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e02\u0e49\u0e32\u0e21':'\u649a\u4e00\u4e0b\u8df3\u904e',W-4,H-10,7,P.w,'right');
+if(T>20&&T%50<34)txt(LANG==='ja'?'\u30bf\u30c3\u30d7\u3067\u30b9\u30ad\u30c3\u30d7':LANG==='en'?'tap to skip':LANG==='th'?'\u0e41\u0e15\u0e30\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e02\u0e49\u0e32\u0e21':'\u3a52\u4e00\u4e0b\u8df3\u904e',W-4,H-10,7,P.w,'right');
 if(T>=SINK_N)sinkEnd();}
 function drawBeach(){const F=(c,a,b,w,h)=>{ctx.fillStyle=c;ctx.fillRect(a|0,b|0,w||1,h||1);};
 const g=ctx.createLinearGradient(0,0,0,40);g.addColorStop(0,'#41a6f6');g.addColorStop(1,'#73eff7');ctx.fillStyle=g;ctx.fillRect(0,0,W,40);
@@ -3009,7 +3009,7 @@ function dsLv(w){return(mode==='level'&&lvl&&lvl.w===w)?lvl.s:-1;}
 const DSL={
 zh:{jp:{ch:'\u65e5\u672c\u7bc7',dn:['\u6771\u4eac','\u6771\u4eac','\u6771\u4eac','\u5927\u962a','\u5927\u962a','\u5927\u962a','\u4eac\u90fd','\u4eac\u90fd','\u4eac\u90fd\u30fb\u795e\u793e','\u4eac\u90fd\u30fb\u795e\u793e'],
  lv:['\u6f80\u8c37\u5341\u5b57\u8def\u53e3','\u6771\u4eac\u9435\u5854','\u79cb\u8449\u539f\u96fb\u5668\u8857','\u9053\u9813\u5800\u904b\u6cb3','\u5927\u962a\u57ce','\u65b0\u4e16\u754c\u30fb\u901a\u5929\u95a3','\u5d50\u5c71\u7af9\u6797','\u7947\u5712\u753a\u5c4b\u30fb\u71c8\u7c60','\u5343\u672c\u9ce5\u5c45\u53c3\u9053','\u795e\u793e\u6c60\u5858\u30fb\u6cb3\u7ae5'],
- end:['\u6210\u73ed\u4eba\u4e00\u9f4a\u904e\u99ac\u8def\uff0c\u597d\u58ef\u89c0\u55b5','\u9435\u5854\u7d05\u767d\u8272\u597d\u975a\u55b5','\u9713\u8679\u62db\u724c\u9583\u5230\u773c\u90fd\u82b1\u55b5','\u7ae0\u9b5a\u71d2\u597d\u71d9\u53e3\u55b5','\u5927\u962a\u57ce\u597d\u5a01\u6c34\u55b5','\u901a\u5929\u95a3\u5572\u71c8\u597d\u71b1\u9b27\u55b5','\u7af9\u6797\u6c99\u6c99\u8072\uff0c\u597d\u6dbc\u723d\u55b5','\u71c8\u7c60\u7167\u4f4f\u77f3\u677f\u8def\uff0c\u975c\u975c\u884c\u904e\u55b5','\u55ba\u9ce5\u5c45\u524d\u9762\u8f15\u8f15\u97a0\u500b\u8eac\uff0c\u975c\u975c\u884c\u904e\u55b5','\u6cb3\u7ae5\u4ea4\u8fd4\u9752\u74dc\uff0c\u65e5\u672c\u7bc7\u5b8c\u6210\u55b5\uff01'],
+ end:['\u6210\u73ed\u4eba\u4e00\u9f4a\u904e\u99ac\u8def\uff0c\u597d\u58ef\u89c0\u55b5','\u9435\u5854\u7d05\u767d\u8272\u597d\u975a\u55b5','\u9713\u8679\u62db\u724c\u9583\u5230\u773c\u90fd\u82b1\u55b5','\u7ae0\u9b5a\u71d2\u597d\u71d9\u53e3\u55b5','\u5927\u962a\u57ce\u597d\u5a01\u6c34\u55b5','\u901a\u5929\u95a3\u5572\u71c8\u597d\u71b1\u9b27\u55b5','\u7af9\u6797\u6c99\u6c99\u8072\uff0c\u597d\u6dbc\u723d\u55b5','\u71c8\u7c60\u7167\u4f4f\u77f3\u677f\u8def\uff0c\u975c\u975c\u884c\u904e\u55b5','\u5750\u5c0f\u706b\u8eca\u7747\u6eaa\u8c37\uff0c\u597d\u958b\u5fc3\u55b5','\u6cb3\u7ae5\u4ea4\u8fd4\u9752\u74dc\uff0c\u65e5\u672c\u7bc7\u5b8c\u6210\u55b5\uff01'],
  tw:['\u4eba\u6f6e\u597d\u591a\uff0c\u6c34\u6d41\u5de6\u53f3\u6416','\u6d77\u6d41\u6703\u63a8\u4f60\u5411\u53f3','\u9713\u8679\u6b04\u6746\u6703\u5f48\u8fd4\u4f60','\u904b\u6cb3\u6c34\u63a8\u4f60\u5411\u5de6','\u597d\u5be7\u975c\uff0c\u5c11\u5572\u5371\u96aa','\u73cd\u73e0\u6703\u98c4\u57cb\u569f','\u7af9\u6797\u6c34\u6d41\u5de6\u53f3\u6416','\u591a\u5572\u6c23\u6ce1\u88dc\u6c27','\u597d\u5be7\u975c\uff0c\u6162\u6162\u6e38','\u6cb3\u7ae5\u55ba\u6c60\u5858\u7b49\u4f60']},
  th:{ch:'\u6cf0\u570b\u7bc7',dn:['\u83ef\u5bcc\u91cc','\u83ef\u5bcc\u91cc','\u83ef\u5bcc\u91cc','\u7d05\u7d71','\u7d05\u7d71','\u6e05\u9081','\u6e05\u9081','\u6e05\u9081','\u5e03\u5409','\u5e03\u5409'],
  lv:['\u4e09\u5cf0\u5854\u30fb\u7334\u5b50','\u5411\u65e5\u8475\u7530','\u7d0d\u840a\u738b\u5bae','\u5927\u4f5b\u5bfa','\u6e44\u5357\u6cb3\u7554','\u5854\u4f69\u9580\u53e4\u57ce','\u9031\u65e5\u591c\u5e02','\u7d20\u5e16\u5c71\u30fb\u96f2\u6d77','\u82ad\u6771\u6d77\u7058','\u6500\u7259\u7063\u5947\u77f3'],
@@ -3807,7 +3807,7 @@ function rTopPanels(v,L){const T=RTX(),zh=rLang()==='zh';const nm=meName();
  rPatch(v,L,[62,8,142,24],[T.lv+rLv()+'  '+nm]);rPatch(v,L,[95,29,62,12],[((prog.u-1)%10)+' / 10'],{fs:9});
  {const a=Q(v,[72,42,124,9]),r=rS(L,a);rx.fillStyle='#2b3a66';rx.fillRect(r[0],r[1],r[2],r[3]);rx.fillStyle='#41a6f6';rx.fillRect(r[0],r[1],r[2]*(((prog.u-1)%10)/10),r[3]);}
  rPatch(v,L,[268,16,62,26],[String(wallet.p|0)],{al:'center',col:'#3a2a1a'});const seen=Object.keys(DEX.s||{}).length;rPatch(v,L,[382,16,58,26],[String(seen)],{al:'center'});
- const tz={hk:8,tpe:8,tyo:9,osa:9,bkk:7}[rCity(v)]||8,d=new Date(Date.now()+tz*36e5);const hh=String(d.getUTCHours()).padStart(2,'0'),mm=String(d.getUTCMinutes()).padStart(2,'0');
+ const tz=rTZ(rCity(v)),d=new Date(Date.now()+tz*36e5);const hh=String(d.getUTCHours()).padStart(2,'0'),mm=String(d.getUTCMinutes()).padStart(2,'0');
  rPatch(v,L,[550,10,96,52],[T.wd[d.getUTCDay()],(d.getUTCMonth()+1)+'/'+d.getUTCDate(),hh+':'+mm],{al:'center'});
  if(RF.wx){const a=Q(v,[512,8,36,40]),r=rS(L,a);rx.fillStyle=rSamp(v,a[0]+2,a[1]+2);rx.fillRect(r[0],r[1],r[2],r[3]);rx.font=Math.round(r[3]*.62)+'px Noto Sans Thai,Loma,sans-serif';rx.textAlign='center';rx.textBaseline='middle';rx.fillText(WX_IC[rWx(rCity(v)).k]||'\u26c5',r[0]+r[2]/2,r[1]+r[3]/2);}
  rPatch(v,L,v==='house'?[45,73,175,44]:[45,74,158,46],[T.say[(Date.now()/6000|0)%3]],{b:0,fs:11});
@@ -3842,14 +3842,15 @@ function rAnim(v,L,t){const F=rFxPrep(v);if(!F||F.fail)return;const strip=10,amp
  if(v!=='sea'||1){for(let y=0;y<RV[v].h;y+=strip){const dx=Math.sin(t*1.3+y*.018)*amp*Math.min(1,y/400+.3);rx.drawImage(F.m,0,y,RV[v].w,strip,L.x+dx*L.s,L.y+y*L.s,RV[v].w*L.s,strip*L.s+.5);}}
  for(const [x,y,p,len] of F.wat){const a=Math.sin(t*2+p);if(a<.35)continue;rx.globalAlpha=(a-.35)*1.2;rx.fillStyle='#eaffff';rx.fillRect(L.x+(x+Math.sin(t+p)*3)*L.s,L.y+y*L.s,Math.max(1,len*L.s),Math.max(1,1.6*L.s));}rx.globalAlpha=1;}
 // ---- weather per city (Open-Meteo, cached 30 min in mmsea_wx6; season fallback offline)
-const RWC={hk:[22.32,114.17,8],tpe:[25.03,121.56,8],tyo:[35.68,139.69,9],osa:[34.69,135.5,9],bkk:[13.75,100.5,7]};
+const RWC={hk:[22.32,114.17,8],mo:[22.2,113.54,8],tpe:[25.03,121.56,8],tyo:[35.68,139.69,9],osa:[34.69,135.5,9],bkk:[13.75,100.5,7],cnx:[18.79,98.98,7],sin:[1.35,103.82,8],lon:[51.51,-0.13,1],nyc:[40.71,-74.01,-4]};
+function rTZ(k){const c=RWX[k];return c&&c.off!=null?c.off:(RWC[k]||RWC.hk)[2];}
 let RWX={};try{RWX=JSON.parse(localStorage.getItem('mmsea_wx6')||'{}')||{};}catch(e){}
-function rCity(v){if(v==='sea')return'hk';try{const l=me()&&me().loc;if(l){if(l.r==='th'||l.l==='th')return'bkk';if(l.r==='tw')return'tpe';if(l.l==='ja')return l.r==='kansai'?'osa':'tyo';if(l.r==='hk')return'hk';}}catch(e){}return LANG==='ja'?'tyo':LANG==='th'?'bkk':'hk';}
+function rCity(v){if(v==='sea')return'hk';{let p=null;try{p=localStorage.getItem('mmsea_wxcity');}catch(e){}if(p&&p!=='auto'&&RWC[p])return p;}try{const l=me()&&me().loc;if(l){if(l.r==='th'||l.l==='th')return'bkk';if(l.r==='tw')return'tpe';if(l.l==='ja')return l.r==='kansai'?'osa':'tyo';if(l.r==='hk')return'hk';}}catch(e){}return LANG==='ja'?'tyo':LANG==='th'?'bkk':'hk';}
 function rSeason(k){const m=new Date().getMonth()+1,d=new Date().getDate();const wet=(k==='bkk'&&m>=5&&m<=10)||((k==='hk'||k==='tpe')&&m>=5&&m<=9)||((k==='tyo'||k==='osa')&&m===6);const cold=(k==='tyo'||k==='osa')&&(m===1||m===2);
  const h=(d*7+k.length*13)%10;return cold&&h<3?'snow':wet&&h<5?'rain':h<6?'sun':'cloud';}
-const rBusy={};
-function rWx(k){const c=RWX[k];if((!c||Date.now()-c.at>18e5)&&!rBusy[k]&&navigator.onLine!==false&&window.fetch){rBusy[k]=1;const q=RWC[k];const ctl=window.AbortController?new AbortController():null;setTimeout(()=>{try{ctl&&ctl.abort();}catch(e){}},8000);
-  fetch('https://api.open-meteo.com/v1/forecast?latitude='+q[0]+'&longitude='+q[1]+'&current=weather_code,is_day&timezone=auto',ctl?{signal:ctl.signal}:{}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.current){RWX[k]={k:wxKind(j.current.weather_code|0),at:Date.now(),src:'api'};try{localStorage.setItem('mmsea_wx6',JSON.stringify(RWX));}catch(e){}}}).catch(()=>{}).finally(()=>{rBusy[k]=0;});}
+const rBusy={},rTry={};
+function rWx(k){const c=RWX[k];if((!c||Date.now()-c.at>18e5||(c.t==null&&!(rTry[k]>Date.now())))&&!rBusy[k]&&navigator.onLine!==false&&window.fetch){rBusy[k]=1;rTry[k]=Date.now()+6e4;const q=RWC[k];const ctl=window.AbortController?new AbortController():null;setTimeout(()=>{try{ctl&&ctl.abort();}catch(e){}},8000);
+  fetch('https://api.open-meteo.com/v1/forecast?latitude='+q[0]+'&longitude='+q[1]+'&current=weather_code,is_day,temperature_2m&timezone=auto',ctl?{signal:ctl.signal}:{}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.current){RWX[k]={k:wxKind(j.current.weather_code|0),at:Date.now(),src:'api',t:typeof j.current.temperature_2m==='number'?j.current.temperature_2m:null,off:typeof j.utc_offset_seconds==='number'?j.utc_offset_seconds/3600:null};try{localStorage.setItem('mmsea_wx6',JSON.stringify(RWX));}catch(e){}}}).catch(()=>{}).finally(()=>{rBusy[k]=0;});}
  return c&&Date.now()-c.at<6*36e5?c:{k:rSeason(k),src:'season'};}
 const RPART=[];
 function rWeather(L,k,box,t){const w=rWx(k).k,b=box||[0,0,L.Wv,L.Hv];rx.save();rx.beginPath();rx.rect(b[0],b[1],b[2],b[3]);rx.clip();const n=Math.max(45,Math.round(b[2]*b[3]/500));
@@ -3860,7 +3861,7 @@ function rWeather(L,k,box,t){const w=rWx(k).k,b=box||[0,0,L.Wv,L.Hv];rx.save();r
  rx.restore();}
 // ---- time of day by the displayed city's local time
 const RLAMP={town:[[205,252],[240,252],[275,250],[300,112],[345,112],[418,92],[462,96],[418,318],[462,326],[488,455],[365,135],[175,128],[300,372],[262,425],[352,452],[480,215],[522,378]],house:[[300,140],[340,140],[380,160],[85,190],[110,200],[160,300],[395,300]],sea:[]};
-function rTod(k){const off=(RWC[k]||RWC.hk)[2],h=(new Date().getUTCHours()+off+new Date().getUTCMinutes()/60)%24;return window.__todH!=null?window.__todH:h;}
+function rTod(k){const off=rTZ(k),h=(new Date().getUTCHours()+off+new Date().getUTCMinutes()/60+48)%24;return window.__todH!=null?window.__todH:h;}
 function rTint(v,L,k,t){const h=rTod(k);const night=h<5.5||h>=19.5,dusk=!night&&(h<7||h>=17.5);if(!night&&!dusk)return;
  rx.fillStyle=night?'rgba(14,22,70,0.46)':'rgba(255,128,60,0.16)';rx.fillRect(0,0,L.Wv,L.Hv);if(dusk&&h>=17.5){rx.fillStyle='rgba(120,60,140,0.10)';rx.fillRect(0,0,L.Wv,L.Hv);}
  if(night){for(const [x,y] of RLAMP[v]||[]){const X=L.x+x*SC6[v]*L.s,Y=L.y+y*SC6[v]*L.s,s=Math.max(3,L.s*16),f=.75+.25*Math.sin(t*3+x);rx.fillStyle='rgba(255,210,120,'+(0.22*f)+')';rx.fillRect(X-s*1.6,Y-s*1.6,s*3.2,s*3.2);rx.fillStyle='rgba(255,226,150,'+(0.5*f)+')';rx.fillRect(X-s*.7,Y-s*.7,s*1.4,s*1.4);rx.fillStyle='rgba(255,244,200,0.9)';rx.fillRect(X-s*.25,Y-s*.25,s*.5,s*.5);}
@@ -3894,7 +3895,7 @@ rc.addEventListener('pointercancel',()=>{rDown=null;});rc.addEventListener('touc
 goWMap=function(v){goRef(v==='sea'?'sea':'town');};
 
 // VIBDEBUG stays on: while the reference views show, shrink it into the bottom-right corner so it does not cover the art or the top bar
-function rDbg(on){const d=[...document.body.children].find(e=>e.firstChild&&e.firstChild.textContent&&e.firstChild.textContent.startsWith('DBG '));if(!d)return;if(on){d._s=d._s||d.style.cssText;Object.assign(d.style,{top:'auto',left:'auto',right:'2px',bottom:'26px',transform:'scale(.55)',transformOrigin:'right bottom',opacity:'.75'});}else if(d._s){d.style.cssText=d._s;d._s=null;}}
+function rDbg(on){const d=[...document.body.children].find(e=>e.firstChild&&e.firstChild.textContent&&e.firstChild.textContent.startsWith('DBG '));if(!d)return;if(on){d._s=d._s||d.style.cssText;Object.assign(d.style,{top:'auto',left:'auto',right:'2px',bottom:'26px',transform:'scale(.4)',transformOrigin:'right bottom',opacity:'.6',pointerEvents:'none'});}else if(d._s){d.style.cssText=d._s;d._s=null;}}
 /*0640: Taiwan boss becomes a big bubble-tea OCTOPUS (replaces the old boba creature). Eight arms hold tapioca pearls, a milk-tea cup and straws;
  tapioca pearls form its armour. Fought in the open sea (surface scenery hidden while it is on screen). Specials: pearl barrage, straw jab, tea splash, pearl-armour shield.*/
 function twOctoSpr(f){return v2Spr(64,56,F=>{const K='#1a1c2c',PU='#7a3fb0',PL='#a66ed8',PD='#4e2380',PK='#f4b8d8',NV='#29366f',GD='#ffcd75',RD='#b13e53',AP='#333c57';
@@ -4050,6 +4051,264 @@ RH.sea.push(['i_mo',[24,262,96,30]]);
 {const _ra=rAct;rAct=function(k){if(k==='i_mo')return()=>goSelect(MOW);return _ra(k);};
  const _so=rSeaOver;rSeaOver=function(L){_so(L);const T={zh:'\ud83e\udd67 \u6fb3\u9580',en:'\ud83e\udd67 Macau',ja:'\ud83e\udd67 \u30de\u30ab\u30aa',th:'\ud83e\udd67 \u0e21\u0e32\u0e40\u0e01\u0e4a\u0e32'}[rLang()]||'\ud83e\udd67 \u6fb3\u9580';rPill(L,'sea',[24,262,96,30],T+'  '+wmDone(MOW)+'/10','#fff','rgba(177,62,83,0.92)');};}
 {const _gt=goalText;goalText=function(l){if(l&&l.w===MOW&&l.k==='boss')return({zh:'\u982d\u76ee\u95dc\uff1a\u6253\u6557',en:'Boss level: beat the ',ja:'\u30dc\u30b9\u30b9\u30c6\u30fc\u30b8\uff1a',th:'\u0e14\u0e48\u0e32\u0e19\u0e1a\u0e2d\u0e2a: \u0e0a\u0e19\u0e30'}[BL()]||'\u982d\u76ee\u95dc\uff1a\u6253\u6557')+BOSSDEF.motart.n+(BL()==='ja'?'\u3092\u305f\u304a\u305b':'');return _gt(l);};}
+/*0640c: \u4eac\u90fd\u7af9\u6797 (Kyoto Bamboo Grove, Arashiyama-style) \u2014 the Japan chapter's level 7 (177) gets a new crisp pixel backdrop:
+ tall swaying bamboo, stone path with stepping stones, soft light shafts, stone lanterns, a tanuki and a cat on the path, a tiny Fuji-style peak glimpsed in a gap.
+ No torii, no shrines. The sea chart's Japan island gets a \ud83c\udf8b pill that leads into the Japan chapter.*/
+const KYW=17,KYS=6;
+function kyName(){return({zh:'\u4eac\u90fd\u7af9\u6797',en:'Kyoto Bamboo Grove',ja:'\u4eac\u90fd\u306e\u7af9\u6797',th:'\u0e1b\u0e48\u0e32\u0e44\u0e1c\u0e48\u0e40\u0e01\u0e35\u0e22\u0e27\u0e42\u0e15'})[BL()]||'\u4eac\u90fd\u7af9\u6797';}
+{const N={zh:'\u4eac\u90fd\u7af9\u6797',en:'Kyoto Bamboo Grove',ja:'\u4eac\u90fd\u306e\u7af9\u6797',th:'\u0e1b\u0e48\u0e32\u0e44\u0e1c\u0e48\u0e40\u0e01\u0e35\u0e22\u0e27\u0e42\u0e15'};for(const k in DSL){const d=DSL[k]&&DSL[k].jp;if(d&&d.lv)d.lv[KYS]=N[k]||N.en;}}
+const KYC={};// live canvases (redrawn for sway)
+function kyDraw(x,ph){const F=dsR(x),K='#1a1c2c';x.clearRect(0,0,W,56);
+ // misty green sky between the stalks
+ const g=x.createLinearGradient(0,0,0,54);g.addColorStop(0,'#a7f070');g.addColorStop(.55,'#d8f4c8');g.addColorStop(1,'#f4f4f4');x.fillStyle=g;x.fillRect(0,0,W,54);
+ // tiny Fuji-style peak in a far gap
+ const fx=W*0.62|0;F('#94b0c2',fx-14,30,28,8);F('#94b0c2',fx-9,26,18,4);F('#94b0c2',fx-5,23,10,3);F('#f4f4f4',fx-5,23,10,2);F('#f4f4f4',fx-3,22,6,1);
+ // far bamboo (pale, thin)
+ for(let i=0;i<W;i+=5){const sw=Math.round(Math.sin(ph+i*.13)*1);F('#73c48f',i+sw,0,2,46);for(let y=4+(i%7);y<46;y+=9)F('#5aa878',i+sw,y,2,1);}
+ // light shafts (soft, slanted)
+ x.save();x.globalAlpha=.18+.05*Math.sin(ph*.7);x.fillStyle='#fff3b0';for(const sx of[30,78,128]){x.beginPath();x.moveTo(sx,0);x.lineTo(sx+8,0);x.lineTo(sx+26,54);x.lineTo(sx+14,54);x.closePath();x.fill();}x.restore();
+ // stone path: perspective strip with stepping stones
+ F('#566c86',0,44,W,10);F('#94b0c2',W/2-26|0,38,52,16);F('#94b0c2',W/2-18|0,34,36,4);F('#c2c3c7',W/2-12|0,31,24,3);
+ for(let r=0;r<4;r++){const y=33+r*5,w=8+r*4;for(let k=-1;k<=1;k++)F(r%2?'#c2c3c7':'#f4f4f4',(W/2+k*(w+3)-w/2)|0,y,w,2);}
+ // bamboo fence (low, woven) along the path
+ for(let i=0;i<W;i+=3){if(Math.abs(i-W/2)<30)continue;F('#8f563b',i,42,2,6);}F('#5d3a1a',0,42,W/2-30|0,1);F('#5d3a1a',W/2+30|0,42,W,1);F('#5d3a1a',0,45,W/2-30|0,1);F('#5d3a1a',W/2+30|0,45,W,1);
+ // near bamboo (tall, bright, swaying at the top)
+ const near=[4,16,26,40,52,108,120,134,146,158,170];
+ for(const bx of near){if(bx>=W)continue;const sw=Math.sin(ph+bx*.21)*2.2;
+  for(let y=0;y<46;y+=2){const o=Math.round(sw*(1-y/46));F(K,bx+o-1,y,6,2);F(bx%3?'#38b764':'#257179',bx+o,y,4,2);F('#a7f070',bx+o+1,y,1,2);}
+  for(let y=5+(bx%5);y<44;y+=8){const o=Math.round(sw*(1-y/46));F(K,bx+o-1,y,6,1);F('#a7f070',bx+o,y+1,4,1);}
+  const o=Math.round(sw);for(let l=0;l<3;l++){const ly=2+l*6,dir=(l+bx)%2?1:-1;F('#38b764',bx+o+(dir>0?4:-6),ly,6,2);F('#a7f070',bx+o+(dir>0?5:-5),ly,3,1);}}
+ // stone lanterns (toro, garden style)
+ for(const lx of[34,W-40]){F(K,lx-1,30,9,14);F('#94b0c2',lx,40,7,4);F('#94b0c2',lx+2,36,3,4);F('#c2c3c7',lx-1,32,9,3);F('#ffcd75',lx+1,35,5,2);F('#94b0c2',lx,31,7,1);F('#566c86',lx+2,29,3,2);}
+ // tanuki sitting on the path, cat walking beside it
+ const tx=W/2-14|0,ty=40;F(K,tx-1,ty-8,10,10);F('#8f563b',tx,ty-7,8,9);F('#f4e8c8',tx+2,ty-3,4,4);F(K,tx+1,ty-6,6,2);F('#f4e8c8',tx+1,ty-6,1,1);F('#f4e8c8',tx+6,ty-6,1,1);F(K,tx,ty-9,2,2);F(K,tx+6,ty-9,2,2);F('#5d3a1a',tx+8,ty-2,4,3);F(K,tx+10,ty-2,2,2);
+ const cx=W/2+8+Math.round(Math.sin(ph*.5)*2),cy=40;F(K,cx-1,cy-7,10,8);F('#ffcd75',cx,cy-6,8,6);F('#ef7d57',cx+2,cy-6,2,1);F(K,cx,cy-8,2,2);F(K,cx+6,cy-8,2,2);F(K,cx+2,cy-4,1,1);F(K,cx+5,cy-4,1,1);F('#ef7d57',cx+8,cy-5,3,1);F('#ffcd75',cx+1,cy,2,1);F('#ffcd75',cx+5,cy,2,1);
+ // falling leaves
+ for(let i=0;i<5;i++){const lx=((i*37+ph*9)%W)|0,ly=((i*11+ph*6)%40)|0;F('#a7f070',lx,ly,2,1);}
+ F('#1a1c2c',0,53,W,1);}
+{const _db=dsBake;dsBake=function(w,s){const o=_db(w,s);if(w!==KYW||s!==KYS)return o;const c=o.c,x=c.getContext('2d');kyDraw(x,0);KYC.c=c;KYC.x=x;return o;};}
+setInterval(()=>{if(!KYC.c)return;try{if(typeof lvl!=='undefined'&&lvl&&lvl.w===KYW&&lvl.s===KYS&&state==='play')kyDraw(KYC.x,performance.now()/700);}catch(e){}},120);
+// sea chart: \ud83c\udf8b pill on the Japan island leading into the Japan chapter
+RH.sea.push(['i_ky',[262,330,104,24]]);
+{const _ra=rAct;rAct=function(k){if(k==='i_ky')return()=>{beep(880,.04);goSelect(KYW);};return _ra(k);};
+ const _so=rSeaOver;rSeaOver=function(L){_so(L);rPill(L,'sea',[262,330,104,24],'\ud83c\udf8b '+kyName(),'#fff','rgba(37,113,121,0.92)');};}
+/*0640f: \u5d50\u5c71\u5c0f\u706b\u8eca (Arashiyama sightseeing train). Replaces the old Japan level 9 torii path (no torii rule): a little open-carriage
+ retro train running along a green gorge above a river, autumn maples, a cat waving from the carriage. Original pixel art, no logos.*/
+const KTS=8;
+{const N={zh:'\u5d50\u5c71\u89c0\u5149\u5c0f\u706b\u8eca',en:'Arashiyama Scenic Train',ja:'\u5d50\u5c71\u306e\u30c8\u30ed\u30c3\u30b3',th:'\u0e23\u0e16\u0e44\u0e1f\u0e0a\u0e21\u0e27\u0e34\u0e27\u0e2d\u0e32\u0e23\u0e32\u0e0a\u0e34\u0e22\u0e32\u0e21\u0e30'},D={zh:'\u4eac\u90fd',en:'Kyoto',ja:'\u304d\u3087\u3046\u3068',th:'\u0e40\u0e01\u0e35\u0e22\u0e27\u0e42\u0e15'},
+  E={zh:'\u5750\u5c0f\u706b\u8eca\u7747\u6eaa\u8c37\uff0c\u597d\u958b\u5fc3\u55b5',en:'A little train ride over the gorge. So fun, meow',ja:'\u30c8\u30ed\u30c3\u30b3\u3067\u3051\u3044\u3053\u304f\u3092\u306a\u304c\u3081\u305f\u306b\u3083',th:'\u0e19\u0e31\u0e48\u0e07\u0e23\u0e16\u0e44\u0e1f\u0e0a\u0e21\u0e2b\u0e38\u0e1a\u0e40\u0e02\u0e32 \u0e2a\u0e19\u0e38\u0e01\u0e08\u0e31\u0e07 \u0e40\u0e2b\u0e21\u0e35\u0e22\u0e27'};
+ for(const k in DSL){const d=DSL[k]&&DSL[k].jp;if(!d)continue;const q=N[k]?k:'en';if(d.lv)d.lv[KTS]=N[q];if(d.dn)d.dn[KTS]=D[q];if(d.end)d.end[KTS]=E[q];}
+ try{DSC[KYW].kinds[KTS]='train';}catch(e){}}
+function ktDraw(x,ph){const F=dsR(x),K='#1a1c2c';x.clearRect(0,0,W,56);
+ const g=x.createLinearGradient(0,0,0,30);g.addColorStop(0,'#73eff7');g.addColorStop(1,'#d8f4f8');x.fillStyle=g;x.fillRect(0,0,W,30);
+ // gorge hills, layered, with maples
+ for(let i=0;i<W;i++){const h1=14+Math.round(Math.sin(i*.07)*4+Math.sin(i*.19)*2),h2=22+Math.round(Math.sin(i*.05+1)*3);F('#38b764',i,h1,1,40);F('#257179',i,h2,1,40);}
+ for(let i=0;i<14;i++){const mx=(i*29)%W,my=16+(i*7)%12;F(K,mx-1,my-1,7,6);F(i%3?'#ef7d57':'#ef4f3a',mx,my,5,4);F('#ffcd75',mx+1,my,2,1);}
+ // river at the bottom with shimmer
+ F('#3b5dc9',0,44,W,10);for(let i=0;i<W;i+=7)F('#73eff7',(i+Math.round(ph*3))%W,46+(i%3)*2,3,1);
+ // track on a trestle
+ F(K,0,36,W,2);F('#8f563b',0,36,W,1);for(let i=0;i<W;i+=8){F('#5d3a1a',i,38,2,6);F('#5d3a1a',i+1,40,6,1);}
+ // little train: engine + 2 open carriages, moving slowly
+ const tx=((Math.round(ph*3))%(W+40))+10;
+ const car=(cx,c)=>{F(K,cx,26,22,10);F(c,cx+1,27,20,8);F('#f4f4f4',cx+1,27,20,1);F(K,cx+1,29,20,1);for(let k=0;k<3;k++){F('#94b0c2',cx+3+k*6,30,4,3);}F(K,cx+3,35,3,2);F(K,cx+16,35,3,2);F(K,cx-2,32,2,1);};
+ // engine
+ F(K,tx,24,18,12);F('#b13e53',tx+1,25,16,10);F('#ffcd75',tx+1,25,16,2);F('#94b0c2',tx+3,28,5,4);F(K,tx+12,20,4,5);F('#566c86',tx+13,21,2,4);F('#ffcd75',tx+16,30,2,2);F(K,tx+2,35,3,2);F(K,tx+12,35,3,2);
+ car(tx-24,'#38b764');car(tx-48,'#ef7d57');
+ // cats riding: one waving from the first carriage
+ const cy=24,c1=tx-20;F(K,c1-1,cy-1,8,6);F('#ffcd75',c1,cy,6,5);F(K,c1,cy-2,2,2);F(K,c1+4,cy-2,2,2);F(K,c1+1,cy+2,1,1);F(K,c1+4,cy+2,1,1);
+ const wv=Math.round(Math.sin(ph*3));F('#ffcd75',c1+7,cy-2+wv,2,3);
+ const c2=tx-42;F(K,c2-1,cy-1,8,6);F('#f4f4f4',c2,cy,6,5);F(K,c2,cy-2,2,2);F(K,c2+4,cy-2,2,2);F(K,c2+1,cy+2,1,1);F(K,c2+4,cy+2,1,1);
+ // puffs from the engine
+ x.save();x.globalAlpha=.6;x.fillStyle='#f4f4f4';for(let i=0;i<3;i++){const t=(ph*2+i)%3;x.fillRect(tx+12-t*4,17-t*3,3+i,2);}x.restore();
+ F(K,0,53,W,1);}
+const KTC={};
+{const _db=dsBake;dsBake=function(w,s){const o=_db(w,s);if(w!==KYW||s!==KTS)return o;const x=o.c.getContext('2d');ktDraw(x,30);KTC.x=x;return o;};}
+setInterval(()=>{if(!KTC.x)return;try{if(typeof lvl!=='undefined'&&lvl&&lvl.w===KYW&&lvl.s===KTS&&state==='play')ktDraw(KTC.x,performance.now()/700);}catch(e){}},120);
+// 0640h: no torii anywhere \u2014 the location-card skylines (Kyoto, Miyajima) drew torii gates; they become clumps of bamboo of the same size.
+try{lTorii=function(R,cx,by,w,h,col){const n=Math.max(2,w/5|0);for(let i=0;i<n;i++){const bx=Math.round(cx-w/2+i*w/n),bh=Math.round(h*(0.75+((i*7)%4)/12));R(bx,by-bh,2,bh,'#38b764');for(let y=by-bh+3;y<by;y+=5)R(bx,y,2,1,'#257179');R(bx+2,by-bh+1,2,1,'#a7f070');}};}catch(e){}
+/*0640d: Dotonbori running billboard at 2x (48x40), closer to the famous canal-side sign: one runner (a white cat), arms up in a V, one knee raised,
+ white top and shorts, on a blue running track, inside a big rectangular board with a bright border and bulb lights. Original pixel art, no logo or lettering.
+ The rest of the canal scene is unchanged except the takoyaki sign, which moves right to make room; the bridge is still drawn last with its exact original pixels.*/
+function jpRun2(F,x,y){const K='#1a1c2c',w='#f4f4f4';
+ F(K,x-2,y-2,52,44);F('#ffcd75',x-1,y-1,50,42);F('#ef7d57',x,y,48,40);// bright frame
+ for(let i=0;i<48;i+=4){F(i%8?'#fff3b0':'#f4f4f4',x+i+1,y,2,1);F(i%8?'#f4f4f4':'#fff3b0',x+i+1,y+39,2,1);}for(let j=4;j<38;j+=4){F('#fff3b0',x,y+j,1,2);F('#fff3b0',x+47,y+j,1,2);}// bulbs
+ F(K,x+2,y+2,44,36);const g=['#73eff7','#41a6f6','#3b5dc9'];for(let r=0;r<26;r++)F(g[r<8?0:r<18?1:2],x+3,y+3+r,42,1);// sky
+ F('#29366f',x+3,y+29,42,8);for(let l=0;l<3;l++)F(w,x+3,y+30+l*3,42,1);// blue track with lanes
+ for(let i=0;i<42;i+=6)F('#41a6f6',x+3+i,y+29,3,1);
+ const cx=x+24,cy=y+6;// runner cat
+ F(K,cx-4,cy-1,9,8);F(w,cx-3,cy,7,6);F(K,cx-4,cy-3,2,3);F(K,cx+3,cy-3,2,3);F(w,cx-3,cy-2,1,2);F(w,cx+3,cy-2,1,2);F('#ff77a8',cx-3,cy-2,1,1);F('#ff77a8',cx+3,cy-2,1,1);
+ F(K,cx-2,cy+2,1,1);F(K,cx+2,cy+2,1,1);F('#ff77a8',cx,cy+3,1,1);F(K,cx-1,cy+4,3,1);// face, big smile
+ F(K,cx-4,cy+7,9,9);F(w,cx-3,cy+8,7,7);F('#c2c3c7',cx-3,cy+14,7,1);// white top
+ // arms raised in a V
+ for(let i=0;i<7;i++){F(K,cx-5-i,cy+8-i,3,2);F(w,cx-5-i,cy+8-i,2,1);F(K,cx+4+i,cy+8-i,3,2);F(w,cx+5+i,cy+8-i,2,1);}F(w,cx-12,cy-0,3,2);F(w,cx+10,cy-0,3,2);
+ // shorts
+ F(K,cx-4,cy+16,9,4);F(w,cx-3,cy+16,7,3);F('#c2c3c7',cx,cy+16,1,3);
+ // standing leg (left) and raised knee (right)
+ F(K,cx-3,cy+19,3,6);F(w,cx-2,cy+19,1,5);F(K,cx-4,cy+24,4,2);F(w,cx-3,cy+24,2,1);
+ F(K,cx+1,cy+18,7,3);F(w,cx+2,cy+19,5,1);F(K,cx+6,cy+20,3,5);F(w,cx+7,cy+20,1,4);F(K,cx+6,cy+24,4,2);F(w,cx+7,cy+24,2,1);
+ F(K,cx-6,cy+15,2,4);F(w,cx-6,cy+16,1,2);// tail
+ F('#ef4f3a',x+3,y+27,42,1);F(w,x+3,y+28,42,1);}
+{const _o=dsJpX;dsJpX=function(x,F,kd){if(kd!=='canal')return _o(x,F,kd);
+  jpRun2(F,4,2);
+  F('k',112,2,40,16);F('#ef4f3a',113,3,38,14);F('#ff7a5c',118,5,28,8);F('k',123,7,2,2);F('k',139,7,2,2);F('w',123,7,1,1);F('w',139,7,1,1);
+  for(let i=0;i<4;i++){F('#ef4f3a',110-i*2,8+i*3,4,2);F('#ef4f3a',150+i*2,8+i*3,4,2);}F('#ef4f3a',112,0,6,4);F('#ef4f3a',146,0,6,4);F('k',115,1,1,2);F('k',149,1,1,2);
+  F('k',82,6,20,12);F('#ffcd75',83,7,18,10);for(let i=0;i<3;i++){F('#8b5a3c',85+i*5,9,4,4);F('#f4f4f4',86+i*5,9,2,1);}F('#38b764',84,15,16,1);
+  for(let i=0;i<9;i++)jpLan(F,62+i*6,26,i%2?'#ef4f3a':'#f4f4f4');
+  for(let i=0;i<W;i+=5)F(['#ff77a8','#73eff7','#ffcd75'][(i/5|0)%3],i,49+((i/5|0)%2)*2,2,1);
+  F('k',60,38,40,3);F('#b13e53',61,38,38,2);};}
+/*0640e: Dotonbori bridge homage ("bridge version"). Only on the canal bridge: a little wooden bath tub with two cats seen from behind, soaking together.
+ Left: a grey cat whose back fur has a small round Q-style sea-dragon pattern. Right: a black cat with a black pointed eyepatch strap and a smiling-mask back pattern.
+ Both patterns are original fur markings (not tattoos), half hidden by drifting steam. No names, no logos, no weapons. Other eyepatch-cat scenes are on hold.*/
+const BRC={};
+function brCats(x,ph){const F=dsR(x),K='#1a1c2c';
+ const bx=64,by=24;// tub sits on the bridge deck (deck top y=38)
+ // tub
+ F(K,bx,by+8,32,7);F('#8f563b',bx+1,by+9,30,5);F('#b86f50',bx+1,by+9,30,1);for(let i=4;i<30;i+=6)F('#5d3a1a',bx+1+i,by+9,1,5);F('#5d3a1a',bx+1,by+12,30,1);
+ F('#73eff7',bx+1,by+8,30,1);
+ // grey cat (back view): ears, round head, shoulders above water
+ const g='#94b0c2',gd='#566c86',c1=bx+5;
+ F(K,c1-1,by-3,12,12);F(g,c1,by-2,10,11);F(K,c1,by-5,3,3);F(K,c1+7,by-5,3,3);F(g,c1+1,by-4,1,2);F(g,c1+8,by-4,1,2);
+ F(gd,c1+1,by+2,8,1);// head/back divide
+ // sea-dragon fur pattern: tiny curled pale dragon, round and cute
+ const p='#f4f4f4';F(p,c1+3,by+4,4,1);F(p,c1+2,by+5,1,2);F(p,c1+3,by+7,3,1);F(p,c1+6,by+6,1,1);F(p,c1+6,by+3,2,1);F('#73eff7',c1+7,by+3,1,1);
+ // black cat with black pointed eyepatch strap
+ const b='#333c57',c2=bx+18;
+ F(K,c2-1,by-3,12,12);F(b,c2,by-2,10,11);F(K,c2,by-5,3,3);F(K,c2+7,by-5,3,3);F('#ff77a8',c2+1,by-4,1,1);F('#ff77a8',c2+8,by-4,1,1);
+ F(K,c2,by-1,10,1);F(K,c2+9,by-2,2,1);F(K,c2+10,by-1,1,1);// eyepatch strap with the pointed patch peeking at the side
+ // smiling-mask fur pattern: round face with smiling eyes and a big grin
+ const m='#f4f4f4';F(m,c2+2,by+3,6,5);F(b,c2+3,by+4,1,1);F(b,c2+6,by+4,1,1);F(b,c2+3,by+6,4,1);F(b,c2+2,by+5,1,1);F(b,c2+7,by+5,1,1);
+ F('#ffcd75',c2+10,by+5,2,1);// tail tip curling over the tub rim
+ // steam: soft puffs drifting up, half hiding the patterns
+ x.save();for(let i=0;i<7;i++){const t=(ph*0.6+i*0.9)%6,sx=bx+3+i*4+Math.round(Math.sin(ph+i)*1.5),sy=by+8-t*2.2|0;x.globalAlpha=Math.max(0,0.55-t*0.08);x.fillStyle='#f4f4f4';x.fillRect(sx,sy,4,3);x.fillRect(sx+1,sy-1,2,1);}x.restore();}
+{const _o=dsJpX;dsJpX=function(x,F,kd){_o(x,F,kd);if(kd!=='canal')return;
+  BRC.bg=document.createElement('canvas');BRC.bg.width=x.canvas.width;BRC.bg.height=x.canvas.height;BRC.bg.getContext('2d').drawImage(x.canvas,0,0);BRC.x=x;brCats(x,0);};}
+setInterval(()=>{if(!BRC.x||!BRC.bg)return;try{if(typeof lvl!=='undefined'&&lvl&&lvl.w===17&&DSC[17].kinds[lvl.s]==='canal'&&state==='play'){BRC.x.clearRect(56,10,48,30);BRC.x.drawImage(BRC.bg,56,10,48,30,56,10,48,30);brCats(BRC.x,performance.now()/400);}}catch(e){}},150);
+// ---- 0640b: visible map buttons. The town/sea hotspots worked but were invisible (only the baked art hinted at them) and in landscape several sat off-screen until panned.
+// Every map location now gets a crisp pixel label-button (zh/en/ja/th) drawn on top; off-screen ones are pinned to the screen edge with an arrow; any pressed hotspot gets a press highlight.
+const MBT={zh:{foun:'\u5674\u6c34\u6c60',dock:'\u78bc\u982d',light:'\u71c8\u5854'},en:{foun:'Fountain',dock:'Dock',light:'Lighthouse'},ja:{foun:'\u3075\u3093\u3059\u3044',dock:'\u307f\u306a\u3068',light:'\u3068\u3046\u3060\u3044'},th:{foun:'\u0e19\u0e49\u0e33\u0e1e\u0e38',dock:'\u0e17\u0e48\u0e32\u0e40\u0e23\u0e37\u0e2d',light:'\u0e1b\u0e23\u0e30\u0e20\u0e32\u0e04\u0e32\u0e23'}};
+const MBK={town:['house','farm','shop','lib','gym','foun','dock','light','city'],sea:['i_hk','i_tw','i_jp','i_th','rank','shop']};
+const MBW={i_hk:14,i_tw:16,i_jp:17,i_th:18};
+let MBP=null;// last press flash {k,t}
+function mbLabel(v,k){const T=RTX(),X=MBT[rLang()]||MBT.zh;if(v==='sea'){if(k[0]==='i'&&k[1]==='_'){let s=T.isl[k.slice(2)];try{s+=' '+wmDone(MBW[k])+'/10';}catch(e){}return s;}return k==='rank'?T.rank:T.shop;}return T.b[k]||X[k]||k;}
+function mbDraw(){if(state!=='wmap'||!RL||!RF.hs)return;const v=RS.v,keys=MBK[v];
+ const pk=(rDown&&rDown.h&&rDown.h.k)||(MBP&&performance.now()-MBP.t<180?MBP.k:null);
+ // press highlight on the art hotspot itself (also covers hotspots without a button, e.g. Macau pill, nav, skins)
+ if(pk){const h=RS.hot.find(h=>h.k===pk&&!h.btn);if(h){rx.fillStyle='rgba(239,125,87,0.30)';rx.fillRect(h.r[0],h.r[1],h.r[2],h.r[3]);rx.strokeStyle='#ef7d57';rx.lineWidth=3;rx.strokeRect(h.r[0]+1.5,h.r[1]+1.5,h.r[2]-3,h.r[3]-3);}}
+ if(!keys)return;const Wv=innerWidth,Hv=innerHeight,top=36,bot=Hv-28,fs=Wv<420?12:13,bh=fs+12,placed=[],add=[];
+ rx.save();rx.imageSmoothingEnabled=false;rx.font='bold '+fs+'px "Noto Sans CJK TC","Noto Sans Thai",sans-serif';rx.textBaseline='middle';rx.textAlign='center';
+ for(const k of keys){const e=RH[v].find(h=>h[0]===k);if(!e)continue;const hr=rS(RL,Q(v,e[1])),fn=rAct(k);if(!fn)continue;
+  const lab=mbLabel(v,k),bw=Math.ceil(rx.measureText(lab).width)+18;let x=Math.round(hr[0]+hr[2]/2-bw/2),y=Math.round(hr[1]+hr[3]/2-bh/2),dir=0;
+  if(y<top){y=top;dir=-1;}if(y>bot-bh){y=bot-bh;dir=1;}x=Math.max(4,Math.min(Wv-bw-4,x));
+  for(let n=0;n<12&&placed.some(p=>x<p[0]+p[2]+3&&x+bw+3>p[0]&&y<p[1]+p[3]+3&&y+bh+3>p[1]);n++)y+=dir>0?-(bh+4):(bh+4);
+  placed.push([x,y,bw,bh]);const on=pk===k,oy=on?2:0;
+  rx.fillStyle='rgba(26,28,44,0.55)';rx.fillRect(x+2,y+3,bw,bh);// shadow
+  rx.fillStyle='#1a1c2c';rx.fillRect(x,y+oy,bw,bh);// outline
+  rx.fillStyle=on?'#ef7d57':'#ffcd75';rx.fillRect(x+2,y+2+oy,bw-4,bh-4);
+  rx.fillStyle=on?'#b13e53':'#f4f4f4';rx.fillRect(x+2,y+2+oy,bw-4,2);rx.fillStyle=on?'#b13e53':'#ef7d57';rx.fillRect(x+2,y+bh-4+oy,bw-4,2);
+  if(!dir){const cx=x+bw/2|0;rx.fillStyle='#1a1c2c';for(let i=0;i<4;i++)rx.fillRect(cx-4+i,y+bh+oy+i,8-2*i,1);}// pixel pointer
+  rx.fillStyle='#1a1c2c';rx.fillText((dir<0?'\u25b2 ':dir>0?'\u25bc ':'')+lab,x+bw/2,y+bh/2+oy+1);
+  add.push({r:[x-2,y-2,bw+4,bh+6],fn,k,btn:1});}
+ rx.restore();RS.hot.unshift(...add);}
+
+rc.addEventListener('pointerdown',()=>{if(rDown&&rDown.h)rLast=0;},true);
+rc.addEventListener('pointerup',e=>{const h=rHit(e);if(h&&h.k)MBP={k:h.k,t:performance.now()};},true);
+
+// ---- 0640b: precise hotspots for the painted buttons (bottom bar \u5730\u5716/\u80cc\u5305/\u4efb\u52d9/\u89d2\u8272/\u8a2d\u5b9a, profile card, date/weather card, tasks card) in town, house and sea
+{const set=(v,k,a)=>{const e=RH[v].find(h=>h[0]===k);if(e)e[1]=a;else RH[v].push([k,a]);};
+ set('town','nav0',[11,531,66,61]);set('town','nav1',[80,531,64,61]);set('town','nav2',[147,531,62,61]);set('town','nav3',[213,531,61,61]);set('town','nav4',[280,531,60,61]);set('town','pet',[508,536,140,53]);
+ set('town','prof',[5,3,200,62]);set('town','wxc',[508,3,145,62]);set('town','tasks',[508,75,147,26]);
+ set('house','prof',[5,3,200,58]);set('house','gem',[345,12,100,36]);set('house','wxc',[512,3,140,60]);set('house','tasks',[485,70,170,28]);
+ set('sea','prof',[8,8,200,64]);
+ // later entries win nothing: rHit takes the first match, so move the big background 'out' hotspot (house) to the end
+ const o=RH.house.findIndex(h=>h[0]==='out');if(o>=0)RH.house.push(RH.house.splice(o,1)[0]);}
+{const _ra=rAct;rAct=function(k){const m={nav1:()=>mbOpen('bag'),nav2:()=>mbOpen('quest'),nav3:()=>mbOpen('char'),nav4:()=>mbOpen('set'),prof:()=>mbOpen('char'),wxc:()=>mbOpen('wx'),tasks:()=>mbOpen('quest')};
+ if(m[k])return()=>{beep(880,.04);m[k]();};return _ra(k);};}
+
+// ---- 0640b: in-map pixel panels (bag / quests / character / settings / weather region)
+const MBL={zh:{bag:'\u80cc\u5305',quest:'\u4efb\u52d9',char:'\u89d2\u8272',set:'\u8a2d\u5b9a',wx:'\u5929\u6c23\u5730\u5340',close:'\u95dc\u9589',pearl:'\u73cd\u73e0',boats:'\u5df2\u6709\u5c0f\u8239',seen:'\u898b\u904e\u5605\u8c93',shop:'\u53bb\u5546\u5e97',todo:'\u4eca\u65e5\u5c0f\u4e8b',chap:'\u7ae0\u7bc0',prof:'\u6539\u540d\u540c\u5916\u89c0',dex:'\u8c93\u54aa\u5716\u9451',garage:'\u6f5b\u8247\u8eca\u623f',outfit:'\u5c0f\u8239\u5916\u89c0',snd:'\u8072\u97f3',on:'\u958b',off:'\u95dc',dbg:'VIBDEBUG \u9762\u677f',lang:'\u8a9e\u8a00',more:'\u66f4\u591a\u8a2d\u5b9a',auto:'\u81ea\u52d5\uff08\u8ddf\u6240\u5728\u5730\uff09',now:'\u800c\u5bb6'},
+ en:{bag:'Bag',quest:'Quests',char:'Character',set:'Settings',wx:'Weather place',close:'Close',pearl:'Pearls',boats:'Boats owned',seen:'Cats met',shop:'Open shop',todo:'Daily little things',chap:'Chapters',prof:'Name & look',dex:'Cat codex',garage:'Sub garage',outfit:'Boat skins',snd:'Sound',on:'On',off:'Off',dbg:'VIBDEBUG panel',lang:'Language',more:'More settings',auto:'Auto (your location)',now:'Now'},
+ ja:{bag:'\u30d0\u30c3\u30b0',quest:'\u3084\u308b\u3053\u3068',char:'\u30ad\u30e3\u30e9',set:'\u305b\u3063\u3066\u3044',wx:'\u3066\u3093\u304d\u306e\u3070\u3057\u3087',close:'\u3068\u3058\u308b',pearl:'\u3057\u3093\u3058\u3085',boats:'\u3082\u3063\u3066\u308b\u3075\u306d',seen:'\u3042\u3063\u305f\u306d\u3053',shop:'\u30b7\u30e7\u30c3\u30d7\u3078',todo:'\u304d\u3087\u3046\u306e\u3053\u3068',chap:'\u3057\u3087\u3046',prof:'\u306a\u307e\u3048\u3068\u307f\u305f\u3081',dex:'\u306d\u3053\u305a\u304b\u3093',garage:'\u305b\u3093\u3059\u3044\u304b\u3093\u3053',outfit:'\u3075\u306d\u306e\u307f\u305f\u3081',snd:'\u304a\u3068',on:'\u30aa\u30f3',off:'\u30aa\u30d5',dbg:'VIBDEBUG \u30d1\u30cd\u30eb',lang:'\u3053\u3068\u3070',more:'\u307b\u304b\u306e\u305b\u3063\u3066\u3044',auto:'\u3058\u3069\u3046\uff08\u3044\u308b\u3070\u3057\u3087\uff09',now:'\u3044\u307e'},
+ th:{bag:'\u0e01\u0e23\u0e30\u0e40\u0e1b\u0e4b\u0e32',quest:'\u0e20\u0e32\u0e23\u0e01\u0e34\u0e08',char:'\u0e15\u0e31\u0e27\u0e25\u0e30\u0e04\u0e23',set:'\u0e15\u0e31\u0e49\u0e07\u0e04\u0e48\u0e32',wx:'\u0e2a\u0e16\u0e32\u0e19\u0e17\u0e35\u0e48\u0e2d\u0e32\u0e01\u0e32\u0e28',close:'\u0e1b\u0e34\u0e14',pearl:'\u0e44\u0e02\u0e48\u0e21\u0e38\u0e01',boats:'\u0e40\u0e23\u0e37\u0e2d\u0e17\u0e35\u0e48\u0e21\u0e35',seen:'\u0e41\u0e21\u0e27\u0e17\u0e35\u0e48\u0e40\u0e08\u0e2d',shop:'\u0e44\u0e1b\u0e23\u0e49\u0e32\u0e19\u0e04\u0e49\u0e32',todo:'\u0e40\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e40\u0e25\u0e47\u0e01\u0e46 \u0e27\u0e31\u0e19\u0e19\u0e35\u0e49',chap:'\u0e1a\u0e17',prof:'\u0e0a\u0e37\u0e48\u0e2d\u0e41\u0e25\u0e30\u0e2b\u0e19\u0e49\u0e32\u0e15\u0e32',dex:'\u0e2a\u0e21\u0e38\u0e14\u0e41\u0e21\u0e27',garage:'\u0e2d\u0e39\u0e48\u0e40\u0e23\u0e37\u0e2d\u0e14\u0e33\u0e19\u0e49\u0e33',outfit:'\u0e2a\u0e01\u0e34\u0e19\u0e40\u0e23\u0e37\u0e2d',snd:'\u0e40\u0e2a\u0e35\u0e22\u0e07',on:'\u0e40\u0e1b\u0e34\u0e14',off:'\u0e1b\u0e34\u0e14',dbg:'\u0e41\u0e1c\u0e07 VIBDEBUG',lang:'\u0e20\u0e32\u0e29\u0e32',more:'\u0e15\u0e31\u0e49\u0e07\u0e04\u0e48\u0e32\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21',auto:'\u0e2d\u0e31\u0e15\u0e42\u0e19\u0e21\u0e31\u0e15\u0e34 (\u0e15\u0e32\u0e21\u0e17\u0e35\u0e48\u0e2d\u0e22\u0e39\u0e48)',now:'\u0e15\u0e2d\u0e19\u0e19\u0e35\u0e49'}};
+const MBC={hk:{zh:'\u9999\u6e2f',en:'Hong Kong',ja:'\u30db\u30f3\u30b3\u30f3',th:'\u0e2e\u0e48\u0e2d\u0e07\u0e01\u0e07'},mo:{zh:'\u6fb3\u9580',en:'Macau',ja:'\u30de\u30ab\u30aa',th:'\u0e21\u0e32\u0e40\u0e01\u0e4a\u0e32'},tpe:{zh:'\u53f0\u5317, \u53f0\u7063',en:'Taipei, Taiwan',ja:'\u30bf\u30a4\u30da\u30a4, \u305f\u3044\u308f\u3093',th:'\u0e44\u0e17\u0e40\u0e1b, \u0e44\u0e15\u0e49\u0e2b\u0e27\u0e31\u0e19'},
+ tyo:{zh:'\u6771\u4eac, \u65e5\u672c',en:'Tokyo, Japan',ja:'\u3068\u3046\u304d\u3087\u3046, \u306b\u307b\u3093',th:'\u0e42\u0e15\u0e40\u0e01\u0e35\u0e22\u0e27, \u0e0d\u0e35\u0e48\u0e1b\u0e38\u0e48\u0e19'},osa:{zh:'\u5927\u962a, \u65e5\u672c',en:'Osaka, Japan',ja:'\u304a\u304a\u3055\u304b, \u306b\u307b\u3093',th:'\u0e42\u0e2d\u0e0b\u0e32\u0e01\u0e32, \u0e0d\u0e35\u0e48\u0e1b\u0e38\u0e48\u0e19'},bkk:{zh:'\u66fc\u8c37, \u6cf0\u570b',en:'Bangkok, Thailand',ja:'\u30d0\u30f3\u30b3\u30af, \u30bf\u30a4',th:'\u0e01\u0e23\u0e38\u0e07\u0e40\u0e17\u0e1e\u0e2f, \u0e44\u0e17\u0e22'},
+ cnx:{zh:'\u6e05\u9081, \u6cf0\u570b',en:'Chiang Mai, Thailand',ja:'\u30c1\u30a7\u30f3\u30de\u30a4, \u30bf\u30a4',th:'\u0e40\u0e0a\u0e35\u0e22\u0e07\u0e43\u0e2b\u0e21\u0e48, \u0e44\u0e17\u0e22'},sin:{zh:'\u65b0\u52a0\u5761',en:'Singapore',ja:'\u30b7\u30f3\u30ac\u30dd\u30fc\u30eb',th:'\u0e2a\u0e34\u0e07\u0e04\u0e42\u0e1b\u0e23\u0e4c'},lon:{zh:'\u502b\u6566, \u82f1\u570b',en:'London, UK',ja:'\u30ed\u30f3\u30c9\u30f3, \u30a4\u30ae\u30ea\u30b9',th:'\u0e25\u0e2d\u0e19\u0e14\u0e2d\u0e19, \u0e2a\u0e2b\u0e23\u0e32\u0e0a\u0e2d\u0e32\u0e13\u0e32\u0e08\u0e31\u0e01\u0e23'},nyc:{zh:'\u7d10\u7d04, \u7f8e\u570b',en:'New York, USA',ja:'\u30cb\u30e5\u30fc\u30e8\u30fc\u30af, \u30a2\u30e1\u30ea\u30ab',th:'\u0e19\u0e34\u0e27\u0e22\u0e2d\u0e23\u0e4c\u0e01, \u0e2a\u0e2b\u0e23\u0e31\u0e10\u0e2f'}};
+const MBCK=['hk','mo','tpe','tyo','osa','bkk','cnx','sin','lon','nyc'];
+function mbCity(k){const c=MBC[k];return c?(c[rLang()]||c.en):k;}
+function mbTemp(k){const c=rWx(k);return c&&c.t!=null?Math.round(c.t)+'\u00b0C':'';}
+function mbWxText(k){const t=mbTemp(k);return (WX_IC[rWx(k).k]||'')+' '+mbCity(k)+(t?'  '+t:'');}
+function mbPick(){try{return localStorage.getItem('mmsea_wxcity')||'auto';}catch(e){return'auto';}}
+function mbOpen(id){const X=MBL[rLang()]||MBL.zh,T=RTX(),rows=[];let title=X[id];
+ const W=[['hk',14],['tw',16],['jp',17],['th',18]];
+ if(id==='bag'){rows.push({t:X.pearl+': '+(wallet.p|0),info:1});let own=0;try{own=(wallet.own||[]).length;}catch(e){}rows.push({t:X.boats+': '+own,info:1});rows.push({t:X.seen+': '+Object.keys(DEX.s||{}).length,info:1});rows.push({t:X.outfit,fn:()=>{goShop();shp.tab=1;}});rows.push({t:X.shop,fn:()=>goShop()});}
+ if(id==='quest'){rows.push({t:X.todo,fn:()=>{goTitle();homeGo('todo');}});for(const [k,w] of W){let d=0;try{d=wmDone(w);}catch(e){}rows.push({t:T.isl[k]+'  '+d+'/10',fn:()=>goSelect(w)});}
+  if(typeof MOW!=='undefined'){let d=0;try{d=wmDone(MOW);}catch(e){}rows.push({t:({zh:'\u6fb3\u9580',en:'Macau',ja:'\u30de\u30ab\u30aa',th:'\u0e21\u0e32\u0e40\u0e01\u0e4a\u0e32'}[rLang()])+'  '+d+'/10',fn:()=>goSelect(MOW)});}
+  if(typeof KYW!=='undefined')rows.push({t:kyName(),fn:()=>goSelect(KYW)});}
+ if(id==='char'){rows.push({t:meName()+'  '+T.lv+rLv(),info:1});rows.push({t:X.prof,fn:()=>goProfile('edit')});rows.push({t:X.dex,fn:goDex});rows.push({t:X.outfit,fn:()=>{goShop();shp.tab=1;}});if(typeof goGarage==='function')rows.push({t:X.garage,fn:goGarage});}
+ if(id==='set'){rows.push({t:X.snd+': '+(muted?X.off:X.on),fn:()=>{muted=!muted;try{localStorage.setItem('mmsea_mute',muted?'1':'0');}catch(e){}mbOpen('set');},keep:1});
+  const dv=document.getElementById('vibdbg');rows.push({t:X.dbg+': '+(dv&&dv.style.visibility==='hidden'?X.off:X.on),fn:()=>{if(dv)dv.style.visibility=dv.style.visibility==='hidden'?'':'hidden';mbOpen('set');},keep:1});
+  rows.push({t:X.wx+': '+(mbPick()==='auto'?X.auto:mbCity(mbPick())),fn:()=>mbOpen('wx'),keep:1});
+  const LP={zh:'',en:'en/',ja:'ja/',th:'th/'},base=location.pathname.replace(/(en|ja|th)\/[^/]*$/,'').replace(/[^/]*$/,'');
+  rows.push({t:X.lang+': \u4e2d\u6587 \u00b7 EN \u00b7 \u65e5\u672c\u8a9e \u00b7 \u0e44\u0e17\u0e22',info:1});rows.push({t:'\u4e2d\u6587',fn:()=>{location.href=base+LP.zh;}},{t:'EN',fn:()=>{location.href=base+LP.en;}},{t:'\u65e5\u672c\u8a9e',fn:()=>{location.href=base+LP.ja;}},{t:'\u0e44\u0e17\u0e22',fn:()=>{location.href=base+LP.th;}});
+  rows.push({t:X.more,fn:()=>{goTitle();homeGo('set');}});}
+ if(id==='wx'){const p=mbPick();rows.push({t:(p==='auto'?'\u25cf ':'')+X.auto,fn:()=>mbSetCity('auto'),keep:1});for(const k of MBCK){rows.push({t:(p===k?'\u25cf ':'')+mbCity(k),sub:mbTemp(k),fn:()=>mbSetCity(k),keep:1});}}
+ RS.pan={id,title,rows,sc:0};}
+function mbSetCity(k){try{localStorage.setItem('mmsea_wxcity',k);}catch(e){}if(k!=='auto')rWx(k);REXT[RS.v]=null;mbOpen('wx');}
+function mbPanel(){const P=RS.pan,Wv=innerWidth,Hv=innerHeight,X=MBL[rLang()]||MBL.zh,hot=[];rx.save();rx.imageSmoothingEnabled=false;
+ rx.fillStyle='rgba(10,14,30,0.6)';rx.fillRect(0,0,Wv,Hv);hot.push({r:[0,0,Wv,Hv],fn:()=>{RS.pan=null;},k:'p_bg'});
+ const pw=Math.min(Wv-20,360),rh=32,full=P.rows.reduce((n,r,i)=>n+(r.half?(P.rows[i-1]&&P.rows[i-1].half?0:1):1),0),ph=Math.min(Hv-60,56+full*(rh+4)+8),px=(Wv-pw)/2|0,py=Math.max(36,(Hv-ph)/2|0);
+ rx.fillStyle='#1a1c2c';rx.fillRect(px-3,py-3,pw+6,ph+6);rx.fillStyle='#f4e8c8';rx.fillRect(px,py,pw,ph);rx.fillStyle='#3b5dc9';rx.fillRect(px,py,pw,34);rx.fillStyle='#41a6f6';rx.fillRect(px,py,pw,3);
+ rx.font='bold 15px "Noto Sans CJK TC","Noto Sans Thai",sans-serif';rx.textAlign='left';rx.textBaseline='middle';rx.fillStyle='#fff';rx.fillText(P.title,px+12,py+18);
+ const pk=(rDown&&rDown.h&&rDown.h.k)||(MBP&&performance.now()-MBP.t<180?MBP.k:null);
+ const cb=[px+pw-34,py+4,28,26];rx.fillStyle=pk==='p_x'?'#ef7d57':'#b13e53';rx.fillRect(cb[0],cb[1],cb[2],cb[3]);rx.fillStyle='#fff';rx.textAlign='center';rx.fillText('\u2715',cb[0]+14,cb[1]+14);
+ const ins=[];hot.push({r:cb,fn:()=>{RS.pan=null;},k:'p_x'});
+ const max=Math.floor((ph-48)/(rh+4));let y=py+42,i=0,line=0,hx=0;rx.font='bold 13px "Noto Sans CJK TC","Noto Sans Thai",sans-serif';
+ for(let n=0;n<P.rows.length;n++){const r=P.rows[n];let x=px+8,w=pw-16;if(r.half){const g=P.rows.slice(0,n+1).reverse().findIndex(q=>!q.half),idx=(g<0?n+1:g)-1;w=(pw-16-12)/4;x=px+8+idx*(w+4);if(idx>0)y-=rh+4;}
+  if(line>=P.sc&&line-P.sc<max){const k='p_'+n,on=pk===k,oy=on?2:0;
+   if(r.info){rx.fillStyle='#e0c89a';rx.fillRect(x,y,w,rh);rx.fillStyle='#1a1c2c';rx.textAlign='left';rx.fillText(r.t,x+10,y+rh/2+1);}
+   else{rx.fillStyle='#1a1c2c';rx.fillRect(x,y+oy,w,rh);rx.fillStyle=on?'#ef7d57':'#ffcd75';rx.fillRect(x+2,y+2+oy,w-4,rh-4);rx.fillStyle=on?'#b13e53':'#f4f4f4';rx.fillRect(x+2,y+2+oy,w-4,2);
+    rx.fillStyle='#1a1c2c';rx.textAlign=r.half?'center':'left';rx.fillText(r.t,r.half?x+w/2:x+10,y+rh/2+1+oy);if(r.sub){rx.textAlign='right';rx.fillText(r.sub,x+w-10,y+rh/2+1+oy);}
+    ins.push({r:[x,y,w,rh],fn:()=>{const keep=r.keep;try{r.fn();}catch(e){console.error(e);}if(!keep)RS.pan=null;},k});}
+   y+=rh+4;}else if(!r.half||P.rows[n-1]&&!P.rows[n-1].half)y+=0;
+  if(!r.half||!(P.rows[n+1]&&P.rows[n+1].half))line++;}
+ if(line>max){const sx=px+pw-14;rx.fillStyle='#3b5dc9';const up=[sx-8,py+40,20,22],dn=[sx-8,py+ph-26,20,22];rx.fillRect(...up);rx.fillRect(...dn);rx.fillStyle='#fff';rx.fillText('\u25b2',up[0]+10,up[1]+11);rx.fillText('\u25bc',dn[0]+10,dn[1]+11);
+  ins.push({r:up,fn:()=>{P.sc=Math.max(0,P.sc-1);},k:'p_up'},{r:dn,fn:()=>{P.sc=Math.min(line-max,P.sc+1);},k:'p_dn'});}
+ rx.restore();RS.hot=[...ins,...hot.reverse()];}
+
+// ---- 0640b: zoom (pinch, +/- buttons, ctrl/trackpad wheel) with drag-to-pan; hotspots/buttons follow because they are all placed through rLayout
+RS.z=1;RS.zx=0;RS.zy=0;
+{const _rl=rLayout;rLayout=function(){const L=_rl();const z=RS.z||1;if(z<=1.001){RS.zx=RS.zy=0;return L;}const V=RV[RS.v],Wv=innerWidth,Hv=innerHeight,top=34,ah=Hv-60;
+ const s=L.s*z,w=V.w*s,h=V.h*s,x0=(Wv-w)/2,y0=top+(ah-h)/2;let x=x0,y=y0;
+ if(w>Wv){x=Math.max(Wv-w,Math.min(0,x0+RS.zx));}if(h>ah){y=Math.max(top+ah-h,Math.min(top,y0+RS.zy));}RS.zx=x-x0;RS.zy=y-y0;return{x,y,s,w,h,Wv,Hv,zm:1};};}
+function mbZoomAt(px,py,nz){const L=rLayout(),u=(px-L.x)/L.s,v=(py-L.y)/L.s;RS.z=Math.max(1,Math.min(4,nz));RS.zx=RS.zy=0;const L0=rLayout();if(RS.z>1){RS.zx=(px-u*L0.s)-L0.x;RS.zy=(py-v*L0.s)-L0.y;}rLast=0;}
+function mbFitZ(){if(innerWidth>=innerHeight||RS.v==='sea')return 1;const V=RV[RS.v],s=Math.min(innerWidth/V.w,(innerHeight-60)/V.h);return Math.max(1,Math.min(4,(innerHeight-60)/(V.h*s)));}
+{const _gr=goRef;goRef=function(v){const prev=RS.v,was=state==='wmap';_gr(v);if(RS.v!==prev||!was){RS.z=mbFitZ();RS.zx=RS.zy=0;}RS.pan=null;};}
+const MBptr=new Map();let MBpin=null,MBd=null;
+rc.addEventListener('pointerdown',e=>{MBptr.set(e.pointerId,{x:e.clientX,y:e.clientY});MBd={x:e.clientX,y:e.clientY,zx:RS.zx,zy:RS.zy};
+ if(MBptr.size===2&&!RS.pan){const [a,b]=[...MBptr.values()];MBpin={d:Math.hypot(a.x-b.x,a.y-b.y)||1,z:RS.z};}},true);
+rc.addEventListener('pointermove',e=>{if(!MBptr.has(e.pointerId))return;MBptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(MBpin&&MBptr.size>=2){const [a,b]=[...MBptr.values()];mbZoomAt((a.x+b.x)/2,(a.y+b.y)/2,MBpin.z*Math.hypot(a.x-b.x,a.y-b.y)/MBpin.d);if(rDown)rDown.mv=1;}
+ else if(RS.z>1&&MBd&&!RS.pan){const dx=e.clientX-MBd.x,dy=e.clientY-MBd.y;if(Math.abs(dx)>8||Math.abs(dy)>8){RS.zx=MBd.zx+dx;RS.zy=MBd.zy+dy;}}},true);
+const mbUp=e=>{MBptr.delete(e.pointerId);if(MBptr.size<2&&MBpin){MBpin=null;if(rDown)rDown.mv=1;MBd=null;}};
+rc.addEventListener('pointerup',e=>{if(MBpin&&rDown)rDown.mv=1;mbUp(e);},true);rc.addEventListener('pointercancel',mbUp,true);
+rc.addEventListener('wheel',e=>{if(e.ctrlKey||RS.z>1&&!(RL&&RL.panY)){e.preventDefault();e.stopImmediatePropagation();if(e.ctrlKey)mbZoomAt(e.clientX,e.clientY,RS.z*Math.exp(-e.deltaY*0.01));else{RS.zx-=e.deltaX;RS.zy-=e.deltaY;}}},{capture:true,passive:false});
+function mbZoomBtns(){const Wv=innerWidth,Hv=innerHeight,bs=22,x=Wv-bs-4,y0=Math.round(Hv/2-bs-4),pk=(rDown&&rDown.h&&rDown.h.k)||(MBP&&performance.now()-MBP.t<180?MBP.k:null),out=[];
+ rx.save();rx.font='bold 18px Noto Sans Thai,Loma,sans-serif';rx.textAlign='center';rx.textBaseline='middle';
+ [['zin','+',()=>mbZoomAt(Wv/2,(Hv-26+34)/2,RS.z*1.4)],['zout','\u2212',()=>mbZoomAt(Wv/2,(Hv-26+34)/2,RS.z/1.4)]].forEach(([k,t,fn],i)=>{const bx=Wv-(2-i)*(bs+12)+8,y=Hv-bs-1,on=pk===k,oy=on?2:0,dis=k==='zout'&&RS.z<=1||k==='zin'&&RS.z>=4;
+  rx.fillStyle='#1a1c2c';rx.fillRect(bx,y+oy,bs,bs);rx.fillStyle=dis?'#566c86':on?'#ef7d57':'#41a6f6';rx.fillRect(bx+2,y+2+oy,bs-4,bs-4);rx.fillStyle=on?'#b13e53':'#73eff7';rx.fillRect(bx+2,y+2+oy,bs-4,2);
+  rx.fillStyle='#fff';rx.fillText(t,bx+bs/2,y+bs/2+oy+1);out.push({r:[bx-2,y-6,bs+4,bs+8],fn:()=>{beep(990,.03);fn();},k,btn:1});});
+ rx.font='bold 11px Noto Sans Thai,Loma,sans-serif';rx.fillStyle='#ffcd75';rx.textAlign='right';rx.fillText(RS.z.toFixed(1)+'\u00d7',Wv-2*(bs+12)+2,Hv-11);
+ rx.restore();return out;}
+// weather + place label (town/house card, each sea island); tap opens the region picker
+function mbWxLabels(){const v=RS.v,out=[];if(!RF.wx)return out;rx.save();const fs=innerWidth<420?10:12;rx.font='bold '+fs+'px "Noto Sans CJK TC","Noto Sans Thai",sans-serif,"Noto Color Emoji"';rx.textBaseline='middle';rx.textAlign='center';
+ const pill=(cx,cy,t,k,fn)=>{const w=Math.ceil(rx.measureText(t).width)+12,h=fs+8,x=Math.max(2,Math.min(innerWidth-w-2,cx-w/2|0)),y=Math.max(34,cy|0);const pk=(rDown&&rDown.h&&rDown.h.k)||(MBP&&performance.now()-MBP.t<180?MBP.k:null),on=pk===k;
+  rx.fillStyle='#1a1c2c';rx.fillRect(x,y,w,h);rx.fillStyle=on?'#ef7d57':'#f4f4f4';rx.fillRect(x+1,y+1,w-2,h-2);rx.fillStyle='#41a6f6';rx.fillRect(x+1,y+h-3,w-2,2);rx.fillStyle='#1a1c2c';rx.fillText(t,x+w/2,y+h/2);out.push({r:[x-2,y-2,w+4,h+4],fn:()=>{beep(880,.04);fn();},k,btn:1});};
+ if(v==='sea'){for(const [k,c] of [['i_hk','hk'],['i_tw','tpe'],['i_jp','tyo'],['i_th','bkk']]){const r=rS(RL,Q('sea',RH.sea.find(h=>h[0]===k)[1]));pill(r[0]+r[2]/2,r[1]+2,mbWxText(c),'wx_'+c,()=>mbOpen('wx'));}}
+ else{const c=rCity(v),r=rS(RL,Q(v,[508,64,145,10]));pill(r[0]+r[2]/2,r[1],mbWxText(c),'wx_town',()=>mbOpen('wx'));}
+ rx.restore();return out;}
+
+{const _rd=rDraw;rDraw=function(){_rd();try{if(state!=='wmap')return;mbDraw();const ex=[...mbWxLabels(),...mbZoomBtns()];RS.hot.unshift(...ex);if(RS.pan)mbPanel();}catch(e){console.error(e);}};}
+// 0640g: no automatic geolocation \u2014 the old home weather asked the browser for a position on first run. The region picker (mmsea_wxcity) replaces it.
+try{if(typeof cfg!=='undefined'&&cfg&&!cfg.geo){cfg.geoAsked=1;}}catch(e){}
 
 /*m0600_end*/
 </script></body></html>
