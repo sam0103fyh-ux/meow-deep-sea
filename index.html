@@ -5269,4 +5269,7 @@ function hDraw(){var S=HYPO,T=S.t,k=Math.min(1,T/HN);
 }
 var _st=step;step=function(){if(HYPO){if(state!=='over'){HYPO=null;return _st.apply(this,arguments);}HYPO.t++;pendUI=null;UIB=[];try{hDraw();}catch(e){console.error('hypo',e);HYPO=null;}if(HYPO&&HYPO.t>=HN)hEnd();return;}return _st.apply(this,arguments);};
 }catch(e){console.error('hypoxia',e);}})();</script>
+<script>/*1023 fix: pearl shots froze on bosses with their own update (kappa/ghost/lcrab/pepe/sotter) — base shot movement never ran, so collected-pearl shots stayed drawn forever. Now any shot that did not move this frame flies to the boss and vanishes.*/
+{const _buPF=bossUpdate;bossUpdate=function(){const r=_buPF.apply(this,arguments);try{const B=G&&G.boss;if(!B||!B.fx||!B.fx.shot)return r;const R=(BOSSDEF[B.k]&&BOSSDEF[B.k].r)||13;for(const q of B.fx.shot){if(q._px===q.x&&q._py===q.y){const dx=B.x-q.x,dy=B.y-q.y,d=Math.hypot(dx,dy)||1;q.x+=dx/d*3.2;q.y+=dy/d*3.2;if(d<R||B.st==='dead'||B.st==='friend'){q.dead=1;try{burst(q.x,q.y,P.l,6);}catch(e){}}}q._px=q.x;q._py=q.y;}B.fx.shot=B.fx.shot.filter(q=>!q.dead);}catch(e){}return r;};}
+</script>
 </body></html>
