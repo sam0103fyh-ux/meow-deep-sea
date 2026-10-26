@@ -241,6 +241,7 @@ const pool=w===12?['jelly','eel','door','jelly','strap','eel','jelly']:w===13?['
 let n;switch(k){case'pearls':n=(sI<5?3:6)+w;break;case'depth':n=(sI<5?20:30)+w*4;break;case'fish':n=4+w;break;case'survive':n=(sI<5?20:28)+w*3;break;case'sfish':n=1+(w>=5?1:0);break;case'nodmg':n=15+w*3;break;case'boss':n=25+w*2;break;}
 return{L,w,s:sI,k,n:k==='boss'?1:n,pool,nw,boss:k==='boss'?(WORLD_NEW[w]||EN_ORDER[7-(w%3)]):null,base:w===12?.22+sI*.03:w===13?.25+sI*.03:w===11?.2+sI*.03:w===10?.15+sI*.03:Math.min(.9,(L-1)/110),theme:THEMES[w],sf:SFISH[w%5]};}
 function goalText(l){const n=l.n;switch(l.k){case'pearls':return`Collect ${n} pearls`;case'depth':return`Dive to ${n}m`;case'fish':return`Eat ${n} fish`;case'survive':return`Survive ${n}s`;case'sfish':return`Catch ${n} ${l.sf.n}`;case'nodmg':return`No-hit dive to ${n}m`;case'boss':return`Boss: defeat the ${BOSSDEF[BOSS_ORDER[l.w%3]].n}`;}}
+function goalProg(){return Math.min(goalVal(),lvl.n)+'/'+lvl.n;}
 function goalVal(){const k=lvl.k;return k==='pearls'?G.pearls:k==='fish'?G.fish:k==='sfish'?G.sf:k==='boss'?(G.bossWon?1:0):k==='survive'?Math.floor(G.t/60):Math.floor(G.depth/10);}
 function curDiff(){if(mode==='relax')return 0;return mode==='level'?Math.min(1,lvl.base+G.depth/3000):Math.min(1,G.depth/1500);}
 function startLevel(L){L=Math.max(1,Math.min(200,L|0));if(!TRYC){cfg.ckpt=L;saveCfg();}mode='level';LV=L;lvl=getLevel(L);THEME=lvl.theme;SF=lvl.sf;SFIMG=sfImgs(SF);newGame();
@@ -430,7 +431,7 @@ let revealKind='zxx';
 function questAdd(k,n){if(quest.done||QDAY.k!==k||!n)return;const before=quest.prog;quest.prog=Math.min(QDAY.n,quest.prog+n);saveQuest();
 const q4=Math.floor(before*4/QDAY.n),n4=Math.floor(quest.prog*4/QDAY.n);if(quest.prog>=QDAY.n)questComplete();else if(n4>q4)showToast('Daily quest '+quest.prog+'/'+QDAY.n);}
 function questComplete(){quest.done=true;quest.streak=(quest.last===ymd(-1))?quest.streak+1:1;quest.last=TODAY;const first=!quest.ever;let msg;
-if(first){quest.ever=true;msg='Hidden cat unlocked!';}else{const bonus=20+Math.min(10,quest.streak)*5;wallet.p+=bonus;saveCfg();msg=`Reward 🦪+${bonus} · ${quest.streak}-day streak`;}
+if(first){quest.ever=true;msg='Hidden cat unlocked!';}else{const bonus=25;wallet.p+=bonus;saveCfg();msg=`Reward 🦪+${bonus}`;}
 saveQuest();[659,784,988,1318].forEach((f,i)=>setTimeout(()=>beep(f,.16,'triangle'),i*120));
 if(G){const cols=[P.y,P.o,P.p,P.g,P.c];for(let i=0;i<40;i++)G.parts.push({x:G.x+8,y:G.y+8,vx:rnd(-2,2),vy:rnd(-2.6,.6),l:rnd(30,60),c:cols[i%5]});if(state==='play'){G.banner={a:'🎉 Daily quest done!',b:msg,l:200};say(cfg.cat===8?LUCKY_LINES[0]:'Quest done! Clocking off!',140,true);}}
 showToast('Daily quest complete!');if(first){revealKind='lucky';reveal=1;}}
@@ -996,11 +997,11 @@ ctx.fillStyle='rgba(26,28,44,0.75)';ctx.fillRect(0,0,W,13);
 /*polish-4: last heart blinks softly (same rhythm idea as the low-O2 bar) so the final hit is not a surprise*/if(G.hp<=1&&G.hp>0&&G.maxhp>1&&state==='play'&&tick%30>=20)ctx.globalAlpha=.35;for(let i=0;i<G.maxhp;i++){if(i+1<=G.hp)ctx.drawImage(HEART,2+i*7,4);else if(i+.5<=G.hp)ctx.drawImage(HEART,0,0,HEART.width/2|0,HEART.height,2+i*7,4,HEART.width/2|0,HEART.height);}ctx.globalAlpha=1;
 ctx.fillStyle=P.k;ctx.fillRect(31,4,38,6);ctx.fillStyle=G.o2<25&&tick%20<10?P.m:P.c;ctx.fillRect(32,5,Math.max(0,G.o2*.36),4);
 num(Math.floor(G.depth/10)+'m',73,4,P.g);drawScore();if(state==='play')drawCombo();
-if(state==='play'){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(0,13,W,11);if(mode==='level')txt(lvLabel(LV)+' '+goalText(lvl).replace(/^Boss: last (\d+)s vs Giant (.+)$/,'Giant $2: $1s')+' '+Math.min(goalVal(),lvl.n)+'/'+lvl.n,80,14,8,lvl.boss?P.p:P.y);else txt(mode==='deep'?'⬇ Deepest Dive  '+meName()+' · '+distName(meDist()):mode==='vs'?'⚔ Merchant Duel: last cat floating wins':'Daily: '+THEME.n,80,14,8,P.y);
+if(state==='play'){ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(0,13,W,11);if(mode==='level')txt(lvLabel(LV)+' '+goalText(lvl).replace(/^Boss: last (\d+)s vs Giant (.+)$/,'Giant $2: $1s')+' '+goalProg(),80,14,8,lvl.boss?P.p:P.y);else txt(mode==='deep'?'⬇ Deepest Dive  '+meName()+' · '+distName(meDist()):mode==='vs'?'⚔ Merchant Duel: last cat floating wins':'Daily: '+THEME.n,80,14,8,P.y);
 const sk=SKILLS[cfg.skill];if(sk.id!=='none'&&skillOpen(cfg.skill)){const on=G.skillUses>0;ctx.globalAlpha=on?.85:.35;ctx.fillStyle=P.k;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,0,7);ctx.fill();ctx.fillStyle=on?P.v:P.S;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,12,0,7);ctx.fill();ctx.globalAlpha=1;if(G.magT>0){ctx.strokeStyle=P.y;ctx.lineWidth=2;ctx.beginPath();ctx.arc(SKB.x+15,SKB.y+15,14,-Math.PI/2,-Math.PI/2+Math.PI*2*G.magT/240);ctx.stroke();ctx.lineWidth=1;}txt(sk.ic,SKB.x+15,SKB.y+9,11,P.w);txt('x'+G.skillUses,SKB.x+26,SKB.y+22,7,P.y);}v2SkDraw();}
 UIB=[];if(state==='garage')drawGarage();if(state==='profile')drawProfile();if(state==='players')drawPlayers();if(state==='board')drawBoard();if(state==='region')drawRegion();if(state==='loc')drawLocSel();if(state==='oboard')drawOBoard();if(state==='vsmenu')drawVsMenu();if(state==='dex')drawDex();if(state==='feedback')drawFeedback();if(state==='dock')drawDock();v2HkOver();if(state==='vscount')drawVsCount();if(mode==='vs'&&(state==='play'||state==='over'))drawVsHud();
 if(state==='title'){ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(10,30,140,40);txt(TITLE1,92,33,16,P.y,'center',116);txt(TITLE2,92,51,14,P.p,'center',116);
-ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(10,73,140,51);ctx.drawImage(DSFIMG[f],12,80);txt('Daily: '+DTHEME.n,82,74,10,P.y);txt('Special fish: '+DSF.n+' (+50)',82,86,8,P.c);txt('Best today '+daily.best+' '+(daily.caught>0?'Caught ✔ x'+daily.caught:'Not caught yet'),82,96,7,P.w);ctx.fillStyle='rgba(255,205,117,0.25)';ctx.fillRect(12,105,136,1);txt('📜 '+QDAY.t(QDAY.n)+(quest.done?' ✔':''),80,107,7,quest.done?P.g:P.y);ctx.fillStyle=P.k;ctx.fillRect(20,117,96,5);ctx.fillStyle=quest.done?P.g:P.o;ctx.fillRect(21,118,Math.round(94*quest.prog/QDAY.n),3);txt(quest.prog+'/'+QDAY.n+(quest.streak>1&&quest.last===TODAY?' 🔥'+quest.streak:''),134,115,7,P.w);
+ctx.fillStyle='rgba(26,28,44,0.7)';ctx.fillRect(10,73,140,51);ctx.drawImage(DSFIMG[f],12,80);txt('Daily: '+DTHEME.n,82,74,10,P.y);txt('Special fish: '+DSF.n+' (+50)',82,86,8,P.c);txt('Best today '+daily.best+' '+(daily.caught>0?'Caught ✔ x'+daily.caught:'Not caught yet'),82,96,7,P.w);ctx.fillStyle='rgba(255,205,117,0.25)';ctx.fillRect(12,105,136,1);txt('📜 '+QDAY.t(QDAY.n)+(quest.done?' ✔':''),80,107,7,quest.done?P.g:P.y);ctx.fillStyle=P.k;ctx.fillRect(20,117,96,5);ctx.fillStyle=quest.done?P.g:P.o;ctx.fillRect(21,118,Math.round(94*quest.prog/QDAY.n),3);txt(quest.prog+'/'+QDAY.n+'',134,115,7,P.w);
 ctx.fillStyle='rgba(26,28,44,0.6)';ctx.fillRect(6,144,148,82);
 bigLv(10,146,68,20,`▶ Levels (up to ${lvLabel(prog.u)})`,'rgba(56,183,100,0.92)',()=>goSelect());button(80,146,70,20,'','rgba(197,140,247,0.92)',startRelax);txt(XS().rbtn.replace(/^\S+ /,''),115,147,18,P.w,'center',66);
 button(10,168,46,12,'★ Daily','rgba(65,166,246,0.92)',startDaily);button(57,168,46,12,'⬇ Deepest Dive','rgba(59,93,201,0.95)',startDeep);
@@ -1028,7 +1029,7 @@ button(10,106,46,16,'Share 📤','rgba(65,166,246,0.9)',doShare);button(58,106,4
 ctx.fillStyle='rgba(26,28,44,0.75)';ctx.fillRect(14,150,132,74);
 if(state==='clear'){txt(lvl.boss?'Boss defeated! 🎉':'Cleared!',80,154,13,P.g);txt('Score '+G.score,80,172,11,P.y);txt(LV===100?'All 100 levels done!':LV>100&&LV%10===0?THEMES[(LV-1)/10|0].n+' complete!':(LV%10===0?'A new world awaits':'Next: '+goalText(getLevel(LV+1))),80,187,8,P.w);if(tick>30&&tick%40<28)txt(LV>=100?'Tap for level select':'Tap for next level',80,204,11,P.c);}
 else{txt(G.fail||'Washed ashore, meow!',80,154,12,P.y);txt(G.gag,80,166,8,P.w);txt('Score '+G.score,80,175,10,P.y);
-txt(lv?('Progress '+Math.min(goalVal(),lvl.n)+'/'+lvl.n):(G.newBest?'New record!':'Best '+best),80,187,9,G.newBest&&!lv?P.g:P.w);if(tick>30){if(lv){button(14,200,78,16,'Dive again, meow','rgba(56,183,100,0.92)',retryNow);button(96,200,50,16,'Restart, meow','rgba(59,93,201,0.92)',()=>startLevel(((LV-1)/10|0)*10+1));}else button(40,200,80,16,'Dive again, meow','rgba(56,183,100,0.92)',retryNow);}}}}
+txt(lv?('Progress '+goalProg()):(G.newBest?'New record!':'Best '+best),80,187,9,G.newBest&&!lv?P.g:P.w);if(tick>30){if(lv){button(14,200,78,16,'Dive again, meow','rgba(56,183,100,0.92)',retryNow);button(96,200,50,16,'Restart, meow','rgba(59,93,201,0.92)',()=>startLevel(((LV-1)/10|0)*10+1));}else button(40,200,80,16,'Dive again, meow','rgba(56,183,100,0.92)',retryNow);}}}}
 function drawGarage(){const f=(tick>>3)&3;ctx.fillStyle='rgba(11,20,40,0.62)';ctx.fillRect(0,0,W,H);ctx.fillStyle='#3b5dc9';ctx.fillRect(3,13,154,224);ctx.fillStyle='rgba(26,28,44,0.97)';ctx.fillRect(4,14,152,222);txt('🐱 Garage / Prep',80,16,10,P.y);
 ctx.fillStyle='rgba(115,239,247,0.25)';ctx.fillRect(30,24,100,56);drawSubFull(ctx,56,34+(cfg.model===1?Math.round(Math.sin(tick*.06)*2):Math.round(Math.sin(tick*.1))),f,cfg,3);
 const row=(y,lab,val,k,n)=>{txt(lab,22,y+3,8,P.c);button(40,y,16,14,'◀','rgba(59,93,201,0.9)',()=>cyc(k,n,-1));txt(val,90,y+2,9,P.w);button(124,y,16,14,'▶','rgba(59,93,201,0.9)',()=>cyc(k,n,1));};
@@ -5704,5 +5705,120 @@ T3.lamps=(night)=>{const c=T3.cam,B=T3.br;T3.nightF=night?1:.55;T3.nightT=perfor
 {const _rt=rTint;rTint=function(v,L,k,t){_rt.apply(this,arguments);try{if(v==='town'&&state==='wmap'){const h=rTod(k),night=h<5.5||h>=19.5,dusk=!night&&(h<7||h>=17.5);if(night||dusk)T3.lamps(night);}}catch(e){console.error(e);}};}
 {const _ex=T3.extra;T3.extra=(O,ox,oy,k,ms,rm)=>{_ex(O,ox,oy,k,ms,rm);[[18,4,0],[19,5,1]].forEach(([i,j,f])=>{const [x,y]=cc(i,j);O.push({z:y+1,x,f:()=>{const look=!rm&&Math.floor(ms/1700+i)%3===0;gullDraw(ox,oy,k,x-12,y-14,5,f?!look:look);}});});};}
 }catch(e){console.error('town3b',e);}})();
+</script>
+<script>
+/*URGENT 1026 (local): first dive, short prompts, save code, pearl floor, gentle surprises, island story cards*/
+(function(){try{
+const LG=()=>{try{const l=rLang();return ['zh','en','ja','th'].includes(l)?l:'zh';}catch(e){return 'zh';}};
+const st=k=>{try{return localStorage.getItem(k);}catch(e){return null;}},ss=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
+// ---- 3. short action prompts (controls = drag / arrow keys)
+IFX.zh.h=['👆 拖住游','🫧 執泡泡|🪼 避水母','⚪ 執珍珠'];IFX.zh.tap='撳＝收埋';
+IFX.en.h=['👆 Drag to swim','🫧 Get bubbles|🪼 Dodge jellies','⚪ Grab pearls'];IFX.en.tap='Tap = hide';
+IFX.ja.h=['👆 ドラッグでおよぐ','🫧 あわをとる|🪼 クラゲをよける','⚪ しんじゅをとる'];IFX.ja.tap='タップでとじる';
+IFX.th.h=['👆 ลากเพื่อว่าย','🫧 เก็บฟอง|🪼 หลบแมงกะพรุน','⚪ เก็บไข่มุก'];IFX.th.tap='แตะ = ซ่อน';
+try{const LI={zh:'👆 撳燈籠＝照明',en:'👆 Tap lantern = light',ja:'👆 ランタンをタップ',th:'👆 แตะโคม = ส่องแสง'};for(const k in LI)if(V2L[k])V2L[k].lantIntro=LI[k];}catch(e){}
+// ---- 2. first dive: brand-new player drops straight into level 1; region/name asked after the first dive
+let FD=null;
+const _eiU=endIntro;endIntro=function(){if(state!=='intro')return;let fresh=false;try{fresh=prog.u<=1&&prog.c[1]==null&&!(profs.list&&profs.list.length)&&st('mmsea_fd1')!=='1';}catch(e){}
+ _eiU.apply(this,arguments);if(fresh){FD={pend:1};try{rgn=null;}catch(e){}try{startLevel(1);}catch(e){console.error(e);FD=null;}}};
+function fdOnboard(){FD.pend=0;ss('mmsea_fd1','1');try{if(!REGION&&meDist()<0)goRegion('first');else if(!profs.seen&&!profs.list.length)goProfile('first');}catch(e){}}
+// ---- 6. pearl floor on replay + single goal-progress source
+const _slU=startLevel;startLevel=function(L){let was=false;try{was=prog.c[Math.max(1,Math.min(200,L|0))]!=null;}catch(e){}_slU.apply(this,arguments);if(G){G.replay=was;G.sur=surPlan();}};
+const _bpU=bankPearls;bankPearls=function(){const fl=!!(G&&!G.banked&&mode==='level'&&!TRYC&&G.replay&&(G.pearls|0)<1);const r=_bpU.apply(this,arguments);if(fl&&G.banked){try{wallet.p=(wallet.p|0)+1;G.floorP=1;saveCfg();}catch(e){}}return r;};// floor goes to the wallet only, so G.pearls (the goal count) stays true
+// ---- 5. save code
+const SVT={zh:{ex:'📤 匯出存檔碼',im:'📥 匯入存檔碼',cp:'存檔碼已複製喵',ok:'讀取成功，重新載入喵',bad:'存檔碼唔啱喵',ask:'貼上存檔碼：',cf:'會蓋過而家嘅存檔，確定？（之後可以還原）',un:'↩ 還原上一個存檔',und:'已還原，重新載入喵',show:'複製呢個存檔碼，換機時貼返：'},
+ en:{ex:'📤 Export save code',im:'📥 Import save code',cp:'Save code copied, meow',ok:'Save loaded! Reloading, meow',bad:'That code is not valid, meow',ask:'Paste your save code:',cf:'This will replace your current save. Continue? (You can undo it later.)',un:'↩ Restore previous save',und:'Restored! Reloading, meow',show:'Copy this save code:'},
+ ja:{ex:'📤 セーブコードをだす',im:'📥 セーブコードをいれる',cp:'コピーしたにゃ',ok:'よみこんだにゃ！',bad:'コードがちがうにゃ',ask:'セーブコードをはってね：',cf:'いまのセーブに うわがきするよ。いい？（あとで もどせるよ）',un:'↩ まえのセーブにもどす',und:'もどしたにゃ',show:'このコードをコピーしてね：'},
+ th:{ex:'📤 ส่งออกรหัสเซฟ',im:'📥 นำเข้ารหัสเซฟ',cp:'คัดลอกรหัสแล้ว เหมียว',ok:'โหลดเซฟแล้ว เหมียว',bad:'รหัสไม่ถูกต้อง เหมียว',ask:'วางรหัสเซฟ:',cf:'จะแทนที่เซฟปัจจุบัน ตกลงไหม? (ย้อนกลับได้ภายหลัง)',un:'↩ คืนเซฟก่อนหน้า',und:'คืนค่าแล้ว เหมียว',show:'คัดลอกรหัสนี้:'}};
+const SVK=/^(mmsea_|mds_)/,SVU='mmsea_undo',svOk=k=>SVK.test(k)&&k!==SVU;
+function svKeys(){const a=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(svOk(k))a.push(k);}return a.sort();}
+function svHash(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36);}
+window.svUndo=function(){let o;try{o=JSON.parse(localStorage.getItem(SVU)||'null');}catch(e){return false;}if(!o||o.v!==1||!o.d)return false;for(const k of svKeys())localStorage.removeItem(k);for(const k in o.d)if(svOk(k))localStorage.setItem(k,o.d[k]);localStorage.removeItem(SVU);return true;};
+window.svExport=function(){const o={};for(const k of svKeys())o[k]=localStorage.getItem(k);const b=btoa(unescape(encodeURIComponent(JSON.stringify({v:1,d:o}))));return 'MMSEA1-'+b+'-'+svHash(b);};
+window.svImport=function(code){code=String(code||'').replace(/\s+/g,'');const m=/^MMSEA1-([A-Za-z0-9+/=]+)-([0-9a-z]+)$/.exec(code);if(!m||svHash(m[1])!==m[2])return false;let o;try{o=JSON.parse(decodeURIComponent(escape(atob(m[1]))));}catch(e){return false;}
+ if(!o||o.v!==1||!o.d||typeof o.d!=='object')return false;const ks=Object.keys(o.d);if(!ks.length||!ks.every(k=>svOk(k)&&typeof o.d[k]==='string'))return false;
+ if(arguments[1]==='check')return true;
+ try{const u={};for(const k of svKeys())u[k]=localStorage.getItem(k);localStorage.setItem(SVU,JSON.stringify({v:1,d:u}));}catch(e){return false;}
+ for(const k of ['mmsea_prog','mmsea_cfg','mmsea_wallet'])if(o.d[k]!=null){try{JSON.parse(o.d[k]);}catch(e){return false;}}
+ for(const k of svKeys())localStorage.removeItem(k);for(const k of ks)localStorage.setItem(k,o.d[k]);return true;};
+const _mbU=mbOpen;mbOpen=function(id){_mbU.apply(this,arguments);try{if(id!=='set'||!RS.pan)return;const S=SVT[LG()],r=RS.pan.rows;
+ r.splice(r.length-1,0,{t:S.ex,keep:1,fn:()=>{const c=svExport();try{navigator.clipboard.writeText(c).then(()=>showToast(S.cp),()=>{});}catch(e){}window.prompt(S.show,c);}},
+  {t:S.im,keep:1,fn:()=>{const c=window.prompt(S.ask,'');if(c==null)return;if(!svImport(c,'check')){showToast(S.bad);beep(200,.1);return;}if(!window.confirm(S.cf))return;if(svImport(c)){showToast(S.ok);setTimeout(()=>location.reload(),800);}else{showToast(S.bad);beep(200,.1);}}});
+ if(localStorage.getItem(SVU))r.splice(r.length-1,0,{t:S.un,keep:1,fn:()=>{if(svUndo()){showToast(S.und);setTimeout(()=>location.reload(),800);}}});}catch(e){console.error(e);}};
+// ---- 7. gentle surprises (visual + soft notes only, no rewards, max one per dive)
+const SUR={zh:['🐋 鯨魚喺遠處唱歌…','🪼 水母跳緊慢舞…','🫧 泡泡變咗音符…'],en:['🐋 A whale sings far away…','🪼 Jellies drift in a slow dance…','🫧 Bubbles turn into notes…'],ja:['🐋 とおくで クジラが うたってる…','🪼 クラゲが ゆっくり おどってる…','🫧 あわが おんぷに なった…'],th:['🐋 วาฬร้องเพลงอยู่ไกลๆ…','🪼 แมงกะพรุนเต้นช้าๆ…','🫧 ฟองกลายเป็นตัวโน้ต…']};
+function surPlan(){return Math.random()<.35?{at:1200+(Math.random()*2400|0),k:Math.random()*3|0,t:-1}:null;}
+const NOTE=[294,349,392,440,523,587];
+function surStep(){const s=G&&G.sur;if(!s||s.done)return;if(s.t<0){if(G.t<s.at||G.boss||G.o2<40||(typeof TUT!=='undefined'&&TUT))return;s.t=0;}s.t++;const D=420;if(s.t>D){s.done=1;return;}
+ const a=Math.min(1,s.t/40,(D-s.t)/40);ctx.save();ctx.setTransform(S,0,0,S,0,0);
+ if(s.k===0){const x=-50+s.t*(W+100)/D,y=78+Math.sin(s.t*.02)*4;ctx.globalAlpha=.32*a;ctx.fillStyle='#29366f';ctx.fillRect(x,y,34,10);ctx.fillRect(x+2,y-2,26,2);ctx.fillRect(x+4,y+10,22,2);ctx.fillRect(x-8,y+2,8,5);ctx.fillRect(x-12,y-1+((s.t>>4)&1),5,4);ctx.fillRect(x-12,y+6-((s.t>>4)&1),5,4);ctx.fillStyle='#73eff7';ctx.fillRect(x+28,y+3,1,1);
+  if(s.t%100===10)try{beep(110,.9,'sine');setTimeout(()=>beep(147,.9,'sine'),500);}catch(e){}}
+ else if(s.k===1){ctx.globalAlpha=.45*a;for(let i=0;i<5;i++){const p=Math.sin(s.t*.06+i*1.3),x=18+i*30,y=120+Math.sin(s.t*.02+i)*10,w=8+p*2;ctx.fillStyle='#f4a7ff';ctx.fillRect(x-w/2,y,w,5);ctx.fillRect(x-w/2+1,y-2,w-2,2);ctx.fillStyle='#c8a0ff';for(let j=0;j<3;j++)ctx.fillRect(x-3+j*3,y+5,1,4+((s.t>>3)+j+i)%3);}
+  if(s.t%60===20)try{beep(NOTE[(s.t/60|0)%6],.35,'sine');}catch(e){}}
+ else{ctx.globalAlpha=.6*a;for(let i=0;i<6;i++){const t0=i*55,u=s.t-t0;if(u<0||u>140)continue;const x=30+i*20,y=H-20-u*1.2;ctx.fillStyle='#c0f4ff';if(u<130){ctx.fillRect(x,y,4,4);ctx.fillStyle='#ffffff';ctx.fillRect(x+1,y+1,1,1);}else{ctx.fillRect(x-2,y,1,1);ctx.fillRect(x+5,y,1,1);ctx.fillRect(x+1,y-3,2,1);}if(u===130)try{beep(NOTE[i],.3,'sine');}catch(e){}}}
+ ctx.globalAlpha=.85*a;txt(SUR[LG()][s.k],80,72,7,'#ffcd75','center',150);ctx.restore();}
+// ---- 8. island story cards (draft text from 小夢 /workspace/urgent-team/stories.md, condensed + translated)
+const STW={14:'hk',16:'tw',17:'jp',15:'th'};
+const STX={hk:{zh:['粉粉嘅碼頭茶檔','黃昏嘅海港一閃一閃，','粉紅海豚粉粉開咗個小茶檔。','「潛完水攰就坐低飲杯茶啦，','渡輪嘅汽笛好似海喺度唱歌。」','貓仔捧住杯茶，望住對岸燈火。'],
+ en:['Pinky\'s Pier Tea Stall','Dusk sparkles on the harbour.','Pinky the pink dolphin runs','a little tea stall on the pier.','"Tired from diving? Sit and sip.','The ferry horns sound like the sea singing."'],
+ ja:['ピンクの はとばの おちゃや','ゆうぐれの みなとが きらきら。','ピンクイルカのピンクは','はとばで ちいさな おちゃや。','「もぐって つかれたら ひとやすみ。','ふねの きてきは うみの うただよ」'],
+ th:['ร้านชาริมท่าของพิงกี้','ยามเย็นท่าเรือระยิบระยับ','โลมาสีชมพูพิงกี้เปิดร้านชาเล็กๆ','"ดำน้ำเหนื่อยก็นั่งจิบชาก่อนนะ','เสียงหวูดเรือเหมือนทะเลร้องเพลง"','แมวน้อยถือถ้วยชา มองแสงไฟฝั่งตรงข้าม']},
+ tw:{zh:['阿石嘅夜市珍珠茶','夜市一開，石虎阿石就','喺小攤後面搓珍珠。','海底執返嚟嘅珍珠太靚，','佢捨唔得落茶，擺晒喺櫃檯閃。','「慢慢行，夜市唔會走㗎。」'],
+ en:['Ah-Shek\'s Night Market Tea','When the night market opens,','Ah-Shek the leopard cat rolls','tapioca pearls at his stall.','Sea pearls are too pretty for tea,','so they shine on the counter.','"Walk slowly. The market will wait."'],
+ ja:['アセキの よいちの おちゃ','よいちが ひらくと','ヤマネコの アセキが','タピオカを まるめる。','うみの しんじゅは きれいすぎて','カウンターで きらきら。','「ゆっくり あるこう。」'],
+ th:['ชาไข่มุกตลาดกลางคืนของอาเส็ก','ตลาดกลางคืนเปิดแล้ว','แมวดาวอาเส็กปั้นไข่มุกที่ร้าน','ไข่มุกจากทะเลสวยเกินจะใส่ชา','เลยวางไว้ให้ระยิบที่เคาน์เตอร์','"เดินช้าๆ ตลาดไม่หนีไปไหนหรอก"']},
+ jp:{zh:['湯湯嘅河邊暖湯','雪猴湯湯落山過冬，','喺河邊搵到個暖暖小湯池。','佢請貓仔食熱辣辣章魚燒，','「浸湯同潛水一樣，','都係俾身體慢慢放鬆。」'],
+ en:['Yu-Yu\'s Riverside Hot Bath','Yu-Yu the snow monkey came down','the mountain and found a warm','little bath by the river.','"Bathing is like diving:','it lets your body slowly relax."'],
+ ja:['ユユの かわべの おゆ','ゆきざるの ユユは やまをおりて','かわべで あったかい おゆを みつけた。','あつあつの たこやきを ふーふー。','「おふろも ダイビングも','からだを ゆっくり ほぐすんだ」'],
+ th:['บ่อน้ำอุ่นริมแม่น้ำของยูยู','ลิงหิมะยูยูลงจากภูเขา','เจอบ่อน้ำอุ่นเล็กๆ ริมแม่น้ำ','ชวนแมวน้อยกินทาโกะยากิร้อนๆ','"แช่น้ำอุ่นก็เหมือนดำน้ำ','ให้ร่างกายผ่อนคลายช้าๆ"']},
+ th:{zh:['翁樂嘅吊床水上市場','小象翁樂喺兩棵椰樹中間','掛咗張吊床，下面係水上市場。','佢用鼻遞杯凍椰青俾貓仔：','「熱就飲啖椰青，唔使急。」','兩個一齊搖吓搖吓，差啲瞓着。'],
+ en:['Ong-Lok\'s Hammock Market','Little elephant Ong-Lok hangs','a hammock between two palms,','above the floating market.','"Hot? Sip some coconut. No rush."','They sway together and nearly doze.'],
+ ja:['オンロックの ハンモック','こぞうの オンロックは','ヤシのきの あいだに ハンモック。','したは みずの いちば。','「あついね。ココナッツ どうぞ。','いそがなくて いいよ」'],
+ th:['เปลญวนเหนือตลาดน้ำของอ้นหลก','ช้างน้อยอ้นหลกผูกเปลญวน','ระหว่างต้นมะพร้าวสองต้น','"ร้อนก็จิบน้ำมะพร้าว ไม่ต้องรีบ"','สองเพื่อนแกว่งเปลไปมา','จนเกือบเผลอหลับ']}};
+const STR={zh:'📖 小故事',en:'📖 Story',ja:'📖 おはなし',th:'📖 เรื่องเล่า'},STC={zh:'撳一下關閉',en:'Tap to close',ja:'タップでとじる',th:'แตะเพื่อปิด'};
+let STO=null;let STS={};try{STS=JSON.parse(st('mmsea_story')||'{}')||{};}catch(e){}
+window.storyOpen=function(w){const k=STW[w];if(!k)return;STO={k,t:0};STS[k]=1;ss('mmsea_story',JSON.stringify(STS));};
+const _gsU=goSelect;goSelect=function(w){_gsU.apply(this,arguments);try{if(state==='select'&&STW[selW]&&!STS[STW[selW]])storyOpen(selW);}catch(e){}};
+const STN={zh:'▶ 撳一下繼續',en:'▶ Tap for more',ja:'▶ タップで つぎへ',th:'▶ แตะเพื่ออ่านต่อ'};
+function stWrap(s,fs,mw,lg){let toks;if(lg==='en')toks=s.split(/(\s+)/);else if(typeof Intl!=='undefined'&&Intl.Segmenter){toks=[...new Intl.Segmenter(lg==='th'?'th':lg==='ja'?'ja':'zh',{granularity:lg==='zh'?'grapheme':'word'}).segment(s)].map(x=>x.segment);}else toks=[...s];
+ const out=[];let cur='';const NOSTART=/^[，。、！？」』）〉》：；,.!?)\]"”]/;
+ for(const t of toks){if(t==='\n'){out.push(cur);cur='';continue;}const nx=cur+t;if(cur&&txtW(nx.trim(),fs)>mw){if(NOSTART.test(t)&&t.length<=2){cur=nx;continue;}let c=cur.trim(),carry='';const mm=/[「『（“]+$/.exec(c);if(mm&&mm[0].length<c.length){carry=mm[0];c=c.slice(0,-carry.length);}out.push(c);cur=carry+t.trimStart();}else cur=nx;}
+ if(cur.trim())out.push(cur.trim());return out;}
+function stLay(){const lg=LG(),key=STO.k+lg;if(STO.lay&&STO.lay.key===key)return STO.lay;const L=STX[STO.k][lg],sep=lg==='en'||lg==='th'?' ':'';
+ const FS=lg==='en'?11:9,LH=lg==='en'?15:14,MW=128,body=stWrap(L.slice(1).join(sep),FS,MW,lg),maxL=Math.max(4,Math.floor((H-96)/LH)),pages=[],np=Math.ceil(body.length/maxL)||1,per=Math.ceil(body.length/np);for(let i=0;i<body.length;i+=per)pages.push(body.slice(i,i+per));
+ let TS=10,tt=stWrap(L[0],TS,136,lg);if(tt.length>1&&tt[tt.length-1].length<=4){TS=9;tt=stWrap(L[0],TS,136,lg);}
+ STO.lay={key,TS,title:tt,pages,FS,LH};STO.pg=STO.pg||0;return STO.lay;}
+function storyDraw(){if(!STO)return;if(state!=='select'){STO=null;return;}STO.t++;const lg=LG(),Y=stLay(),pg=Y.pages[Math.min(STO.pg|0,Y.pages.length-1)]||[],last=(STO.pg|0)>=Y.pages.length-1;
+ ctx.save();ctx.setTransform(S,0,0,S,0,0);ctx.fillStyle='rgba(10,14,30,0.72)';ctx.fillRect(0,0,W,H);
+ const th=Y.title.length*14,h=14+th+6+pg.length*Y.LH+22,y=Math.max(6,(H-h)/2|0),x0=8,w0=144;
+ ctx.fillStyle='#1a1c2c';ctx.fillRect(x0-2,y-2,w0+4,h+4);ctx.fillStyle='#ffcd75';ctx.fillRect(x0-1,y-1,w0+2,h+2);ctx.fillStyle='#29366f';ctx.fillRect(x0,y,w0,h);
+ ctx.fillStyle='#3b5dc9';ctx.fillRect(x0,y,w0,th+10);ctx.fillStyle='#ffcd75';ctx.fillRect(x0+4,y+th+10,w0-8,1);
+ Y.title.forEach((t,i)=>txt(t,80,y+5+i*14,Y.TS,'#ffcd75','center'));
+ pg.forEach((t,i)=>txt(t,x0+8,y+th+16+i*Y.LH,Y.FS,'#f4f4f4','left'));
+ const ft=last?STC[lg]:STN[lg],pgs=Y.pages.length>1?' '+((STO.pg|0)+1)+'/'+Y.pages.length:'';txt(ft+pgs,80,y+h-15,8,'#73eff7','center');ctx.restore();}
+const _dbU=drawBtn;drawBtn=function(){_dbU.apply(this,arguments);try{if(state==='select'&&!STO&&STW[selW])button(118,24,38,12,STR[LG()],'rgba(41,54,111,0.92)',()=>storyOpen(selW));}catch(e){}};
+const _dsU=dStart;dStart=function(p){if(STO){if(STO.t>15){const Y=STO.lay;if(Y&&(STO.pg|0)<Y.pages.length-1){STO.pg=(STO.pg|0)+1;STO.t=0;}else STO=null;try{beep(660,.04);}catch(e){}}return;}return _dsU(p);};
+// ---- step hook: first pearl drift, surprises, onboarding after first dive, story overlay
+const _stU=step;step=function(){_stU.apply(this,arguments);try{
+ if(FD&&G&&state==='play'&&mode==='level'&&LV===1){if(!FD.sp&&G.t>=45){FD.sp=1;FD.e={t:'pearl',x:Math.max(8,Math.min(W-24,G.x+30)),y:Math.min(H-24,G.y+40),vx:0,fd:1};G.ents.push(FD.e);}
+  const e=FD.e;if(e&&!e.dead&&G.ents.includes(e)){const dx=G.x-e.x,dy=G.y-e.y,d=Math.hypot(dx,dy);if(d>1){const v=Math.min(d,.9);e.x+=dx/d*v;e.y+=dy/d*v+(G.speed||0)*.5;}}else if(e&&FD.got==null)FD.got=G.t;}
+ if(FD&&FD.pend&&!['play','over','clear','intro','region','profile','loc'].includes(state))fdOnboard();
+ if(G&&state==='play'&&!SINK)surStep();
+ try{if(state==='select'&&!STO&&STW[selW]&&!STS[STW[selW]])storyOpen(selW);}catch(e){}
+ if(SINK&&state==='over'&&mode==='level'&&lvl&&G){ctx.save();ctx.setTransform(S,0,0,S,0,0);ctx.fillStyle='rgba(26,28,44,0.55)';ctx.fillRect(0,13,W,11);txt(lvLabel(LV)+'　'+goalText(lvl)+'　'+goalProg(),80,14,8,lvl.boss?P.p:P.y);ctx.restore();}// polish4: keep the goal count visible while sinking, so a pearl caught on the last frame shows before the end screen
+ storyDraw();}catch(e){console.error(e);}};
+// ---- polish1 1026: stagger first-dive overlays, one at a time: hint -> 新發現 toast -> lantern card
+const TQ=[];let HB=null,HBX=0;
+const tutOn=()=>{try{return !!(TUT&&state==='play'&&mode==='level'&&LV===1);}catch(e){return false;}};
+const toastOn=()=>{try{return !!(toast&&toast.l>0);}catch(e){return false;}};
+const _stP=showToast;showToast=function(m){try{if(String(m).indexOf(V2B().newF)===0&&(tutOn()||TQ.length||(G&&G.banner&&state==='play'))){TQ.push(m);return;}}catch(e){}return _stP.apply(this,arguments);};
+const _dbP=drawBanner;drawBanner=function(){try{if(!HBX&&G&&G.banner&&G.banner.b===V2().lantIntro&&(HBX=1)&&(tutOn()||TQ.length||toastOn())){HB=G.banner;G.banner=null;}
+ if(!tutOn()&&TQ.length&&!toastOn()&&!(G&&G.banner))_stP(TQ.shift());
+ else if(HB&&G&&state==='play'&&!tutOn()&&!TQ.length&&!toastOn()&&!G.banner){HB.l=300;G.banner=HB;HB=null;}
+ if(state!=='play')TQ.length=0;}catch(e){}return _dbP.apply(this,arguments);};
+window.__pol={TQ:()=>TQ.length,HB:()=>!!HB,tut:()=>tutOn(),toast:()=>toastOn()};
+window.__urg=
+{FD:()=>FD,STO:()=>STO};
+}catch(e){console.error('urgent1026',e);}})();
 </script>
 </body></html>
